@@ -1,0 +1,88 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/auth_pages_css/signUp.css' %}">
+    <title>Sign Up</title>
+</head>
+<body>
+  <style>
+    .error {
+      color: red !important;
+    }
+  </style>
+    <div class="signUpScreen">
+        <header>
+          <a href="{% url 'public:home' %}">
+          <img src="{% static 'assets/assets/logo.png' %}" alt='logo'/>
+          </a>
+        </header>
+        <h1>Join us!!</h1>
+        <form class="form" method="post">{% csrf_token %}
+        <div class="email">
+          <label for='emailId'>Email</label>
+          {{ registration_form.email|add_required_class:"is-required form-control" }}
+          <div class="error" class="form-text">
+            {{registration_form.errors.email}}
+          </div>
+        </div>
+
+
+            <div class="first_name">
+            <label for='first'>First Name</label>
+            {{ registration_form.first_name|add_required_class:"is-required form-control" }}
+            <div class="error" class="form-text">
+              {{registration_form.errors.first_name}}
+            </div>
+          </div>
+
+
+            <div class="last_name">
+            <label for='last'>Last Name</label>
+            {{ registration_form.last_name|add_required_class:"is-required form-control" }}
+            <div class="error" class="form-text">
+              {{registration_form.errors.last_name}}
+            </div>
+          </div>
+
+
+            <div class="username">
+            <label for='phone'>Phone Number</label>
+            {{ registration_form.phone_number|add_required_class:"is-required form-control" }}
+            <div class="error" class="form-text">
+              {{registration_form.errors.phone_number}}
+            </div>
+          </div>
+
+
+            <div class="password">
+            <label for='passwordId'>Password</label>
+            {{ registration_form.password1|add_required_class:"is-required form-control" }}
+            <div class="error" class="form-text">
+              {{registration_form.errors.password1}}
+            </div>
+          </div>
+
+
+            <div class='confirm'>
+            <label for='password2Id'>Confirm Password</label>
+            {{ registration_form.password2|add_required_class:"is-required form-control" }}
+            <div class="error" class="form-text">
+              {{registration_form.errors.password2}}
+            </div>
+          </div>
+
+
+            <button type='submit'>Join</button>
+        </form>
+        <p class='redirect'>
+          Already registered? Please <a href="{% url 'accounts:login' %}">sign in</a>
+        </p>
+      </div>
+</body>
+</html>

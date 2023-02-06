@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'assets/auth_pages_css/resetPassword.css' %}">
+    <title>Rest Password</title>
+</head>
+<body>
+    <div class="resetPage">
+        <header>
+          <a href="{% url 'public:home' %}">
+          <img src="{% static 'assets/assets/logo.png'%}" alt='company-logo'/>
+          </a>
+        </header>
+        <h1>Reset Password</h1>
+        <div class="form" style="text-align: center;">
+            <div class="container activate-email-container">
+                <div class="activate-email-wrapper">
+                    <div class="p-4">
+                        {% if 'email' in request.get_full_path %}
+                                <h3 class="mb-4">Password Reset Success</h3>
+                                <p>Check your email for instructions</p>
+                        {% endif%}
+                        {% if 'complete' in request.get_full_path %}
+                                <h3 class="mb-4">Password Reset Success</h3>
+                                <a href="{% url 'accounts:login' %}">Login</a>
+                        {% endif%}
+                    </div> 
+                </div>
+            </div>
+        </div>
+      </div>
+    
+</body>
+</html>

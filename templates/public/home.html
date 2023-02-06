@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{% static 'assets/styles.css' %}">
+</head>
+<body>
+    <div class="landing__container">
+        <div class="logo__container">
+        <img src="{% static 'assets/assets/logo.png' %}" alt='company logo'/>
+        </div>
+       <div class="links__container">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'platform_admin:dashboard' %}">Dashboard</a>
+        <a href="{% url 'platform_admin:dashboard' %}">Dashboard</a>
+        {% else %}
+        <a href="{% url 'accounts:register' %}">Sign Up</a>
+        <a href="{% url 'accounts:login' %}">Log In</a>
+
+            {% endif %}
+       </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'base-dashboard-new.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main_content_iner overly_inner ">
+  <div class="container-fluid p-0 ">
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div class="container" style="color: black">
+    <div class="row">
+      <h2>Users</h2>
+      {% for user in users %}
+      <p style="color: black">{{user.first_name}} {{user.last_name}}</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
