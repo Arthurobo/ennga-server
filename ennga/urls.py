@@ -21,4 +21,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('', include('public.urls', namespace='public')),
     path('dashboard/', include('platform_admin.urls', namespace='platform_admin')),
+    path('utility/', include('utility.urls', namespace='utility')),
 ]

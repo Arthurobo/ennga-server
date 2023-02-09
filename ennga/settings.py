@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 'multiselectfield',
     'widget_tweaks',
     "anymail",
+    'django_htmx',
 
     'accounts',
     'utility',
@@ -65,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
@@ -205,4 +207,10 @@ AWS_QUERYSTRING_EXPIRE = 60*60*24*365*10
 
 ############################################### End of Development ########################################
 
-# django_heroku.settings(locals())
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+# CELERY_BROKER_URL = 'rediss://:pa4cd541ac58e26357078bdf9d04b5b65be73f2f18cd66d5840e4dc1513db97cd@ec2-34-193-69-177.compute-1.amazonaws.com:19720'
+
+# DRF 
+CORS_ALLOW_ALL_ORIGINS = True

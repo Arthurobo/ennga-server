@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import MarketSectorBulkData, MarketSector
 
-# Register your models here.
+admin.site.register(MarketSectorBulkData)
+admin.site.register(MarketSector)

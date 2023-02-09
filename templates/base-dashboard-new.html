@@ -43,6 +43,12 @@
 
   <link rel="stylesheet" href="{% static 'dashboard/css/style1.css' %}" />
   <link rel="stylesheet" href="{% static 'dashboard/css/colors/default.css' %}" id="colorSkinCSS">
+
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+
+
 </head>
 
 <body class="crm_body_bg">
@@ -83,6 +89,29 @@
     }
   </style>
 {% endcomment %}
+
+<style>
+  .centered-btn-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+<style>
+  .form-wrapper {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  @media only screen and (min-device-width:1025px) {
+    .form-wrapper {
+    padding-left: 150px;
+    padding-right: 150px;
+  }
+  }
+</style>
+
+
   <nav class="sidebar dark_sidebar" style="background-color: #20222A;">
     <div class="logo d-flex justify-content-between" style="background-color: #20222A;">
       <!-- <a class="large_logo" href="index-2.html"><img src="{% static 'dashboard/img/logo_white.png' %}" alt=""></a> -->
@@ -109,17 +138,28 @@
         </a>
       </li>
 
-
       <li class="">
         <a href="{% url 'platform_admin:edit-account' user_id=request.user.id %}" false">
           <div class="nav_icon_small">
             <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
           </div>
           <div class="nav_title">
-            <span>Settings</span>
+            <span>Account</span>
           </div>
         </a>
       </li>
+
+      <li class="">
+        <a href="{% url 'platform_admin:market-sector-list-view' %}" false">
+          <div class="nav_icon_small">
+            <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Market Sector</span>
+          </div>
+        </a>
+      </li>
+
 
       <li class="">
         <a href="{% url 'accounts:logout' %}" aria-expanded="false">
@@ -382,6 +422,17 @@
 
   <script src="{% static 'dashboard/js/dashboard_init.js' %}"></script>
   <script src="{% static 'dashboard/js/custom.js' %}"></script>
+
+
+
+
+  <script>
+    document.body.addEventListener("htmx:configRequest", (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}'
+    })
+  </script>
+
+
 </body>
 
 

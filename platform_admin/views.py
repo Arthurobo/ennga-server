@@ -10,6 +10,10 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
                             AccountUpdateForm, UserProfileUpdateForm)
 from accounts.models import Account, Profile
 from django.conf import settings
+from .forms import MarketSectorForm, MarketSectorBulkDataForm
+from .models import MarketSectorBulkData, MarketSector
+from .tasks import create_new_customers
+from utility.models import Country
 # Create your views here.
 
 
@@ -80,3 +84,4 @@ class UpdatePassword(PasswordChangeView):
     def form_valid(self, form):
         messages.success(self.request, "Password changed successfully.")
         return HttpResponseRedirect(self.get_success_url())
+

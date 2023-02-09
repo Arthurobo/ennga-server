@@ -26,37 +26,43 @@
     {% endif %}
   </div>
 
-  <div class="container" style="color: black">
+  <div class="container form-wrapper" style="color: black">
     <div class="row edit-account-form-wrapper">
-      <div class="col-lg-6">
-        <h2>Update Account</h2>
+      <div class="">
+        <div class="text-center">
+            <h2>Update Account</h2>
+          </div>
       <form method="post">{% csrf_token %}
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Email address</label>
-          {{ form.email|add_required_class:"is-required form-control" }}
-          <div id="emailHelp" class="form-text">{{form.errors.email}}</div>
+        <div class="row">
+          <div class="col-lg-6 mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            {{ form.email|add_required_class:"is-required form-control" }}
+            <div id="emailHelp" class="form-text">{{form.errors.email}}</div>
+          </div>
+          <div class="col-lg-6 mb-3">
+            <label for="exampleInputPassword1" class="form-label">First Name</label>
+            {{ form.first_name|add_required_class:"is-required form-control" }}
+            <div id="emailHelp" class="form-text">{{form.errors.first_name}}</div>
+          </div>
+          <div class="col-lg-6 mb-3">
+            <label for="exampleInputPassword1" class="form-label">Last Name</label>
+            {{ form.last_name|add_required_class:"is-required form-control" }}
+            <div id="emailHelp" class="form-text">{{form.errors.last_name}}</div>
+          </div>
+          <div class="col-lg-6 mb-3">
+            <label for="exampleInputPassword1" class="form-label">Username</label>
+            {{ form.username|add_required_class:"is-required form-control" }}
+            <div id="emailHelp" class="form-text">{{form.errors.username}}</div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">First Name</label>
-          {{ form.first_name|add_required_class:"is-required form-control" }}
-          <div id="emailHelp" class="form-text">{{form.errors.first_name}}</div>
+        <div class="centered-btn-wrapper">
+          <button type="submit" class="btn btn-primary">Update</button>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Last Name</label>
-          {{ form.last_name|add_required_class:"is-required form-control" }}
-          <div id="emailHelp" class="form-text">{{form.errors.last_name}}</div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Username</label>
-          {{ form.username|add_required_class:"is-required form-control" }}
-          <div id="emailHelp" class="form-text">{{form.errors.username}}</div>
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
       </form>
       </div>
     </div>
 
-    <div class="row mt-5">
+    <div class="row mt-5 centered-btn-wrapper">
         <a href="{% url 'platform_admin:update_password' %}">Change Password</a>
     </div>
     
