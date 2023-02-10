@@ -53,7 +53,7 @@ def admin_users(request):
 
 @login_required
 def edit_account_view(request, *args, **kwargs):
-    user = request.user.profile
+    user = request.user.account_profile
     market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
     if not request.user.is_authenticated:
         return redirect('accounts:login')
