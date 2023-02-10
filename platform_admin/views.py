@@ -26,9 +26,35 @@ def dashboard(request):
     }
     return render(request, 'platform_admin/dashboard.html', context)
 
+@login_required
+def all_users(request):
+    users = Account.objects.all()
+    context = {
+        'users': users,
+    }
+    return render(request, 'platform_admin/all-users.html', context)
+
+@login_required
+def approved_users(request):
+    users = Account.objects.filter(is_active=True)
+    context = {
+        'users': users,
+    }
+    return render(request, 'platform_admin/approved-users.html', context)
+
+@login_required
+def admin_users(request):
+    users = Account.objects.filter(is_active=True, is_admin=True)
+    context = {
+        'users': users,
+    }
+    return render(request, 'platform_admin/admin-users.html', context)
+
 
 @login_required
 def edit_account_view(request, *args, **kwargs):
+    user = request.user.profile
+    market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
     if not request.user.is_authenticated:
         return redirect('accounts:login')
     user_id = kwargs.get("user_id")
@@ -66,6 +92,8 @@ def edit_account_view(request, *args, **kwargs):
 				}
 			)
         context['form'] = form
+        context['market_sectors'] = market_sectors
+        context['object'] = user
     context['DATA_UPLOAD_MAX_MEMORY_SIZE'] = settings.DATA_UPLOAD_MAX_MEMORY_SIZE
     return render(request, 'platform_admin/edit_account.html', context)
 

@@ -109,7 +109,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='account_profile', on_delete=models.CASCADE)
     # This is email is used for default user email address
     email = models.EmailField(verbose_name='email', max_length=50)
     bio = models.CharField(max_length=100, blank=True)

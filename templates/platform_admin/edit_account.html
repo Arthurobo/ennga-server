@@ -24,7 +24,11 @@
         <div class="text-center">
             <h2>Update Account</h2>
           </div>
-      <form method="post">{% csrf_token %}
+          <div class="row my-3 centered-btn-wrapper">
+              <a href="{% url 'platform_admin:update_password' %}" style="display: flex; justify-content: right;">Change Password</a>
+          </div>
+
+      <form method="post" class="mt-4">{% csrf_token %}
         <div class="row">
           <div class="col-lg-6 mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
@@ -54,9 +58,28 @@
       </div>
     </div>
 
-    <div class="row mt-5 centered-btn-wrapper">
-        <a href="{% url 'platform_admin:update_password' %}">Change Password</a>
-    </div>
+
+
+    <div class="row my-3">
+      <div class="col-lg-4">
+          <a href="{{ object.get_user_market_sector_view }}" class="m-2 p-3 py-5 card">
+              <h4>Market Sectors Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </a>
+      </div>
+      <div class="col-lg-4">
+          <div class="m-2 p-3 py-5 card">
+              <h4>Historical Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </div>
+      </div>
+      <div class="col-lg-4">
+          <div class="m-2 p-3 py-5 card">
+              <h4>Geo Physical Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </div>
+      </div>
+  </div>
     
   </div>
 </div>

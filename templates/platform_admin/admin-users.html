@@ -1,0 +1,90 @@
+{% extends 'base-dashboard-new.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<style>
+  .heading-wrap p {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: left !important;
+  }
+</style>
+
+<div class="main_content_iner overly_inner ">
+  <div class="container-fluid p-0 ">
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <div class="alert alert-success text-center" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  
+
+  <div class="container" style="color: black">
+    <div class="row edit-account-form-wrapper">
+      <div class="">
+        <div class="text-center">
+            <h2>Admin Users</h2>
+            <p>All Admin Users</p>
+          </div>
+
+          <div class="container py-5 heading-wrap">
+            <div class="row">
+              <div class="col-lg-3">
+                <p>Name</p>
+              </div>
+              <div class="col-lg-3">
+                <p>Email</p>
+              </div>
+              <div class="col-lg-2">
+                <p>Phone Number</p>
+              </div>
+              <div class="col-lg-2">
+                <p>Sex</p>
+              </div>
+              <div class="col-lg-2">
+                <p>Date Joined</p>
+              </div><hr>
+              {% for user in users %}
+              <div class="row my-2">
+                <div class="col-lg-3">
+                  <a href="{{ user.account_profile.get_absolute_url }}" style="color: black">
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                  </a>
+                </div>
+                <div class="col-lg-3">
+                    <td>{{ user.email }}</td>
+                </div>
+                <div class="col-lg-2">
+                  <td>{{ user.phone_number }}</td>
+                </div>
+                <div class="col-lg-2">
+                    {% if user.sex == 'M' %}
+                    <td>Male</td>
+                    {% elif user.sex == 'F' %}
+                    <td>Female</td>
+                    {% else %}
+                    <td>None</td>
+                    {% endif %}
+                </div>
+                <div class="col-lg-2">
+                  <td>{{ user.date_joined }}</td>
+                </div>
+            </div><hr>
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}
+

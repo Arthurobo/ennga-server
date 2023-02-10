@@ -18,13 +18,48 @@
 
   <div class="container" style="color: black">
     <div class="row">
-      <h2>Users</h2>
-      {% for user in users %}
-      <a href="{{ user.get_absolute_url }}" style="color: black" class="p-2">
-        <h4>{{ user.user.first_name }} {{ user.user.last_name }}</h4>
-      </a>
-      {% endfor %}
+      <h2>Dashboard</h2>
     </div>
+
+
+    <div class="row my-3">
+      <div class="col-lg-4">
+          <a href="{% url 'platform_admin:all-users' %}" class="m-2 p-3 py-5 card">
+              <h4>All Users</h4>
+              <p>All registered users</p>
+          </a>
+      </div>
+      <div class="col-lg-4">
+          <a href="{% url 'platform_admin:approved-users' %}" class="m-2 p-3 py-5 card">
+              <h4>Approved Users</h4>
+              <p>All approved users</p>
+          </a>
+      </div>
+      <div class="col-lg-4">
+          <a href="{% url 'platform_admin:admin-users' %}" class="m-2 p-3 py-5 card">
+              <h4>Admin Users</h4>
+              <p>All Admin Users</p>
+          </a>
+      </div>
+      <div class="col-lg-4">
+          <a href="{% url 'platform_admin:market-sector-list-view' %}" class="m-2 p-3 py-5 card">
+              <h4>Market Sectors Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </a>
+      </div>
+      <div class="col-lg-4">
+          <div class="m-2 p-3 py-5 card">
+              <h4>Historical Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </div>
+      </div>
+      <div class="col-lg-4">
+          <div class="m-2 p-3 py-5 card">
+              <h4>Geo Physical Data</h4>
+              <p><b>{{ market_sectors.count }}</b> data collected</p>
+          </div>
+      </div>
+  </div>
   </div>
 </div>
 
