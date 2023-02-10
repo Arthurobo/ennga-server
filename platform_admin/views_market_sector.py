@@ -56,7 +56,7 @@ def market_sector_create_view(request):
     if request.method == 'POST':
         form = MarketSectorForm(request.POST, request.FILES)
         if form.is_valid():
-            form.instance.user = request.user.profile
+            form.instance.user = request.user.account_profile
             form.save()
             messages.success(request, "Data added successfully!!!")
             return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
@@ -76,13 +76,13 @@ def market_sector_upload_view(request):
     if form_bulk.is_valid():
         nigeria_as_country_location = Country.objects.get(id=1)
 
-        form_bulk.instance.user = request.user.profile
+        form_bulk.instance.user = request.user.account_profile
         form_bulk.instance.country = nigeria_as_country_location
         newly_saved_form = form_bulk.save()
         messages.success(request, "We're still preparing your customers, refresh again after some seconds.")
         newly_saved_form_id = newly_saved_form.id
 
-        user_profile_id = request.user.profile.id
+        user_profile_id = request.user.account_profile.id
 
         # Fuction that processes our csv and creates customers
         # create_new_customers.delay(newly_saved_form_id, user_profile_id)
