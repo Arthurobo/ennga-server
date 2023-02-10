@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
-from accounts.models import Account
+from accounts.models import Account, Profile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 
@@ -14,18 +14,17 @@ from .forms import MarketSectorForm, MarketSectorBulkDataForm
 from .models import MarketSectorBulkData, MarketSector
 from .tasks import create_new_customers
 from utility.models import Country
-# Create your views here.
-
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.views.generic import ( ListView, DetailView, CreateView, 
+                                    UpdateView, DeleteView, RedirectView, View, TemplateView)
 
 @login_required
 def dashboard(request):
-    users = Account.objects.all()
+    users = Profile.objects.all()
     context = {
         'users': users,
     }
     return render(request, 'platform_admin/dashboard.html', context)
-
-
 
 
 @login_required
@@ -85,3 +84,48 @@ class UpdatePassword(PasswordChangeView):
         messages.success(self.request, "Password changed successfully.")
         return HttpResponseRedirect(self.get_success_url())
 
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    template_name = 'platform_admin/profile.html'
+ 
+    # override context data
+    def get_context_data(self, *args, **kwargs):
+        user = self.object
+        market_sectors = MarketSector.objects.filter(user=user)
+        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+        context['market_sectors'] = market_sectors
+        # context["category"] = "MISC"       
+        return context
+
+
+def profile_market_sector_view(request, pk):
+    user = Profile.objects.get(id=pk)
+    market_sectors = _load_market_sectors(request, pk)
+    user_market_sectors = MarketSector.objects.filter(user=user)
+    context = {
+        'market_sectors': market_sectors,
+        'user': user,
+        'user_market_sectors': user_market_sectors
+    }
+    return render(request, 'platform_admin/profile_market_sector.html', context)
+
+
+def profile_load_market_sectors_view(request):
+    market_sector = _load_market_sectors(request)
+    context = {"market_sectors": market_sector,}
+    return render(request, "platform_admin/partials/profile_market_sectors.html", context)
+
+
+def _load_market_sectors(request, pk):
+    page = request.GET.get("page")
+    user = Profile.objects.get(id=pk)
+    market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
+    paginator = Paginator(market_sectors, 50)
+    try:
+        market_sectors = paginator.page(page)
+    except PageNotAnInteger:
+        market_sectors = paginator.page(1)
+    except EmptyPage:
+        market_sectors = paginator.page(paginator.num_pages)
+    return market_sectors

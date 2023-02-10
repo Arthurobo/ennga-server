@@ -119,6 +119,7 @@ class Profile(models.Model):
     city = models.ForeignKey("utility.City", null=True, blank=True, on_delete=models.SET_NULL)
     address_location = models.CharField(max_length=255, blank=True)
     has_store = models.BooleanField(default=False)
+    followers = models.ManyToManyField("Profile", blank=True, related_name='profile_followers')
 
     """
     This field helps to know if a user has updated their shipping 
@@ -133,9 +134,11 @@ class Profile(models.Model):
         return str(self.user.email)
 
     def get_absolute_url(self):
-        return reverse('account:account-detail-view', kwargs={'pk': self.user.pk})
-        # Getting the slug of Account through 'self.user' as a foreignkey Note: To be used later
-        # return reverse('account:account-detail-view', kwargs={'slug': self.user.slug}) 
+        return reverse('platform_admin:user-profile-view', kwargs={'pk': self.user.pk})
+
+    def get_user_market_sector_view(self):
+        return reverse('platform_admin:user-market-sector-view', kwargs={'pk': self.user.pk})
+    
 
     def get_user_profile_url(self):
         return reverse('account:edit-user-profile-view', kwargs={'pk': self.user.pk})
