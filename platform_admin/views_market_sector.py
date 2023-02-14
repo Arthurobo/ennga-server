@@ -43,11 +43,20 @@ def _load_market_sectors(request):
 
 
 def market_sector_create_view(request):
-    form = MarketSectorForm()
+    form = MarketSectorForm(request.POST or None, request.FILES or None)
 
-    if request.method == 'POST':
-        form = MarketSectorForm(request.POST, request.FILES)
-        if form.is_valid():
+    # if request.method == 'POST':
+    #     form = MarketSectorForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         form.instance.user = request.user.account_profile
+    #         form.save()
+    #         messages.success(request, "Data added successfully!!!")
+    #         return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/ajax_market_sector_create.html'
+
+    if form.is_valid():
             form.instance.user = request.user.account_profile
             form.save()
             messages.success(request, "Data added successfully!!!")

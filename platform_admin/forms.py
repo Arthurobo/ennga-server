@@ -1,6 +1,6 @@
 from django import forms
-from .models import MarketSector, MarketSectorBulkData
-from utility.models import Country, State, City
+from .models import MarketSector, MarketSectorBulkData, HistoricalCategory, GeoPoliticalCategory, MarketSectorCategory
+from utility.models import Country, State, City, Clan, GeoPoliticalZone
 
 
 class MarketSectorBulkDataForm(forms.ModelForm):
@@ -47,14 +47,45 @@ class MarketSectorForm(forms.ModelForm):
             widget=forms.Select,
             queryset=City.objects.all(),
         )
+
+    clan = forms.ModelChoiceField(
+            label='Clan',
+            widget=forms.Select,
+            queryset=Clan.objects.all(),
+        )
+
+    geo_political_zone = forms.ModelChoiceField(
+            label='Geo Political Zone',
+            widget=forms.Select,
+            queryset=GeoPoliticalZone.objects.all(),
+        )
+
+    category = forms.ModelChoiceField(
+            label='Market Sector Category',
+            widget=forms.Select,
+            queryset=MarketSectorCategory.objects.all(),
+        )
+    
+
     class Meta:
         model = MarketSector
         fields = ['name', 'state', 'city', 'address_location',
-                    'phone_number', 'description']
+                    'phone_number', 'description', 'clan', 'geo_political_zone', 'category']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['state'].queryset = State.objects.none()
         self.fields['city'].queryset = City.objects.none()
+        self.fields['clan'].queryset = Clan.objects.none()
+
+        if 'geo_political_zone' in self.data:
+            try:
+                geo_political_zone_id = int(self.data.get('geo_political_zone'))
+                self.fields['state'].queryset = State.objects.filter(geo_political_zone_id=geo_political_zone_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty state queryset
+        elif self.instance.pk:
+            self.fields['state'].queryset = self.instance.geo_political_zone.state_set.order_by('name')
 
         if 'state' in self.data:
             try:
@@ -64,3 +95,12 @@ class MarketSectorForm(forms.ModelForm):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
         elif self.instance.pk:
             self.fields['city'].queryset = self.instance.state.city_set.order_by('name')
+
+        if 'city' in self.data:
+            try:
+                city_id = int(self.data.get('city'))
+                self.fields['clan'].queryset = Clan.objects.filter(city_id=city_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['clan'].queryset = self.instance.city.clan_set.order_by('name')

@@ -30,45 +30,7 @@
           <h2>Enter Data</h2>
             <p>Add market Data by either uploading a well structured csv file or add manually</p>
           </div>
-        <form class="mt-4" method="post" id="personForm" data-cities-url="{% url 'utility:ajax-load-cities' %}"
-      data-states-url="{% url 'utility:ajax-load-states' %}" 
-      novalidate>{% csrf_token %}
-        <div class="row">
-            <div class="col-lg-6 mb-3">
-                <label for="exampleInputEmail1" class="form-label">Business Name*</label>
-                {{ form.name|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.name}}</div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <label for="exampleInputPassword1" class="form-label">Phone Number*</label>
-                {{ form.phone_number|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.phone_number}}</div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <label for="exampleInputPassword1" class="form-label">State Location*</label>
-                {{ form.state|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.state}}</div>
-              </div>
-              <div class="col-lg-6 mb-3" id="new-ajax-city-id">
-                <label for="exampleInputPassword1" class="form-label">City Location*</label>
-                {{ form.city|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.city}}</div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Address Location*</label>
-                {{ form.address_location|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.address_location}}</div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Description*</label>
-                {{ form.description|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.description}}</div>
-              </div>
-        </div>
-        <div class="centered-btn-wrapper">
-          <button type="submit" class="btn btn-primary">Create</button>
-        </div>
-      </form>
+        {% include 'platform_admin/market_sector/partials/ajax_market_sector_create.html' %}
       </div>
 
       </div>
@@ -80,6 +42,26 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+  <script>
+    $("#id_geo_political_zone").change(function () {
+      // var url = $("#personForm").attr("data-states-url");
+      // var geo_political_zoneId = $(this).val();
+  
+      $.ajax({
+        url: $("#personForm").attr("data-states-url"),
+        data: {
+          'geo_political_zone': $(this).val()
+        },
+        success: function (data) {
+          $("#id_state").html(data);
+          document.getElementById('new-ajax-state-id').classList.remove('d-none')
+        }
+      });
+  
+    });
+  </script>
+
 
 <script>
   $("#id_state").change(function () {
@@ -102,24 +84,26 @@
 
 
 
-
 <script>
   $("#id_city").change(function () {
-    var url = $("#personForm").attr("data-branches-url");
+    var urlClan = $("#personForm").attr("data-clans-url");
     var cityId = $(this).val();
 
     $.ajax({
-      url: url,
+      url: $("#personForm").attr("data-clans-url"),
       data: {
-        'city': cityId
+        'city': $(this).val()
       },
       success: function (data) {
-        $("#id_branch").html(data);
+        $("#id_clan").html(data);
+        document.getElementById('new-ajax-clan-id').classList.remove('d-none')
       }
     });
 
   });
 </script>
+
+
 
 {% endblock content %}
 
