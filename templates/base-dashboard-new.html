@@ -127,7 +127,7 @@
       </div>
     </div>
     <ul id="sidebar_menu">
-      <li class="">
+      <!-- <li class="">
         <a href="{% url 'platform_admin:dashboard' %}" aria-expanded="false">
           <div class="nav_icon_small">
             <img src="{% static 'dashboard/img/menu-icon/1.svg' %}" alt="">
@@ -136,10 +136,21 @@
             <span>Dashboard</span>
           </div>
         </a>
+      </li> -->
+
+      <li class="">
+        <a href="{% url 'platform_admin:dashboard' %}" aria-expanded="false">
+          <div class="nav_icon_small">
+            <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Dashboard</span>
+          </div>
+        </a>
       </li>
 
       <li class="">
-        <a href="{% url 'platform_admin:edit-account' user_id=request.user.id %}" false">
+        <a href="{% url 'platform_admin:edit-account' user_id=request.user.id %}" aria-expanded="false">
           <div class="nav_icon_small">
             <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
           </div>
@@ -150,7 +161,7 @@
       </li>
 
       <li class="">
-        <a href="{% url 'platform_admin:market-sector-list-view' %}" false">
+        <a href="{% url 'platform_admin:market-sector-data-list-view' %}" aria-expanded="false">
           <div class="nav_icon_small">
             <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
           </div>
@@ -160,6 +171,16 @@
         </a>
       </li>
 
+      <li class="">
+        <a href="{% url 'platform_admin:historical-data-list-view' %}" aria-expanded="false">
+          <div class="nav_icon_small">
+            <img src="{% static 'dashboard/img/menu-icon/7.svg' %}" alt="">
+          </div>
+          <div class="nav_title">
+            <span>Historical</span>
+          </div>
+        </a>
+      </li>
 
       <li class="">
         <a href="{% url 'accounts:logout' %}" aria-expanded="false">

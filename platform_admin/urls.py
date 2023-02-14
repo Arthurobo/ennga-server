@@ -1,14 +1,147 @@
+# from django.urls import path
+# from django.contrib.auth import views as auth_views
+# from django.views.generic import TemplateView
+
+# from .views import dashboard, edit_account_view, UpdatePassword, ProfileDetailView, profile_market_sector_view, profile_load_market_sectors_view, all_users, approved_users, admin_users
+# from .views_market_sector import market_sector_list_view, market_sector_create_view, list_load_market_sectors_view, market_sector_upload_view
+
+# from .views_geo_political import geo_political_list_view, geo_political_create_view, list_load_geo_politicals_view, geo_political_upload_view
+
+# from .views_historical import historical_data_list_view, historical_geo_zone_detail_view
+
+# app_name = "platform_admin"
+
+# urlpatterns = [
+#     path('', dashboard, name='dashboard'),
+#     path('all-users/', all_users, name='all-users'),
+#     path('approved-users/', approved_users, name='approved-users'),
+#     path('admin-users/', admin_users, name='admin-users'),
+
+#     path('<user_id>/edit/', edit_account_view, name='edit-account'),
+#     path('change-password/', UpdatePassword.as_view(), name="update_password"),
+    
+#     path('<int:pk>/', ProfileDetailView.as_view(), name='user-profile-view'),
+#     path('<int:pk>/market-sector/', profile_market_sector_view, name='user-market-sector-view'),
+#     path('<int:pk>/market-sector/load/', profile_load_market_sectors_view, name='profile_market_sectors'),
+
+
+#     # Beginning of market sector
+#     path('market-sector/create/', market_sector_create_view, name="market-sector-create-view"),
+#     path('market-sector/upload/', market_sector_upload_view, name="market-sector-upload-view"),
+
+
+#     path('market-sector/', market_sector_list_view, name="market-sector-list-view"),
+#     path('market-sector/load/', list_load_market_sectors_view, name='market_sectors'),
+
+
+#     path('geo-political/', geo_political_list_view, name="geo-political-list-view"),
+#     path('geo-political/load/', list_load_geo_politicals_view, name='geo_politicals'),
+
+
+#     path('historical-data-list/', historical_data_list_view, name='historical-data-list-view'),
+#     path('historical-geo-zone-detail-view/<int:pk>/', historical_geo_zone_detail_view, name='historical-geo-zone-detail-view'),
+
+                                                                 
+# ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
 
 from .views import dashboard, edit_account_view, UpdatePassword, ProfileDetailView, profile_market_sector_view, profile_load_market_sectors_view, all_users, approved_users, admin_users
+from .views_market_sector import (
+    market_sector_data_list_view, market_sector_geo_zone_detail_view, list_load_market_sector_geo_zone_details_view, 
+    market_sector_state_location_detail_view, list_load_market_sector_state_location_details_view, 
+    market_sector_city_location_detail_view,
+    list_load_market_sector_city_location_details_view, market_sector_clan_location_detail_view, list_load_market_sector_clan_location_details_view
+)
+
+
+from .views_historical import (historical_list_view,
+    list_load_historicals_view,
+    historical_data_list_view, historical_geo_zone_detail_view, list_load_historical_geo_zone_details_view, 
+    historical_state_location_detail_view, list_load_historical_state_location_details_view, 
+    historical_city_location_detail_view,
+    list_load_historical_city_location_details_view, historical_clan_location_detail_view, list_load_historical_clan_location_details_view
+)
+
+from .views_geo_political import (
+    geo_political_list_view,
+list_load_geo_politicals_view
+)
+
+from .views import dashboard, edit_account_view, UpdatePassword, ProfileDetailView, profile_market_sector_view, profile_load_market_sectors_view, all_users, approved_users, admin_users
 from .views_market_sector import market_sector_list_view, market_sector_create_view, list_load_market_sectors_view, market_sector_upload_view
+
 
 app_name = "platform_admin"
 
 urlpatterns = [
-    path('', dashboard, name='dashboard'),
+    path('home/', dashboard, name='dashboard'),
     path('all-users/', all_users, name='all-users'),
     path('approved-users/', approved_users, name='approved-users'),
     path('admin-users/', admin_users, name='admin-users'),
@@ -21,13 +154,78 @@ urlpatterns = [
     path('<int:pk>/market-sector/load/', profile_load_market_sectors_view, name='profile_market_sectors'),
 
 
-    # Beginning of market sector
+
+
+
+    #""" Beginning of hISTORIC DATA """
+    path('historical/', historical_list_view, name="historical-list-view"), # Lists all the data in market sectors
+    path('historical/load/', list_load_historicals_view, name='historicals'),
+    path('historical-data-list/', historical_data_list_view, name='historical-data-list-view'),        
+    ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
+    path('historical-geo-zone-detail-view/<int:geozone_pk>/', historical_geo_zone_detail_view, name='historical-geo-zone-detail-view'),
+    path('historical-geo-zone-detail-view/<int:geozone_pk>/load/', list_load_historical_geo_zone_details_view, name='list-load-historical-geo-zone-details-view'),
+
+    ###################################### END OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('historical-state-location-detail-view/<int:state_location_pk>/', historical_state_location_detail_view, name='historical-state-location-detail-view'),
+    path('historical-state-location-detail-view/<int:state_location_pk>/load/', list_load_historical_state_location_details_view, name='list-load-historical-state-location-details-view'),
+
+    ###################################### END OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('historical-city-location-detail-view/<int:city_location_pk>/', historical_city_location_detail_view, name='historical-city-location-detail-view'),
+    path('historical-city-location-detail-view/<int:city_location_pk>/load/', list_load_historical_city_location_details_view, name='list-load-historical-city-location-details-view'),
+
+    ###################################### END OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('historical-clan-location-detail-view/<int:clan_location_pk>/', historical_clan_location_detail_view, name='historical-clan-location-detail-view'),
+    path('historical-clan-location-detail-view/<int:clan_location_pk>/load/', list_load_historical_clan_location_details_view, name='list-load-historical-clan-location-details-view'),
+
+    ###################################### END OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+
+
+    #""" Beginning of MARKET SECTOR DATA 
     path('market-sector/create/', market_sector_create_view, name="market-sector-create-view"),
     path('market-sector/upload/', market_sector_upload_view, name="market-sector-upload-view"),
-
-
-    path('market-sector/', market_sector_list_view, name="market-sector-list-view"),
+    path('market-sector/', market_sector_list_view, name="market-sector-list-view"), # Lists all the data in market sectors
     path('market-sector/load/', list_load_market_sectors_view, name='market_sectors'),
+    path('market-sector-data-list/', market_sector_data_list_view, name='market-sector-data-list-view'),
+    ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR MARKET_SECTOR DATA ###########################################
+    path('market-sector-geo-zone-detail-view/<int:geozone_pk>/', market_sector_geo_zone_detail_view, name='market-sector-geo-zone-detail-view'),
+    path('market-sector-geo-zone-detail-view/<int:geozone_pk>/load/', list_load_market_sector_geo_zone_details_view, name='list-load-market-sector-geo-zone-details-view'),
 
+    ###################################### END OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('market-sector-state-location-detail-view/<int:state_location_pk>/', market_sector_state_location_detail_view, name='market-sector-state-location-detail-view'),
+    path('market-sector-state-location-detail-view/<int:state_location_pk>/load/', list_load_market_sector_state_location_details_view, name='list-load-market-sector-state-location-details-view'),
+
+    ###################################### END OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('market-sector-city-location-detail-view/<int:city_location_pk>/', market_sector_city_location_detail_view, name='market-sector-city-location-detail-view'),
+    path('market-sector-city-location-detail-view/<int:city_location_pk>/load/', list_load_market_sector_city_location_details_view, name='list-load-market-sector-city-location-details-view'),
+
+    ###################################### END OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+    
+
+    ###################################### BEGINNING OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+
+    path('market-sector-clan-location-detail-view/<int:clan_location_pk>/', market_sector_clan_location_detail_view, name='market-sector-clan-location-detail-view'),
+    path('market-sector-clan-location-detail-view/<int:clan_location_pk>/load/', list_load_market_sector_clan_location_details_view, name='list-load-market-sector-clan-location-details-view'),
+
+    ###################################### END OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
                                                                  
 ]

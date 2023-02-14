@@ -11,18 +11,23 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
 from accounts.models import Account, Profile
 from django.conf import settings
 from .forms import MarketSectorForm, MarketSectorBulkDataForm
-from .models import MarketSectorBulkData, MarketSector
+from .models import MarketSectorBulkData, MarketSector, Historical
 from .tasks import create_new_customers
 from utility.models import Country
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ( ListView, DetailView, CreateView, 
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
 
+
 @login_required
 def dashboard(request):
     users = Profile.objects.all()
+    market_sectors = MarketSector.objects.all()
+    historicals = Historical.objects.all()
     context = {
         'users': users,
+        'historicals': historicals,
+        'market_sectors': market_sectors,
     }
     return render(request, 'platform_admin/dashboard.html', context)
 
