@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "anymail",
     'django_htmx',
+    'ckeditor',
+    'ckeditor_uploader',
 
     'accounts',
     'utility',
@@ -214,3 +216,14 @@ CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 
 # DRF 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'height': 'full', 
+        'width': 'full', 
+    },
+}

@@ -117,7 +117,8 @@ from .views_market_sector import (
     market_sector_data_list_view, market_sector_geo_zone_detail_view, list_load_market_sector_geo_zone_details_view, 
     market_sector_state_location_detail_view, list_load_market_sector_state_location_details_view, 
     market_sector_city_location_detail_view,
-    list_load_market_sector_city_location_details_view, market_sector_clan_location_detail_view, list_load_market_sector_clan_location_details_view
+    list_load_market_sector_city_location_details_view, market_sector_clan_location_detail_view, list_load_market_sector_clan_location_details_view,
+    market_sector_detail_view
 )
 
 
@@ -126,7 +127,8 @@ from .views_historical import (historical_list_view,
     historical_data_list_view, historical_geo_zone_detail_view, list_load_historical_geo_zone_details_view, 
     historical_state_location_detail_view, list_load_historical_state_location_details_view, 
     historical_city_location_detail_view,
-    list_load_historical_city_location_details_view, historical_clan_location_detail_view, list_load_historical_clan_location_details_view
+    list_load_historical_city_location_details_view, historical_clan_location_detail_view, list_load_historical_clan_location_details_view,
+    historical_detail_view
 )
 
 from .views_geo_political import (
@@ -160,7 +162,8 @@ urlpatterns = [
     #""" Beginning of hISTORIC DATA """
     path('historical/', historical_list_view, name="historical-list-view"), # Lists all the data in market sectors
     path('historical/load/', list_load_historicals_view, name='historicals'),
-    path('historical-data-list/', historical_data_list_view, name='historical-data-list-view'),        
+    path('historical-data-list/', historical_data_list_view, name='historical-data-list-view'),
+    path('historical-detail/<int:pk>/', historical_detail_view, name='historical-detail-view'),
     ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
     path('historical-geo-zone-detail-view/<int:geozone_pk>/', historical_geo_zone_detail_view, name='historical-geo-zone-detail-view'),
     path('historical-geo-zone-detail-view/<int:geozone_pk>/load/', list_load_historical_geo_zone_details_view, name='list-load-historical-geo-zone-details-view'),
@@ -198,6 +201,7 @@ urlpatterns = [
     path('market-sector/', market_sector_list_view, name="market-sector-list-view"), # Lists all the data in market sectors
     path('market-sector/load/', list_load_market_sectors_view, name='market_sectors'),
     path('market-sector-data-list/', market_sector_data_list_view, name='market-sector-data-list-view'),
+    path('market-sector-detail/<int:pk>/', market_sector_detail_view, name='market-sector-detail-view'),
     ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR MARKET_SECTOR DATA ###########################################
     path('market-sector-geo-zone-detail-view/<int:geozone_pk>/', market_sector_geo_zone_detail_view, name='market-sector-geo-zone-detail-view'),
     path('market-sector-geo-zone-detail-view/<int:geozone_pk>/load/', list_load_market_sector_geo_zone_details_view, name='list-load-market-sector-geo-zone-details-view'),

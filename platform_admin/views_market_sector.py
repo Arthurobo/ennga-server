@@ -13,6 +13,27 @@ from django.views.generic import ( ListView, DetailView, CreateView,
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
 
 
+@login_required
+def market_sector_detail_view(request, pk):
+    object = MarketSector.objects.get(id=pk)
+    form = MarketSectorForm(request.POST or None, request.FILES or None, instance=object)
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
+
+    if form.is_valid():
+        # form.instance.user = request.user.account_profile
+        form.save()
+        messages.success(request, "Data added successfully!!!")
+        return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+
+    context = {
+        'object': object,
+        'form': form,
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-detail.html', context)
+
+@login_required
 def market_sector_list_view(request):
     market_sectors = _load_market_sectors(request)
     # objects = MarketSector.objects.all().order_by('-date_created')
@@ -22,11 +43,11 @@ def market_sector_list_view(request):
     return render(request, 'platform_admin/all-market-sectors.html', context)
 
 
+@login_required
 def list_load_market_sectors_view(request):
     market_sector = _load_market_sectors(request)
     context = {"market_sectors": market_sector,}
     return render(request, "platform_admin/partials/all-market_sectors.html", context)
-
 
 def _load_market_sectors(request):
     page = request.GET.get("page")
@@ -41,7 +62,7 @@ def _load_market_sectors(request):
     return market_sectors
 
 
-
+@login_required
 def market_sector_create_view(request):
     form = MarketSectorForm(request.POST or None, request.FILES or None)
 
@@ -67,7 +88,7 @@ def market_sector_create_view(request):
     }
     return render(request, 'platform_admin/market-sector-create.html', context)
 
-
+@login_required
 def market_sector_upload_view(request):
     form_bulk = MarketSectorBulkDataForm(request.POST or None, request.FILES or None)
 
@@ -112,6 +133,7 @@ def market_sector_data_list_view(request):
 
 
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR MARKET_SECTOR DATA ###########################################
+@login_required
 def market_sector_geo_zone_detail_view(request, geozone_pk):
     object = GeoPoliticalZone.objects.get(id=geozone_pk)
     geozone_pk = geozone_pk
@@ -124,6 +146,8 @@ def market_sector_geo_zone_detail_view(request, geozone_pk):
     return render(request, 'platform_admin/market_sector/market_sector-geo-zone-detail.html', context)
 
 
+
+@login_required
 def list_load_market_sector_geo_zone_details_view(request, geozone_pk):
     object = GeoPoliticalZone.objects.get(id=geozone_pk)
     market_sector_geo_zone_detail = _load_market_sector_geo_zone_details(request, geozone_pk)
@@ -131,6 +155,8 @@ def list_load_market_sector_geo_zone_details_view(request, geozone_pk):
     return render(request, "platform_admin/market_sector/partials/market_sector_geo_zone_details.html", context)
 
 
+
+@login_required
 def _load_market_sector_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
     market_sector_geo_zone_details = MarketSector.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
@@ -149,6 +175,8 @@ def _load_market_sector_geo_zone_details(request, geozone_pk):
 
 ###################################### BEGINNING OF STATES LOCATION FOR MARKET_SECTOR DATA ###########################################
 
+
+@login_required
 def market_sector_state_location_detail_view(request, state_location_pk):
     object = State.objects.get(id=state_location_pk)
     state_location_pk = state_location_pk
@@ -161,6 +189,8 @@ def market_sector_state_location_detail_view(request, state_location_pk):
     return render(request, 'platform_admin/market_sector/market_sector-state-location-detail.html', context)
 
 
+
+@login_required
 def list_load_market_sector_state_location_details_view(request, state_location_pk):
     object = State.objects.get(id=state_location_pk)
     market_sector_state_location_detail = _load_market_sector_state_location_details(request, state_location_pk)
@@ -168,6 +198,8 @@ def list_load_market_sector_state_location_details_view(request, state_location_
     return render(request, "platform_admin/market_sector/partials/market_sector_state_location_details.html", context)
 
 
+
+@login_required
 def _load_market_sector_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
     market_sector_state_location_details = MarketSector.objects.filter(state=state_location_pk).order_by('-date_created')
@@ -187,6 +219,8 @@ def _load_market_sector_state_location_details(request, state_location_pk):
 
 ###################################### BEGINNING OF CITIES LOCATION FOR MARKET_SECTOR DATA ###########################################
 
+
+@login_required
 def market_sector_city_location_detail_view(request, city_location_pk):
     object = City.objects.get(id=city_location_pk)
     city_location_pk = city_location_pk
@@ -199,6 +233,8 @@ def market_sector_city_location_detail_view(request, city_location_pk):
     return render(request, 'platform_admin/market_sector/market_sector-city-location-detail.html', context)
 
 
+
+@login_required
 def list_load_market_sector_city_location_details_view(request, city_location_pk):
     object = City.objects.get(id=city_location_pk)
     market_sector_city_location_detail = _load_market_sector_city_location_details(request, city_location_pk)
@@ -206,6 +242,8 @@ def list_load_market_sector_city_location_details_view(request, city_location_pk
     return render(request, "platform_admin/market_sector/partials/market_sector_city_location_details.html", context)
 
 
+
+@login_required
 def _load_market_sector_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
     market_sector_city_location_details = MarketSector.objects.filter(city=city_location_pk).order_by('-date_created')
@@ -225,6 +263,8 @@ def _load_market_sector_city_location_details(request, city_location_pk):
 
 ###################################### BEGINNING OF CLANS LOCATION FOR MARKET_SECTOR DATA ###########################################
 
+
+@login_required
 def market_sector_clan_location_detail_view(request, clan_location_pk):
     object = Clan.objects.get(id=clan_location_pk)
     clan_location_pk = clan_location_pk
@@ -236,6 +276,8 @@ def market_sector_clan_location_detail_view(request, clan_location_pk):
     return render(request, 'platform_admin/market_sector/market_sector-clan-location-detail.html', context)
 
 
+
+@login_required
 def list_load_market_sector_clan_location_details_view(request, clan_location_pk):
     object = Clan.objects.get(id=clan_location_pk)
     market_sector_clan_location_detail = _load_market_sector_clan_location_details(request, clan_location_pk)
@@ -243,6 +285,8 @@ def list_load_market_sector_clan_location_details_view(request, clan_location_pk
     return render(request, "platform_admin/market_sector/partials/market_sector_clan_location_details.html", context)
 
 
+
+@login_required
 def _load_market_sector_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
     market_sector_clan_location_details = MarketSector.objects.filter(clan=clan_location_pk).order_by('-date_created')

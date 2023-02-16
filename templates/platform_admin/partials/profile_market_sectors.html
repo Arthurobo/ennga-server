@@ -17,7 +17,7 @@
                   <td>{{ object.address_location }}</td>
                 </div>
                 <div class="col-lg-2">
-                  <td>{{ object.description }}</td>
+                  <td>{{ object.description|safe }}</td>
                 </div>
               </div><hr>
             {% endfor %}

@@ -10,7 +10,9 @@
     </div>
     <div class="col-lg-8 py-2">
       <div>
-        <p>{{ object.description }}</p>
+        <p>{{ object.description|safe|truncatechars:400 }}
+          <a href="{{ object.get_absolute_url }}" style="font-size: 14px;">More</a>
+        </p>
       </div>
     </div>
   </div>

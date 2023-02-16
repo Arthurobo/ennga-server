@@ -1,6 +1,8 @@
 from django.db import models
 from accounts.models import Profile
 from utility.models import Country, State, City, GeoPoliticalZone
+from ckeditor_uploader.fields import RichTextUploadingField
+from django.urls import reverse
 
 
 class MarketSectorCategory(models.Model):
@@ -42,12 +44,16 @@ class MarketSector(models.Model):
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
     address_location = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
-    description = models.TextField()
+    description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('platform_admin:market-sector-detail-view', kwargs={'pk': self.pk})
+    
     
 
 class HistoricalCategory(models.Model):
@@ -76,6 +82,9 @@ class Historical(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+    def get_absolute_url(self):
+        return reverse('platform_admin:historical-detail-view', kwargs={'pk': self.pk})
 
 
 class GeoPoliticalCategory(models.Model):

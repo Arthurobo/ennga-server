@@ -19,6 +19,18 @@ from django.views.generic import ( ListView, DetailView, CreateView,
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
 
 
+
+@login_required
+def historical_detail_view(request, pk):
+    object = MarketSector.objects.get(id=pk)
+    context = {
+        'object': object,
+    }
+    return render(request, 'platform_admin/historical/historical-detail.html', context)
+
+
+
+@login_required
 def historical_list_view(request):
     historicals = _load_historicals(request)
     # objects = MarketSector.objects.all().order_by('-date_created')
@@ -28,12 +40,16 @@ def historical_list_view(request):
     return render(request, 'platform_admin/historical/all-historicals.html', context)
 
 
+
+@login_required
 def list_load_historicals_view(request):
     historical = _load_historicals(request)
     context = {"historicals": historical,}
     return render(request, "platform_admin/historical/partials/all-historicals.html", context)
 
 
+
+@login_required
 def _load_historicals(request):
     page = request.GET.get("page")
     historicals = Historical.objects.all().order_by('-date_created')
@@ -45,14 +61,6 @@ def _load_historicals(request):
     except EmptyPage:
         historicals = paginator.page(paginator.num_pages)
     return historicals
-
-
-
-
-
-
-
-
 
 
 @login_required
@@ -69,6 +77,8 @@ def historical_data_list_view(request):
 
 
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
+
+@login_required
 def historical_geo_zone_detail_view(request, geozone_pk):
     object = GeoPoliticalZone.objects.get(id=geozone_pk)
     geozone_pk = geozone_pk
@@ -81,6 +91,8 @@ def historical_geo_zone_detail_view(request, geozone_pk):
     return render(request, 'platform_admin/historical/historical-geo-zone-detail.html', context)
 
 
+
+@login_required
 def list_load_historical_geo_zone_details_view(request, geozone_pk):
     object = GeoPoliticalZone.objects.get(id=geozone_pk)
     historical_geo_zone_detail = _load_historical_geo_zone_details(request, geozone_pk)
@@ -88,6 +100,8 @@ def list_load_historical_geo_zone_details_view(request, geozone_pk):
     return render(request, "platform_admin/historical/partials/historical_geo_zone_details.html", context)
 
 
+
+@login_required
 def _load_historical_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
     historical_geo_zone_details = Historical.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
@@ -106,6 +120,8 @@ def _load_historical_geo_zone_details(request, geozone_pk):
 
 ###################################### BEGINNING OF STATES LOCATION FOR HISTORICAL DATA ###########################################
 
+
+@login_required
 def historical_state_location_detail_view(request, state_location_pk):
     object = State.objects.get(id=state_location_pk)
     state_location_pk = state_location_pk
@@ -118,6 +134,8 @@ def historical_state_location_detail_view(request, state_location_pk):
     return render(request, 'platform_admin/historical/historical-state-location-detail.html', context)
 
 
+
+@login_required
 def list_load_historical_state_location_details_view(request, state_location_pk):
     object = State.objects.get(id=state_location_pk)
     historical_state_location_detail = _load_historical_state_location_details(request, state_location_pk)
@@ -125,6 +143,8 @@ def list_load_historical_state_location_details_view(request, state_location_pk)
     return render(request, "platform_admin/historical/partials/historical_state_location_details.html", context)
 
 
+
+@login_required
 def _load_historical_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
     historical_state_location_details = Historical.objects.filter(state=state_location_pk).order_by('-date_created')
@@ -144,6 +164,8 @@ def _load_historical_state_location_details(request, state_location_pk):
 
 ###################################### BEGINNING OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
 
+
+@login_required
 def historical_city_location_detail_view(request, city_location_pk):
     object = City.objects.get(id=city_location_pk)
     city_location_pk = city_location_pk
@@ -156,6 +178,8 @@ def historical_city_location_detail_view(request, city_location_pk):
     return render(request, 'platform_admin/historical/historical-city-location-detail.html', context)
 
 
+
+@login_required
 def list_load_historical_city_location_details_view(request, city_location_pk):
     object = City.objects.get(id=city_location_pk)
     historical_city_location_detail = _load_historical_city_location_details(request, city_location_pk)
@@ -163,6 +187,8 @@ def list_load_historical_city_location_details_view(request, city_location_pk):
     return render(request, "platform_admin/historical/partials/historical_city_location_details.html", context)
 
 
+
+@login_required
 def _load_historical_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
     historical_city_location_details = Historical.objects.filter(city=city_location_pk).order_by('-date_created')
@@ -182,6 +208,8 @@ def _load_historical_city_location_details(request, city_location_pk):
 
 ###################################### BEGINNING OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
 
+
+@login_required
 def historical_clan_location_detail_view(request, clan_location_pk):
     object = Clan.objects.get(id=clan_location_pk)
     clan_location_pk = clan_location_pk
@@ -193,6 +221,8 @@ def historical_clan_location_detail_view(request, clan_location_pk):
     return render(request, 'platform_admin/historical/historical-clan-location-detail.html', context)
 
 
+
+@login_required
 def list_load_historical_clan_location_details_view(request, clan_location_pk):
     object = Clan.objects.get(id=clan_location_pk)
     historical_clan_location_detail = _load_historical_clan_location_details(request, clan_location_pk)
@@ -200,6 +230,8 @@ def list_load_historical_clan_location_details_view(request, clan_location_pk):
     return render(request, "platform_admin/historical/partials/historical_clan_location_details.html", context)
 
 
+
+@login_required
 def _load_historical_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
     historical_clan_location_details = Historical.objects.filter(clan=clan_location_pk).order_by('-date_created')

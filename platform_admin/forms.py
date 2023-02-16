@@ -1,6 +1,7 @@
 from django import forms
 from .models import MarketSector, MarketSectorBulkData, HistoricalCategory, GeoPoliticalCategory, MarketSectorCategory
 from utility.models import Country, State, City, Clan, GeoPoliticalZone
+from ckeditor_uploader.fields import RichTextUploadingFormField
 
 
 class MarketSectorBulkDataForm(forms.ModelForm):
@@ -66,11 +67,13 @@ class MarketSectorForm(forms.ModelForm):
             queryset=MarketSectorCategory.objects.all(),
         )
     
+    description = RichTextUploadingFormField(required=True,)
+    
 
     class Meta:
         model = MarketSector
         fields = ['name', 'state', 'city', 'address_location',
-                    'phone_number', 'description', 'clan', 'geo_political_zone', 'category']
+                    'phone_number', 'clan', 'geo_political_zone', 'category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
