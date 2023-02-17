@@ -78,13 +78,16 @@ def market_sector_create_view(request):
         template_name = 'platform_admin/market_sector/partials/ajax_market_sector_create.html'
 
     if form.is_valid():
-            form.instance.user = request.user.account_profile
-            form.save()
-            messages.success(request, "Data added successfully!!!")
-            return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
 
     context = {
-        'form': form,
+    'form': form,
     }
     return render(request, 'platform_admin/market-sector-create.html', context)
 

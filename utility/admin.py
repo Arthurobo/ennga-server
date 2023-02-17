@@ -10,7 +10,7 @@ class CityInline(admin.TabularInline):
     model = City
 
 class StateInline(admin.TabularInline):
-    model = City
+    model = State
 
 
 class CityAdmin(admin.ModelAdmin):
