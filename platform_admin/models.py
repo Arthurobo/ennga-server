@@ -44,7 +44,7 @@ class MarketSector(models.Model):
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
     address_location = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
-    description = RichTextUploadingField(blank=True, null=True,)
+    description = RichTextUploadingField()
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

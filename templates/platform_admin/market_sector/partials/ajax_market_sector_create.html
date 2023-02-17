@@ -10,7 +10,8 @@
 <div id="image-upload">
       <form class="mt-4" id='personForm' action='.' method="POST" enctype="multipart/form-data" hx-post="{{ request.path }}"
           hx-swap="none"
-        hx-encoding="multipart/form-data" 
+        hx-encoding="multipart/form-data"
+        hx-vals="js:{description: CKEDITOR.instances.id_description.getData()}"
         data-cities-url="{% url 'utility:ajax-load-cities' %}"
         data-clans-url="{% url 'utility:ajax-load-clans' %}"
         data-states-url="{% url 'utility:ajax-load-states' %}" >
