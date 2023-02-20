@@ -11,7 +11,7 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
 from accounts.models import Account, Profile
 from django.conf import settings
 from .forms import MarketSectorForm, MarketSectorBulkDataForm
-from .models import MarketSectorBulkData, MarketSector, Historical
+from .models import MarketSectorBulkData, MarketSector, Historical, GeoPhysicalData
 from .tasks import create_new_customers
 from utility.models import Country
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -60,6 +60,9 @@ def admin_users(request):
 def edit_account_view(request, *args, **kwargs):
     user = request.user.account_profile
     market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
+    historicals = Historical.objects.filter(user=user).order_by('-date_created')
+    geo_physicals = GeoPhysicalData.objects.filter(user=user).order_by('-date_created')
+
     if not request.user.is_authenticated:
         return redirect('accounts:login')
     user_id = kwargs.get("user_id")
@@ -98,6 +101,8 @@ def edit_account_view(request, *args, **kwargs):
 			)
         context['form'] = form
         context['market_sectors'] = market_sectors
+        context['historicals'] = historicals
+        context['geo_physicals'] = geo_physicals
         context['object'] = user
     context['DATA_UPLOAD_MAX_MEMORY_SIZE'] = settings.DATA_UPLOAD_MAX_MEMORY_SIZE
     return render(request, 'platform_admin/edit_account.html', context)

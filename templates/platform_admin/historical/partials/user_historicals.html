@@ -1,0 +1,41 @@
+{% if user_historicals %}
+
+{% for object in user_historicals %}
+<div class="row my-4">
+  <div class="col-lg-4 py-2">
+    <td>{{ object.user.user.first_name }} {{ object.user.user.last_name }},</td><br>
+    <td>{{ object.state }} - {{ object.city }},</td><br>
+    <td>{{ object.date_created }}</td><br>
+  </div>
+  <div class="col-lg-8 py-2">
+    <div>
+      <a href="{{ object.get_absolute_url }}" style="font-size: 14px;">
+        <a href="{{ object.get_absolute_url }}" style="font-size: 14px;">
+          <p>{{ object.description|safe|truncatechars:400 }}
+          </p>
+        </a>
+    </a>
+    </div>
+  </div>
+</div>
+<hr>
+            {% endfor %}
+{% else %}
+<div class="centralize-div">
+  <h3 class="ui header center aligned">No results!</h3>
+</div>
+{% endif %}
+
+
+<div class="centralize-div py-5" id="load-more">
+  {% if user_historicals.has_next %}
+  <div class="ui divider"></div>
+  <div class="row mt-5 centered-btn-wrapper">
+    <button class="btn btn-primary" hx-get="{% url 'platform_admin:user_historicals' %}"
+    hx-vals='{"page": "{{ user_historicals.next_page_number }}", "user_historicals": "{{ user_historicals }}"}' hx-target="#load-more"
+    hx-swap="outerHTML">
+    Load more
+  </button>
+  </div>
+  {% endif %}
+</div>

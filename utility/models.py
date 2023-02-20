@@ -43,6 +43,13 @@ class GeoPoliticalZone(models.Model):
         return reverse('platform_admin:list-load-market-sector-geo-zone-details-view', kwargs={'geozone_pk': self.pk})
 
 
+    def get_geo_physical_geo_zone_detail_url(self):
+        return reverse('platform_admin:geo-physical-geo-zone-detail-view', kwargs={'geozone_pk': self.pk})
+
+    def get_list_load_geo_physical_geo_zone_details_url(self):
+        return reverse('platform_admin:list-load-geo-physical-geo-zone-details-view', kwargs={'geozone_pk': self.pk})
+
+
 class State(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
@@ -72,6 +79,13 @@ class State(models.Model):
 
     def get_list_load_market_sector_state_location_details_url(self):
         return reverse('platform_admin:list-load-market-sector-state-location-details-view', kwargs={'state_location_pk': self.pk})
+
+
+    def get_geo_physical_state_location_detail_url(self):
+        return reverse('platform_admin:geo-physical-state-location-detail-view', kwargs={'state_location_pk': self.pk})
+
+    def get_list_load_geo_physical_state_location_details_url(self):
+        return reverse('platform_admin:list-load-geo-physical-state-location-details-view', kwargs={'state_location_pk': self.pk})
 
 
 class City(models.Model):
@@ -104,6 +118,13 @@ class City(models.Model):
 
     def get_list_load_market_sector_city_location_details_url(self):
         return reverse('platform_admin:list-load-market-sector-city-location-details-view', kwargs={'city_location_pk': self.pk})
+
+
+    def get_geo_physical_city_location_detail_url(self):
+        return reverse('platform_admin:geo-physical-city-location-detail-view', kwargs={'city_location_pk': self.pk})
+
+    def get_list_load_geo_physical_city_location_details_url(self):
+        return reverse('platform_admin:list-load-geo-physical-city-location-details-view', kwargs={'city_location_pk': self.pk})
     
 
 class Clan(models.Model):
@@ -137,3 +158,10 @@ class Clan(models.Model):
 
     def get_list_load_market_sector_clan_location_details_url(self):
         return reverse('platform_admin:list-load-market-sector-clan-location-details-view', kwargs={'clan_location_pk': self.pk})
+
+
+    def get_geo_physical_clan_location_detail_url(self):
+        return reverse('platform_admin:geo-physical-clan-location-detail-view', kwargs={'clan_location_pk': self.pk})
+
+    def get_list_load_geo_physical_clan_location_details_url(self):
+        return reverse('platform_admin:list-load-geo-physical-clan-location-details-view', kwargs={'clan_location_pk': self.pk})

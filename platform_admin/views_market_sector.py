@@ -40,7 +40,7 @@ def market_sector_list_view(request):
     context = {
         'market_sectors': market_sectors,
     }
-    return render(request, 'platform_admin/all-market-sectors.html', context)
+    return render(request, 'platform_admin/market_sector/all-market-sectors.html', context)
 
 
 @login_required
@@ -65,14 +65,6 @@ def _load_market_sectors(request):
 @login_required
 def market_sector_create_view(request):
     form = MarketSectorForm(request.POST or None, request.FILES or None)
-
-    # if request.method == 'POST':
-    #     form = MarketSectorForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         form.instance.user = request.user.account_profile
-    #         form.save()
-    #         messages.success(request, "Data added successfully!!!")
-    #         return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/ajax_market_sector_create.html'
@@ -134,6 +126,39 @@ def market_sector_data_list_view(request):
     }
     return render(request, 'platform_admin/market_sector/market_sector-data-list-view.html', context)
 
+
+
+###################################### BEGINNING OF LOGGED IN USER MARKET_SECTOR DATA ###########################################
+@login_required
+def user_market_sector_list_view(request):
+    user_market_sectors = _load_user_market_sectors(request)
+    # objects = MarketSector.objects.all().order_by('-date_created')
+    context = {
+        'user_market_sectors': user_market_sectors,
+    }
+    return render(request, 'platform_admin/market_sector/user-market-sectors.html', context)
+
+
+@login_required
+def list_load_user_market_sectors_view(request):
+    user_market_sector = _load_user_market_sectors(request)
+    context = {"user_market_sectors": user_market_sector,}
+    return render(request, "platform_admin/market_sector/partials/user_market_sectors.html", context)
+
+def _load_user_market_sectors(request):
+    page = request.GET.get("page")
+    user = request.user.account_profile
+    user_market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
+    paginator = Paginator(user_market_sectors, 1)
+    try:
+        user_market_sectors = paginator.page(page)
+    except PageNotAnInteger:
+        user_market_sectors = paginator.page(1)
+    except EmptyPage:
+        user_market_sectors = paginator.page(paginator.num_pages)
+    return user_market_sectors
+
+###################################### END OF LOGGED IN USER MARKET_SECTOR DATA ###########################################
 
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR MARKET_SECTOR DATA ###########################################
 @login_required

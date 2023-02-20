@@ -76,7 +76,7 @@ class Historical(models.Model):
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(HistoricalCategory, null=True, on_delete=models.SET_NULL)
-    description = models.TextField()
+    description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -87,7 +87,7 @@ class Historical(models.Model):
         return reverse('platform_admin:historical-detail-view', kwargs={'pk': self.pk})
 
 
-class GeoPoliticalCategory(models.Model):
+class GeoPhysicalCategory(models.Model):
     name = models.CharField(max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -99,17 +99,20 @@ class GeoPoliticalCategory(models.Model):
         verbose_name_plural = 'Geo Political Categories'
 
 
-class GeoPoliticalData(models.Model):
+class GeoPhysicalData(models.Model):
     user = models.ForeignKey("accounts.Profile", blank=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey("utility.Country", blank=True, null=True, on_delete=models.SET_NULL)
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(GeoPoliticalCategory, null=True, on_delete=models.SET_NULL)
-    description = models.TextField()
+    category = models.ForeignKey(GeoPhysicalCategory, null=True, on_delete=models.SET_NULL)
+    description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.id)
+    
+    def get_absolute_url(self):
+        return reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': self.pk})

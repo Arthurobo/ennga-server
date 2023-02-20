@@ -62,23 +62,24 @@
 
     <div class="row my-3">
       <div class="col-lg-4">
-          <a href="{{ object.get_user_market_sector_view }}" class="m-2 p-3 py-5 card">
+          <a href="{% url 'platform_admin:user-market-sector-list-view' %}" class="m-2 p-3 py-5 card">
               <h4>Market Sectors Data</h4>
               <p><b>{{ market_sectors.count }}</b> data collected</p>
           </a>
       </div>
       <div class="col-lg-4">
-          <div class="m-2 p-3 py-5 card">
+          <a href="{% url 'platform_admin:user-historical-list-view' %}" class="m-2 p-3 py-5 card">
               <h4>Historical Data</h4>
-              <p><b>{{ market_sectors.count }}</b> data collected</p>
-          </div>
+              <p><b>{{ historicals.count }}</b> data collected</p>
+          </a>
       </div>
       <div class="col-lg-4">
-          <div class="m-2 p-3 py-5 card">
-              <h4>Geo Physical Data</h4>
-              <p><b>{{ market_sectors.count }}</b> data collected</p>
-          </div>
+          <a href="{% url 'platform_admin:user-geo-physical-list-view' %}" class="m-2 p-3 py-5 card">
+            <h4>Geo Physical Data</h4>
+            <p><b>{{ geo_physicals.count }}</b> data collected</p>
+          </a>
       </div>
+
   </div>
     
   </div>

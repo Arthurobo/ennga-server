@@ -10,21 +10,33 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
                             AccountUpdateForm, UserProfileUpdateForm)
 from accounts.models import Account, Profile
 from django.conf import settings
-from .forms import MarketSectorForm, MarketSectorBulkDataForm
+from .forms import HistoricalForm
 from .models import MarketSectorBulkData, MarketSector, Historical
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ( ListView, DetailView, CreateView, 
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
-
+from .forms import Historical
 
 
 @login_required
 def historical_detail_view(request, pk):
-    object = MarketSector.objects.get(id=pk)
+    object = Historical.objects.get(id=pk)
+    form = HistoricalForm(request.POST or None, request.FILES or None, instance=object)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+
+    if form.is_valid():
+        # form.instance.user = request.user.account_profile
+        form.save()
+        messages.success(request, "Data added successfully!!!")
+        return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
+    
     context = {
         'object': object,
+        'form': form,
     }
     return render(request, 'platform_admin/historical/historical-detail.html', context)
 
@@ -63,6 +75,29 @@ def _load_historicals(request):
     return historicals
 
 
+
+@login_required
+def historical_create_view(request):
+    form = HistoricalForm(request.POST or None, request.FILES or None)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/ajax_historical_create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    }
+    return render(request, 'platform_admin/historical/historical-create.html', context)
+
+
 @login_required
 def historical_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
@@ -74,6 +109,40 @@ def historical_data_list_view(request):
         'cities' : cities,
     }
     return render(request, 'platform_admin/historical/historical-data-list-view.html', context)
+
+
+###################################### BEGINNING OF LOGGED IN USER HISTORICAL DATA ###########################################
+@login_required
+def user_historical_list_view(request):
+    user_historicals = _load_user_historicals(request)
+    # objects = MarketSector.objects.all().order_by('-date_created')
+    context = {
+        'user_historicals': user_historicals,
+    }
+    return render(request, 'platform_admin/historical/user-historicals.html', context)
+
+
+@login_required
+def list_load_user_historicals_view(request):
+    user_historical = _load_user_historicals(request)
+    context = {"user_historicals": user_historical,}
+    return render(request, "platform_admin/historical/partials/user_historicals.html", context)
+
+def _load_user_historicals(request):
+    page = request.GET.get("page")
+    user = request.user.account_profile
+    user_historicals = Historical.objects.filter(user=user).order_by('-date_created')
+    paginator = Paginator(user_historicals, 1)
+    try:
+        user_historicals = paginator.page(page)
+    except PageNotAnInteger:
+        user_historicals = paginator.page(1)
+    except EmptyPage:
+        user_historicals = paginator.page(paginator.num_pages)
+    return user_historicals
+
+###################################### END OF LOGGED IN USER HISTORICAL DATA ###########################################
+
 
 
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################

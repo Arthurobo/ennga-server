@@ -30,34 +30,28 @@
     <div class="row edit-account-form-wrapper">
       <div class="">
         <div class="text-center">
-            <h2>All Market Data</h2>
-            <p>Add market Data by either uploading a well structured csv file or add manually</p>
+          <h2>{{ object.name }}</h2>
+          <p>All Market Sector data you have collected</p>
           </div>
           
           <div style="display: flex; justify-content: right">
-            <a href="{% url 'platform_admin:market-sector-upload-view' %}" class="btn btn-success m-2">Upload Data</a>
             <a href="{% url 'platform_admin:market-sector-create-view' %}" class="btn btn-success m-2">Add Data</a>
           </div>
 
+          
+
           <div class="container py-5 heading-wrap">
             <div class="row">
-              <div class="col-lg-2">
-                <p>Name</p>
+              <div class="col-lg-3 d-none d-lg-block">
+                <p class="text-center">User/Location/Date</p>
               </div>
-              <div class="col-lg-2">
-                <p>State/City</p>
-              </div>
-              <div class="col-lg-3">
-                <p>Phone Number</p>
-              </div>
-              <div class="col-lg-3">
-                <p>Address Location</p>
-              </div>
-              <div class="col-lg-2">
-                <p>Description</p>
+              <div class="col-lg-3 d-none d-lg-block">
+                <p class="text-center">Description</p>
               </div><hr>
 
-              {% include 'platform_admin/partials/all-market_sectors.html' %}
+              {% include 'platform_admin/market_sector/partials/user_market_sectors.html' %}
+
+
             </div>
           </div>
       </div>

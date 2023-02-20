@@ -1,0 +1,58 @@
+{% extends 'base-dashboard-new.html' %}
+{% load static %}
+{% block content %}
+
+<div class="main_content_iner overly_inner ">
+  <div class="container-fluid p-0 ">
+
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div class="container" style="color: black">
+    <div class="row">
+      <h2 class="text-center">Geo Physical Data</h2>
+    </div>
+
+
+    <div class="row my-3">
+      <div class="col-lg-6">
+            <a class="m-2 p-3 py-5 card" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <h4>Geopolitical Data</h4>
+        </a>
+        
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                {% for geo_political in geo_politicals %}
+                <a href="{{ geo_political.get_geo_physical_geo_zone_detail_url }}" class="my-2">{{ geo_political.name }}</a>
+                {% endfor %}
+            </div>
+          </div>
+    </div>
+    <div class="col-lg-6">
+          <a class="m-2 p-3 py-5 card" data-bs-toggle="collapse" href="#collapseExampleStates" role="button" aria-expanded="false" aria-controls="collapseExampleStates">
+          <h4>State Location Data</h4>
+      </a>
+      
+      <div class="collapse" id="collapseExampleStates">
+          <div class="card card-body">
+              {% for state in states %}
+              <a href="{{ state.get_geo_physical_state_location_detail_url }}" class="my-2">{{ state.name }}</a>
+              {% endfor %}
+          </div>
+        </div>
+  </div>
+    
+  </div>
+  </div>
+</div>
+
+
+{% endblock content %}
