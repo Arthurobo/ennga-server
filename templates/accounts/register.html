@@ -53,7 +53,9 @@
 
             <div class="username">
             <label for='phone'>Phone Number</label>
-            {{ registration_form.phone_number|add_required_class:"is-required form-control" }}
+            <div class="" style="display: flex;">
+              {{ registration_form.phone_number|add_required_class:"is-required form-control" }}
+            </div>
             <div class="error" class="form-text">
               {{registration_form.errors.phone_number}}
             </div>

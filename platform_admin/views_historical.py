@@ -65,7 +65,7 @@ def list_load_historicals_view(request):
 def _load_historicals(request):
     page = request.GET.get("page")
     historicals = Historical.objects.all().order_by('-date_created')
-    paginator = Paginator(historicals, 1)
+    paginator = Paginator(historicals, 20)
     try:
         historicals = paginator.page(page)
     except PageNotAnInteger:
@@ -132,7 +132,7 @@ def _load_user_historicals(request):
     page = request.GET.get("page")
     user = request.user.account_profile
     user_historicals = Historical.objects.filter(user=user).order_by('-date_created')
-    paginator = Paginator(user_historicals, 1)
+    paginator = Paginator(user_historicals, 20)
     try:
         user_historicals = paginator.page(page)
     except PageNotAnInteger:
@@ -174,7 +174,7 @@ def list_load_historical_geo_zone_details_view(request, geozone_pk):
 def _load_historical_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
     historical_geo_zone_details = Historical.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
-    paginator = Paginator(historical_geo_zone_details, 1)
+    paginator = Paginator(historical_geo_zone_details, 20)
     try:
         historical_geo_zone_details = paginator.page(page)
     except PageNotAnInteger:
@@ -217,7 +217,7 @@ def list_load_historical_state_location_details_view(request, state_location_pk)
 def _load_historical_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
     historical_state_location_details = Historical.objects.filter(state=state_location_pk).order_by('-date_created')
-    paginator = Paginator(historical_state_location_details, 1)
+    paginator = Paginator(historical_state_location_details, 20)
     try:
         historical_state_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -261,7 +261,7 @@ def list_load_historical_city_location_details_view(request, city_location_pk):
 def _load_historical_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
     historical_city_location_details = Historical.objects.filter(city=city_location_pk).order_by('-date_created')
-    paginator = Paginator(historical_city_location_details, 1)
+    paginator = Paginator(historical_city_location_details, 20)
     try:
         historical_city_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -304,7 +304,7 @@ def list_load_historical_clan_location_details_view(request, clan_location_pk):
 def _load_historical_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
     historical_clan_location_details = Historical.objects.filter(clan=clan_location_pk).order_by('-date_created')
-    paginator = Paginator(historical_clan_location_details, 1)
+    paginator = Paginator(historical_clan_location_details, 20)
     try:
         historical_clan_location_details = paginator.page(page)
     except PageNotAnInteger:

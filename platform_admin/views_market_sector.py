@@ -149,7 +149,7 @@ def _load_user_market_sectors(request):
     page = request.GET.get("page")
     user = request.user.account_profile
     user_market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
-    paginator = Paginator(user_market_sectors, 1)
+    paginator = Paginator(user_market_sectors, 20)
     try:
         user_market_sectors = paginator.page(page)
     except PageNotAnInteger:
@@ -188,7 +188,7 @@ def list_load_market_sector_geo_zone_details_view(request, geozone_pk):
 def _load_market_sector_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
     market_sector_geo_zone_details = MarketSector.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
-    paginator = Paginator(market_sector_geo_zone_details, 1)
+    paginator = Paginator(market_sector_geo_zone_details, 20)
     try:
         market_sector_geo_zone_details = paginator.page(page)
     except PageNotAnInteger:
@@ -231,7 +231,7 @@ def list_load_market_sector_state_location_details_view(request, state_location_
 def _load_market_sector_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
     market_sector_state_location_details = MarketSector.objects.filter(state=state_location_pk).order_by('-date_created')
-    paginator = Paginator(market_sector_state_location_details, 1)
+    paginator = Paginator(market_sector_state_location_details, 20)
     try:
         market_sector_state_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -275,7 +275,7 @@ def list_load_market_sector_city_location_details_view(request, city_location_pk
 def _load_market_sector_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
     market_sector_city_location_details = MarketSector.objects.filter(city=city_location_pk).order_by('-date_created')
-    paginator = Paginator(market_sector_city_location_details, 1)
+    paginator = Paginator(market_sector_city_location_details, 20)
     try:
         market_sector_city_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -318,7 +318,7 @@ def list_load_market_sector_clan_location_details_view(request, clan_location_pk
 def _load_market_sector_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
     market_sector_clan_location_details = MarketSector.objects.filter(clan=clan_location_pk).order_by('-date_created')
-    paginator = Paginator(market_sector_clan_location_details, 1)
+    paginator = Paginator(market_sector_clan_location_details, 20)
     try:
         market_sector_clan_location_details = paginator.page(page)
     except PageNotAnInteger:

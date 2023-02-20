@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_htmx',
     'ckeditor',
     'ckeditor_uploader',
+    'phonenumber_field',
 
     'accounts',
     'utility',

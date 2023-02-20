@@ -6,16 +6,35 @@ from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
 
 from accounts.models import Account, Profile
 from accounts.models import Account as UserBase
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=50, help_text="Required. Add a valid email address.")
     first_name = forms.CharField(label='First Name', min_length=2, max_length=30, widget=forms.TextInput(attrs={'autofocus': True}))
     last_name = forms.CharField(label='Last Name', min_length=2, max_length=30,)
+    """
+    phone_number = PhoneNumberField(
+        region="CA",
+        widget=PhoneNumberPrefixWidget(
+            country_choices=[
+                 ("NG", "Nigeria"),
+            ],
+        ),
+    )
+    """
 
     class Meta:
         model = Account
         fields = ('email', 'password1', 'password2', 'first_name', "last_name", "phone_number",)
+        widgets = {
+            'phone_number': PhoneNumberPrefixWidget(
+                country_choices=[
+                        ("NG", "Nigeria"),
+                ],
+            ),
+        }
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()

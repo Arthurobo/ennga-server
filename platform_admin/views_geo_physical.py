@@ -54,7 +54,7 @@ def list_load_geo_physicals_view(request):
 def _load_geo_physicals(request):
     page = request.GET.get("page")
     geo_physicals = GeoPhysicalData.objects.all().order_by('-date_created')
-    paginator = Paginator(geo_physicals, 1)
+    paginator = Paginator(geo_physicals, 20)
     try:
         geo_physicals = paginator.page(page)
     except PageNotAnInteger:
@@ -124,7 +124,7 @@ def _load_user_geo_physicals(request):
     page = request.GET.get("page")
     user = request.user.account_profile
     user_geo_physicals = GeoPhysicalData.objects.filter(user=user).order_by('-date_created')
-    paginator = Paginator(user_geo_physicals, 1)
+    paginator = Paginator(user_geo_physicals, 20)
     try:
         user_geo_physicals = paginator.page(page)
     except PageNotAnInteger:
@@ -166,7 +166,7 @@ def list_load_geo_physical_geo_zone_details_view(request, geozone_pk):
 def _load_geo_physical_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
     geo_physical_geo_zone_details = GeoPhysicalData.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
-    paginator = Paginator(geo_physical_geo_zone_details, 1)
+    paginator = Paginator(geo_physical_geo_zone_details, 20)
     try:
         geo_physical_geo_zone_details = paginator.page(page)
     except PageNotAnInteger:
@@ -206,7 +206,7 @@ def list_load_geo_physical_state_location_details_view(request, state_location_p
 def _load_geo_physical_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
     geo_physical_state_location_details = GeoPhysicalData.objects.filter(state=state_location_pk).order_by('-date_created')
-    paginator = Paginator(geo_physical_state_location_details, 1)
+    paginator = Paginator(geo_physical_state_location_details, 20)
     try:
         geo_physical_state_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -248,7 +248,7 @@ def list_load_geo_physical_city_location_details_view(request, city_location_pk)
 def _load_geo_physical_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
     geo_physical_city_location_details = GeoPhysicalData.objects.filter(city=city_location_pk).order_by('-date_created')
-    paginator = Paginator(geo_physical_city_location_details, 1)
+    paginator = Paginator(geo_physical_city_location_details, 20)
     try:
         geo_physical_city_location_details = paginator.page(page)
     except PageNotAnInteger:
@@ -289,7 +289,7 @@ def list_load_geo_physical_clan_location_details_view(request, clan_location_pk)
 def _load_geo_physical_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
     geo_physical_clan_location_details = GeoPhysicalData.objects.filter(clan=clan_location_pk).order_by('-date_created')
-    paginator = Paginator(geo_physical_clan_location_details, 1)
+    paginator = Paginator(geo_physical_clan_location_details, 20)
     try:
         geo_physical_clan_location_details = paginator.page(page)
     except PageNotAnInteger:
