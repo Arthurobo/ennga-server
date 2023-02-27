@@ -173,12 +173,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-DEFAULT_FROM_EMAIL = "hotbuyindia@outlook.com"
+DEFAULT_FROM_EMAIL = "ennga@kulenga.org"
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MAILJET_API_KEY = "f3bd7a953cfda42e191f3dc4ad64accd"
-MAILJET_SECRET_KEY = "b4d997eceddaff1427bbe4fe00717545"
+MAILJET_API_KEY = "ee02ca5ca3b4a37369b0d32729498a54"
+MAILJET_SECRET_KEY = "dd4049305ce296322411bd9a95511910"
 
 # Mailjet settings
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"  # or sendgrid.EmailBackend, or...
