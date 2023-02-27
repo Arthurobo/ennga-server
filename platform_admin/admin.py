@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (MarketSectorBulkData, MarketSector, Historical, 
                     HistoricalCategory, MarketSectorCategory, 
                     GeoPhysicalCategory,
-                    GeoPhysicalData,
+                    GeoPhysicalData, MarketSectorSubCategory
                 )
 
 admin.site.register(MarketSectorBulkData)
@@ -12,3 +12,4 @@ admin.site.register(GeoPhysicalCategory)
 admin.site.register(HistoricalCategory)
 admin.site.register(GeoPhysicalData)
 admin.site.register(MarketSectorCategory)
+admin.site.register(MarketSectorSubCategory)

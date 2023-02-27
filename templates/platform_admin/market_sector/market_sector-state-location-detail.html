@@ -38,7 +38,7 @@
             <a href="#collapseExampleCities" class="btn btn-success m-2" data-bs-toggle="collapse"  role="button" 
                 aria-expanded="false" aria-controls="collapseExampleCities">Select LGA</a>
             <!-- <a href="{% url 'platform_admin:market-sector-upload-view' %}" class="btn btn-success m-2">Upload Data</a> -->
-            <a href="{% url 'platform_admin:market-sector-create-view' %}" class="btn btn-success m-2">Add Data</a>
+            <a href="{{ object.get_market_sector_state_create_view_url }}" class="btn btn-success m-2">Add Data</a>
           </div>
 
           <div class="collapse" id="collapseExampleCities">

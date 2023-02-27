@@ -1,0 +1,9 @@
+1. To update timezone to Lagos timezone instead of Europe ✅
+2. To update the plural of the City Object to CIties instead of citys ✅
+3. To add a sub category for Market Sector Data ✅
+4. Remove the business name, phone number, and address location fields in the market sector data ✅
+5. To filter data based on categories for the various Data collections just like how we get to 
+   filter based on  the various Data types (e.g Market Sector, Historical Data)
+6. Search forms for various Data collections in their respective detail pages
+7. Email Setup
+8. Assigning users to various states, clans, etc. ✅

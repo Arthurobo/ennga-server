@@ -37,7 +37,7 @@
           <div style="display: flex; justify-content: right">
             <a href="#collapseExampleCities" class="btn btn-success m-2" data-bs-toggle="collapse"  role="button" 
                 aria-expanded="false" aria-controls="collapseExampleCities">Select State</a>
-            <a href="{% url 'platform_admin:geo-physical-create-view' %}" class="btn btn-success m-2">Add Data</a>
+            <a href="{{ object.get_geo_physical_geo_political_zone_create_view_url }}" class="btn btn-success m-2">Add Data</a>
           </div>
 
           <div class="collapse" id="collapseExampleCities">

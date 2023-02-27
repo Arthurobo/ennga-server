@@ -10,7 +10,7 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
                             AccountUpdateForm, UserProfileUpdateForm)
 from accounts.models import Account, Profile
 from django.conf import settings
-from .forms import HistoricalForm
+from .forms import HistoricalForm, HistoricalGeoPoliticalZoneForm, HistoricalStateForm, HistoricalCityForm, HistoricalClanForm
 from .models import MarketSectorBulkData, MarketSector, Historical
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
@@ -76,6 +76,10 @@ def _load_historicals(request):
 
 
 
+
+
+
+################## BEGINNING OF VARIOUS LOCATION DATA ENTRY CENTERS ###########################################
 @login_required
 def historical_create_view(request):
     form = HistoricalForm(request.POST or None, request.FILES or None)
@@ -96,6 +100,116 @@ def historical_create_view(request):
     'form': form,
     }
     return render(request, 'platform_admin/historical/historical-create.html', context)
+
+
+@login_required
+def historical_geo_political_zone_create_view(request, geozone_pk):
+    geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
+    form = HistoricalGeoPoliticalZoneForm(request.POST or None, request.FILES or None, geozone_pk=geozone_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/historical-geo-political-zone-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = geo_political_zone
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': geo_political_zone,
+    }
+    return render(request, 'platform_admin/historical/historical-geo-political-zone-create.html', context)
+
+
+@login_required
+def historical_state_create_view(request, state_location_pk):
+    state = State.objects.get(id=state_location_pk)
+    form = HistoricalStateForm(request.POST or None, request.FILES or None, state_location_pk=state_location_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/historical-state-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = state.geo_political_zone
+        form.instance.state = state
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': state,
+    }
+    return render(request, 'platform_admin/historical/historical-state-create.html', context)
+
+
+@login_required
+def historical_city_create_view(request, city_location_pk):
+    city = City.objects.get(id=city_location_pk)
+    form = HistoricalCityForm(request.POST or None, request.FILES or None, city_location_pk=city_location_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/historical-city-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = city.state.geo_political_zone
+        form.instance.state = city.state
+        form.instance.city = city
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': city,
+    }
+    return render(request, 'platform_admin/historical/historical-city-create.html', context)
+
+
+@login_required
+def historical_clan_create_view(request, clan_location_pk):
+    clan = Clan.objects.get(id=clan_location_pk)
+    form = HistoricalClanForm(request.POST or None, request.FILES or None)
+
+    if request.htmx:
+        template_name = 'platform_admin/historical/partials/historical-clan-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = clan.city.state.geo_political_zone
+        form.instance.state = clan.city.state
+        form.instance.city = clan.city
+        form.instance.clan = clan
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': clan,
+    }
+    return render(request, 'platform_admin/historical/historical-clan-create.html', context)
+
+################## END OF VARIOUS LOCATION DATA ENTRY CENTERS ###########################################
+
+
 
 
 @login_required

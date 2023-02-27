@@ -36,7 +36,7 @@
           
           <div style="display: flex; justify-content: right">
             <!-- <a href="{% url 'platform_admin:market-sector-upload-view' %}" class="btn btn-success m-2">Upload Data</a> -->
-            <a href="{% url 'platform_admin:market-sector-create-view' %}" class="btn btn-success m-2">Add Data</a>
+            <a href="{{ object.get_market_sector_clan_create_view_url }}" class="btn btn-success m-2">Add Data</a>
           </div>
 
           <div class="container py-5 heading-wrap">

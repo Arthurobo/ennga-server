@@ -4,7 +4,7 @@ from accounts.models import Account, Profile
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
-from .forms import MarketSectorForm, MarketSectorBulkDataForm
+from .forms import MarketSectorForm, MarketSectorBulkDataForm, MarketSectorGeoPoliticalZoneForm, MarketSectorStateForm, MarketSectorCityForm, MarketSectorClanForm
 from .models import MarketSectorBulkData, MarketSector, Historical
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
@@ -62,6 +62,8 @@ def _load_market_sectors(request):
     return market_sectors
 
 
+
+################## BEGINNING OF VARIOUS LOCATION DATA ENTRY CENTERS ###########################################
 @login_required
 def market_sector_create_view(request):
     form = MarketSectorForm(request.POST or None, request.FILES or None)
@@ -82,6 +84,116 @@ def market_sector_create_view(request):
     'form': form,
     }
     return render(request, 'platform_admin/market-sector-create.html', context)
+
+
+@login_required
+def market_sector_geo_political_zone_create_view(request, geozone_pk):
+    geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
+    form = MarketSectorGeoPoliticalZoneForm(request.POST or None, request.FILES or None, geozone_pk=geozone_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/market-sector-geo-political-zone-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = geo_political_zone
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': geo_political_zone,
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-geo-political-zone-create.html', context)
+
+
+@login_required
+def market_sector_state_create_view(request, state_location_pk):
+    state = State.objects.get(id=state_location_pk)
+    form = MarketSectorStateForm(request.POST or None, request.FILES or None, state_location_pk=state_location_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/market-sector-state-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = state.geo_political_zone
+        form.instance.state = state
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': state,
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-state-create.html', context)
+
+
+@login_required
+def market_sector_city_create_view(request, city_location_pk):
+    city = City.objects.get(id=city_location_pk)
+    form = MarketSectorCityForm(request.POST or None, request.FILES or None, city_location_pk=city_location_pk)
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/market-sector-city-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = city.state.geo_political_zone
+        form.instance.state = city.state
+        form.instance.city = city
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': city,
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-city-create.html', context)
+
+
+@login_required
+def market_sector_clan_create_view(request, clan_location_pk):
+    clan = Clan.objects.get(id=clan_location_pk)
+    form = MarketSectorClanForm(request.POST or None, request.FILES or None)
+
+    if request.htmx:
+        template_name = 'platform_admin/market_sector/partials/market-sector-clan-create.html'
+
+    if form.is_valid():
+        nigeria_as_country_location = Country.objects.get(id=1)
+
+        form.instance.user = request.user.account_profile
+        form.instance.country = nigeria_as_country_location
+        form.instance.geo_political_zone = clan.city.state.geo_political_zone
+        form.instance.state = clan.city.state
+        form.instance.city = clan.city
+        form.instance.clan = clan
+        newly_saved_form = form.save()
+        # messages.success(request, "Data added successfully!!!")
+        # return HttpResponseRedirect(reverse('platform_admin:market-sector-create-view'))
+
+    context = {
+    'form': form,
+    'object': clan,
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-clan-create.html', context)
+
+################## END OF VARIOUS LOCATION DATA ENTRY CENTERS ###########################################
+
+
 
 @login_required
 def market_sector_upload_view(request):
@@ -113,19 +225,46 @@ def market_sector_upload_view(request):
 
 
 
-
+########################### Beginning of Market Data List View With Search ######################################
 @login_required
 def market_sector_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
     states = State.objects.all().order_by('name')
-    cities = City.objects.all().order_by('name')
+    market_sectors, search = _search_market_sector_data(request)
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
-        'cities' : cities,
+        'market_sectors': market_sectors,
     }
     return render(request, 'platform_admin/market_sector/market_sector-data-list-view.html', context)
 
+
+def list_search_market_sector_data_view(request):
+    market_sectors, search = _search_market_sector_data(request)
+    context = {"market_sectors": market_sectors, "search_results": search}
+    return render(request, "platform_admin/market_sector/partials/search-all-market-sectors.html", context)
+
+
+def _search_market_sector_data(request):
+    search = request.GET.get("search")
+    page = request.GET.get("page")
+    market_sectors = MarketSector.objects.all().order_by('-date_created')
+    if search:
+        market_sectors = market_sectors.filter(description__icontains=search)
+        # market_sectors = market_sectors.filter(description__iexact=search)
+
+    paginator = Paginator(market_sectors, 2)
+    try:
+        market_sectors = paginator.page(page)
+    except PageNotAnInteger:
+        market_sectors = paginator.page(1)
+    except EmptyPage:
+        market_sectors = paginator.page(paginator.num_pages)
+
+    return market_sectors, search or ""
+
+
+########################### End of Market Data List View With Search ######################################
 
 
 ###################################### BEGINNING OF LOGGED IN USER MARKET_SECTOR DATA ###########################################

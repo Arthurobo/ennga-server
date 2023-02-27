@@ -13,22 +13,13 @@
         hx-encoding="multipart/form-data"
         hx-vals="js:{description: CKEDITOR.instances.id_description.getData()}"
         data-cities-url="{% url 'utility:ajax-load-cities' %}"
+        data-states-url="{% url 'utility:ajax-load-states' %}"
         data-clans-url="{% url 'utility:ajax-load-clans' %}"
-        data-states-url="{% url 'utility:ajax-load-states' %}" >
+        data-subcategorys-url="{% url 'utility:ajax-load-subcategorys' %}" >
         {% csrf_token %}
 
 
         <div class="row">
-            <div class="col-lg-6 mb-3">
-                <label for="exampleInputEmail1" class="form-label">Business Name*</label>
-                {{ form.name|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.name}}</div>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <label for="exampleInputPassword1" class="form-label">Phone Number*</label>
-                {{ form.phone_number|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.phone_number}}</div>
-              </div>
               <div class="col-lg-6 mb-3" id="new-ajax-geopolitical-id">
                 <label for="exampleInputPassword1" class="form-label">Geo Political Zone*</label>
                 {{ form.geo_political_zone|add_required_class:"is-required form-control" }}
@@ -55,9 +46,9 @@
                 <div id="emailHelp" class="form-text">{{form.errors.category}}</div>
               </div>
               <div class="col-lg-6 mb-3">
-                <label for="exampleInputPassword1" class="form-label">Address Location*</label>
-                {{ form.address_location|add_required_class:"is-required form-control" }}
-                <div id="emailHelp" class="form-text">{{form.errors.address_location}}</div>
+                <label for="exampleInputPassword1" class="form-label">Sub Category*</label>
+                {{ form.sub_category|add_required_class:"is-required form-control" }}
+                <div id="emailHelp" class="form-text">{{form.errors.sub_category}}</div>
               </div>
               <div class="mb-3" style="display: flex; justify-content: center;">
                 <!-- <label for="exampleInputPassword1" class="form-label">Content*</label> -->

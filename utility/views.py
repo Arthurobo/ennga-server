@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from .models import Country, State, City, Clan
 from accounts.models import Profile
+from platform_admin.models import MarketSectorSubCategory
                         
 
 def load_states(request):
@@ -20,3 +21,9 @@ def load_clans(request):
     city_id = request.GET.get('city')
     clans = Clan.objects.filter(city_id=city_id).order_by('name')
     return render(request, 'utility/clan_dropdown_list_options.html', {'clans': clans})
+
+
+def load_subcategorys(request):
+    category_id = request.GET.get('category')
+    subcategorys = MarketSectorSubCategory.objects.filter(category_id=category_id).order_by('name')
+    return render(request, 'utility/subcategory_dropdown_list_options.html', {'subcategorys': subcategorys})

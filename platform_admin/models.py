@@ -17,12 +17,26 @@ class MarketSectorCategory(models.Model):
         verbose_name_plural = 'Market Sector Categories'
 
 
+class MarketSectorSubCategory(models.Model):
+    category = models.ForeignKey(MarketSectorCategory, blank=True, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Market Sector Sub Categories'
+
+
 class MarketSectorBulkData(models.Model):
     user = models.ForeignKey("accounts.Profile", blank=True, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey("utility.Country", blank=True, null=True, on_delete=models.SET_NULL)
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(MarketSectorCategory, null=True, on_delete=models.SET_NULL)
+    sub_category = models.ForeignKey(MarketSectorSubCategory, null=True, on_delete=models.SET_NULL)
     filez = models.FileField(upload_to='customers/csv')
     activated = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -35,26 +49,23 @@ class MarketSectorBulkData(models.Model):
 class MarketSector(models.Model):
     user = models.ForeignKey("accounts.Profile", blank=True, null=True, on_delete=models.SET_NULL)
     bulk_data = models.ForeignKey('MarketSectorBulkData', blank=True, null=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=255)
     category = models.ForeignKey(MarketSectorCategory, null=True, on_delete=models.SET_NULL)
+    sub_category = models.ForeignKey(MarketSectorSubCategory, null=True, on_delete=models.SET_NULL)
     country = models.ForeignKey("utility.Country", blank=True, null=True, on_delete=models.SET_NULL)
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
-    address_location = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
     description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return str(self.id)
     
     def get_absolute_url(self):
         return reverse('platform_admin:market-sector-detail-view', kwargs={'pk': self.pk})
-    
-    
+
 
 class HistoricalCategory(models.Model):
     name = models.CharField(max_length=255)
