@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
 from .forms import MarketSectorForm, MarketSectorBulkDataForm, GeoPhysicalForm, GeoPhysicalGeoPoliticalZoneForm, GeoPhysicalStateForm, GeoPhysicalCityForm, GeoPhysicalClanForm
-from .models import MarketSectorBulkData, MarketSector, Historical, GeoPhysicalData
+from .models import MarketSectorBulkData, MarketSector, Historical, GeoPhysicalData, GeoPhysicalCategory
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -204,10 +204,12 @@ def geo_physical_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
     states = State.objects.all().order_by('name')
     cities = City.objects.all().order_by('name')
+    categories = GeoPhysicalCategory.objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
         'cities' : cities,
+        'categories': categories,
     }
     return render(request, 'platform_admin/geo_physical/geo_physical-data-list-view.html', context)
 
@@ -411,3 +413,42 @@ def _load_geo_physical_clan_location_details(request, clan_location_pk):
     return geo_physical_clan_location_details
 
 ###################################### END OF CLANS LOCATION FOR GEO_PHYSICAL DATA ###########################################
+
+
+
+###################################### BEGINNING OF Category FOR GEO_PHYSICAL DATA ###########################################
+@login_required
+def geo_physical_category_detail_view(request, category_pk):
+    object = GeoPhysicalCategory.objects.get(id=category_pk)
+    category_pk = category_pk
+    objects = _load_geo_physical_category_details(request, category_pk)
+    context = {
+        'object': object,
+        'objects': objects,
+        # 'market_sectors': Account.objects.all()
+    }
+    return render(request, 'platform_admin/geo_physical/geo_physical-category-detail.html', context)
+
+
+@login_required
+def list_load_geo_physical_category_details_view(request, category_pk):
+    object = GeoPhysicalCategory.objects.get(id=category_pk)
+    geo_physical_category_detail = _load_geo_physical_category_details(request, category_pk)
+    context = {"objects": geo_physical_category_detail, 'object': object}
+    return render(request, "platform_admin/geo_physical/partials/geo_physical_category_details.html", context)
+
+@login_required
+def _load_geo_physical_category_details(request, category_pk):
+    page = request.GET.get("page")
+    geo_physical_category_details = GeoPhysicalData.objects.filter(category=category_pk).order_by('-date_created')
+    paginator = Paginator(geo_physical_category_details, 2)
+    try:
+        geo_physical_category_details = paginator.page(page)
+    except PageNotAnInteger:
+        geo_physical_category_details = paginator.page(1)
+    except EmptyPage:
+        geo_physical_category_details = paginator.page(paginator.num_pages)
+    return geo_physical_category_details
+
+
+###################################### END OF Category FOR GEO_PHYSICAL DATA ###########################################

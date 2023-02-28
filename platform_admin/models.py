@@ -16,6 +16,12 @@ class MarketSectorCategory(models.Model):
     class Meta:
         verbose_name_plural = 'Market Sector Categories'
 
+    def get_market_sector_category_detail_url(self):
+        return reverse('platform_admin:market-sector-category-detail-view', kwargs={'category_pk': self.pk})
+
+    def get_list_load_market_sector_category_details_url(self):
+        return reverse('platform_admin:list-load-market-sector-category-details-view', kwargs={'category_pk': self.pk})
+
 
 class MarketSectorSubCategory(models.Model):
     category = models.ForeignKey(MarketSectorCategory, blank=True, null=True, on_delete=models.SET_NULL)
@@ -29,6 +35,11 @@ class MarketSectorSubCategory(models.Model):
     class Meta:
         verbose_name_plural = 'Market Sector Sub Categories'
 
+    def get_market_sector_subcategory_detail_url(self):
+        return reverse('platform_admin:market-sector-subcategory-detail-view', kwargs={'subcategory_pk': self.pk})
+
+    def get_list_load_market_sector_subcategory_details_url(self):
+        return reverse('platform_admin:list-load-market-sector-subcategory-details-view', kwargs={'subcategory_pk': self.pk})
 
 class MarketSectorBulkData(models.Model):
     user = models.ForeignKey("accounts.Profile", blank=True, null=True, on_delete=models.SET_NULL)
@@ -78,6 +89,12 @@ class HistoricalCategory(models.Model):
     class Meta:
         verbose_name_plural = 'Historical Categories'
 
+    def get_historical_category_detail_url(self):
+        return reverse('platform_admin:historical-category-detail-view', kwargs={'category_pk': self.pk})
+
+    def get_list_load_historical_category_details_url(self):
+        return reverse('platform_admin:list-load-historical-category-details-view', kwargs={'category_pk': self.pk})
+
 
 class Historical(models.Model):
     user = models.ForeignKey("accounts.Profile", blank=True, null=True, on_delete=models.SET_NULL)
@@ -108,6 +125,12 @@ class GeoPhysicalCategory(models.Model):
 
     class Meta:
         verbose_name_plural = 'Geo Political Categories'
+    
+    def get_geo_physical_category_detail_url(self):
+        return reverse('platform_admin:geo-physical-category-detail-view', kwargs={'category_pk': self.pk})
+
+    def get_list_load_geo_physical_category_details_url(self):
+        return reverse('platform_admin:list-load-geo-physical-category-details-view', kwargs={'category_pk': self.pk})
 
 
 class GeoPhysicalData(models.Model):

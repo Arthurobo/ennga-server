@@ -8,7 +8,9 @@ from .views_market_sector import (
     market_sector_state_location_detail_view, list_load_market_sector_state_location_details_view, 
     market_sector_city_location_detail_view,
     list_load_market_sector_city_location_details_view, market_sector_clan_location_detail_view, list_load_market_sector_clan_location_details_view,
-    market_sector_detail_view, user_market_sector_list_view, list_load_user_market_sectors_view
+    market_sector_detail_view, user_market_sector_list_view, list_load_user_market_sectors_view, 
+    market_sector_category_detail_view, list_load_market_sector_category_details_view, market_sector_subcategory_detail_view,
+    list_load_market_sector_subcategory_details_view
 )
 
 
@@ -19,7 +21,7 @@ from .views_historical import (historical_list_view,
     historical_city_location_detail_view,
     list_load_historical_city_location_details_view, historical_clan_location_detail_view, list_load_historical_clan_location_details_view,
     historical_detail_view, historical_create_view, user_historical_list_view, list_load_user_historicals_view, historical_geo_political_zone_create_view, historical_state_create_view,
-    historical_city_create_view, historical_clan_create_view
+    historical_city_create_view, historical_clan_create_view, historical_category_detail_view, list_load_historical_category_details_view
 )
 
 from .views_geo_physical import (
@@ -28,7 +30,8 @@ from .views_geo_physical import (
     list_load_geo_physical_geo_zone_details_view, geo_physical_state_location_detail_view, list_load_geo_physical_state_location_details_view,
     geo_physical_city_location_detail_view, list_load_geo_physical_city_location_details_view,
     geo_physical_clan_location_detail_view, list_load_geo_physical_clan_location_details_view, geo_physical_geo_political_zone_create_view,
-    geo_physical_state_create_view, geo_physical_city_create_view, geo_physical_clan_create_view
+    geo_physical_state_create_view, geo_physical_city_create_view, geo_physical_clan_create_view,
+    geo_physical_category_detail_view, list_load_geo_physical_category_details_view
 )
 
 from .views import dashboard, edit_account_view, UpdatePassword, ProfileDetailView, profile_market_sector_view, profile_load_market_sectors_view, all_users, approved_users, admin_users
@@ -105,6 +108,12 @@ urlpatterns = [
 
     ###################################### END OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
 
+    ###################################### BEGINNING OF CATEGORIES FOR MARKET_SECTOR DATA ###########################################
+    path('historical-category-detail-view/<int:category_pk>/', historical_category_detail_view, name='historical-category-detail-view'),
+    path('historical-category-detail-view/<int:category_pk>/load/', list_load_historical_category_details_view, name='list-load-historical-category-details-view'),
+
+    ###################################### END OF CATEGORIES FOR MarketSector DATA ###########################################
+
 
     #""" Beginning of MARKET SECTOR DATA 
     path('market-sector/create/', market_sector_create_view, name="market-sector-create-view"),
@@ -119,6 +128,9 @@ urlpatterns = [
     path('market-sector/list-search-market-sector-data-view/', list_search_market_sector_data_view, name='list-search-market-sector-data-view'),
     path('market-sector-detail/<int:pk>/', market_sector_detail_view, name='market-sector-detail-view'),
 
+    
+    
+
     ###################################### BEGINNING OF LOGGED IN USER MARKET_SECTOR DATA ###########################################
     path('market-sector/user/', user_market_sector_list_view, name="user-market-sector-list-view"), # Lists all the data in market sectors
     path('market-sector/load/user/', list_load_user_market_sectors_view, name='user_market_sectors'),
@@ -128,33 +140,40 @@ urlpatterns = [
     path('market-sector-geo-zone-detail-view/<int:geozone_pk>/', market_sector_geo_zone_detail_view, name='market-sector-geo-zone-detail-view'),
     path('market-sector-geo-zone-detail-view/<int:geozone_pk>/load/', list_load_market_sector_geo_zone_details_view, name='list-load-market-sector-geo-zone-details-view'),
 
-    ###################################### END OF GEOPOLITICAL ZONES FOR HISTORICAL DATA ###########################################
+    ###################################### END OF GEOPOLITICAL ZONES FOR MarketSector DATA ###########################################
     
 
-    ###################################### BEGINNING OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### BEGINNING OF STATES LOCATION FOR MarketSector DATA ###########################################
 
     path('market-sector-state-location-detail-view/<int:state_location_pk>/', market_sector_state_location_detail_view, name='market-sector-state-location-detail-view'),
     path('market-sector-state-location-detail-view/<int:state_location_pk>/load/', list_load_market_sector_state_location_details_view, name='list-load-market-sector-state-location-details-view'),
 
-    ###################################### END OF STATES LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### END OF STATES LOCATION FOR MarketSector DATA ###########################################
     
 
-    ###################################### BEGINNING OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### BEGINNING OF CITIES LOCATION FOR MarketSector DATA ###########################################
 
     path('market-sector-city-location-detail-view/<int:city_location_pk>/', market_sector_city_location_detail_view, name='market-sector-city-location-detail-view'),
     path('market-sector-city-location-detail-view/<int:city_location_pk>/load/', list_load_market_sector_city_location_details_view, name='list-load-market-sector-city-location-details-view'),
 
-    ###################################### END OF CITIES LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### END OF CITIES LOCATION FOR MarketSector DATA ###########################################
     
 
-    ###################################### BEGINNING OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### BEGINNING OF CLANS LOCATION FOR MarketSector DATA ###########################################
 
     path('market-sector-clan-location-detail-view/<int:clan_location_pk>/', market_sector_clan_location_detail_view, name='market-sector-clan-location-detail-view'),
     path('market-sector-clan-location-detail-view/<int:clan_location_pk>/load/', list_load_market_sector_clan_location_details_view, name='list-load-market-sector-clan-location-details-view'),
 
-    ###################################### END OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+    ###################################### END OF CLANS LOCATION FOR MarketSector DATA ###########################################
 
+    ###################################### BEGINNING OF CATEGORIES FOR MARKET_SECTOR DATA ###########################################
+    path('market-sector-category-detail-view/<int:category_pk>/', market_sector_category_detail_view, name='market-sector-category-detail-view'),
+    path('market-sector-category-detail-view/<int:category_pk>/load/', list_load_market_sector_category_details_view, name='list-load-market-sector-category-details-view'),
+    
+    path('market-sector-subcategory-detail-view/<int:subcategory_pk>/', market_sector_subcategory_detail_view, name='market-sector-subcategory-detail-view'),
+    path('market-sector-subcategory-detail-view/<int:subcategory_pk>/load/', list_load_market_sector_subcategory_details_view, name='list-load-market-sector-subcategory-details-view'),
 
+    ###################################### END OF CATEGORIES FOR MarketSector DATA ###########################################
 
 
 
@@ -219,5 +238,11 @@ urlpatterns = [
     path('geo-physical-clan-location-detail-view/<int:clan_location_pk>/load/', list_load_geo_physical_clan_location_details_view, name='list-load-geo-physical-clan-location-details-view'),
 
     # ###################################### END OF CLANS LOCATION FOR GEO_PHYSICAL DATA ###########################################
-                                                                 
+    
+    
+    ###################################### BEGINNING OF CATEGORIES FOR MARKET_SECTOR DATA ###########################################
+    path('geo-physical-category-detail-view/<int:category_pk>/', geo_physical_category_detail_view, name='geo-physical-category-detail-view'),
+    path('geo-physical-category-detail-view/<int:category_pk>/load/', list_load_geo_physical_category_details_view, name='list-load-geo-physical-category-details-view'),
+
+    ###################################### END OF CATEGORIES FOR MarketSector DATA ###########################################
 ]

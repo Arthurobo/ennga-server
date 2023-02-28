@@ -11,7 +11,7 @@ from accounts.forms import (RegistrationForm, AccountAuthenticationForm,
 from accounts.models import Account, Profile
 from django.conf import settings
 from .forms import HistoricalForm, HistoricalGeoPoliticalZoneForm, HistoricalStateForm, HistoricalCityForm, HistoricalClanForm
-from .models import MarketSectorBulkData, MarketSector, Historical
+from .models import MarketSectorBulkData, MarketSector, Historical, HistoricalCategory
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -217,10 +217,12 @@ def historical_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
     states = State.objects.all().order_by('name')
     cities = City.objects.all().order_by('name')
+    categories = HistoricalCategory.objects.all().order_by('name')
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
         'cities' : cities,
+        'categories': categories,
     }
     return render(request, 'platform_admin/historical/historical-data-list-view.html', context)
 
@@ -428,3 +430,43 @@ def _load_historical_clan_location_details(request, clan_location_pk):
     return historical_clan_location_details
 
 ###################################### END OF CLANS LOCATION FOR HISTORICAL DATA ###########################################
+
+
+
+###################################### BEGINNING OF Category FOR HISTORICAL DATA ###########################################
+
+@login_required
+def historical_category_detail_view(request, category_pk):
+    object = HistoricalCategory.objects.get(id=category_pk)
+    category_pk = category_pk
+    objects = _load_historical_category_details(request, category_pk)
+    context = {
+        'object': object,
+        'objects': objects,
+    }
+    return render(request, 'platform_admin/historical/historical-category-detail.html', context)
+
+
+
+@login_required
+def list_load_historical_category_details_view(request, category_pk):
+    object = HistoricalCategory.objects.get(id=category_pk)
+    historical_category_detail = _load_historical_category_details(request, category_pk)
+    context = {"objects": historical_category_detail, 'object': object}
+    return render(request, "platform_admin/historical/partials/historical_category_details.html", context)
+
+
+@login_required
+def _load_historical_category_details(request, category_pk):
+    page = request.GET.get("page")
+    historical_category_details = Historical.objects.filter(category=category_pk).order_by('-date_created')
+    paginator = Paginator(historical_category_details, 20)
+    try:
+        historical_category_details = paginator.page(page)
+    except PageNotAnInteger:
+        historical_category_details = paginator.page(1)
+    except EmptyPage:
+        historical_category_details = paginator.page(paginator.num_pages)
+    return historical_category_details
+
+###################################### END OF Category FOR HISTORICAL DATA ###########################################

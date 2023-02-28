@@ -30,11 +30,9 @@
     <div class="row edit-account-form-wrapper">
       <div class="">
         <div class="text-center">
-            <h2>All Market Data</h2>
-            <p>Add market Data by either uploading a well structured csv file or add manually</p>
+          <h2>{{ object.name }}</h2>
+          <p>All Market Sector data for {{ object.name }} Sub Category</p>
           </div>
-          
-          
 
           <div class="container py-5 heading-wrap">
             <div class="row">
@@ -45,7 +43,8 @@
                 <p class="text-center">Description</p>
               </div><hr>
 
-              {% include 'platform_admin/market_sector/partials/all-market_sectors.html' %}
+              {% include 'platform_admin/market_sector/partials/market_sector_subcategory_details.html' %}
+
 
             </div>
           </div>

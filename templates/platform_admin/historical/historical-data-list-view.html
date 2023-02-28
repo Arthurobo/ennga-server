@@ -49,6 +49,20 @@
           </div>
         </div>
   </div>
+
+  <div class="col-lg-6">
+    <a class="m-2 p-3 py-5 card" data-bs-toggle="collapse" href="#collapseExampleCategories" role="button" aria-expanded="false" aria-controls="collapseExampleStates">
+    <h4>Category Location Data</h4>
+</a>
+
+<div class="collapse" id="collapseExampleCategories">
+    <div class="card card-body">
+        {% for category in categories %}
+        <a href="{{ category.get_historical_category_detail_url }}" class="my-2">{{ category.name }}</a>
+        {% endfor %}
+    </div>
+  </div>
+</div>
     
   </div>
   </div>

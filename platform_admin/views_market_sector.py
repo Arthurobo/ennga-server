@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
 from .forms import MarketSectorForm, MarketSectorBulkDataForm, MarketSectorGeoPoliticalZoneForm, MarketSectorStateForm, MarketSectorCityForm, MarketSectorClanForm
-from .models import MarketSectorBulkData, MarketSector, Historical
+from .models import MarketSectorBulkData, MarketSector, Historical, MarketSectorCategory, MarketSectorSubCategory
 from .tasks import create_new_customers
 from utility.models import Country, State, GeoPoliticalZone, City, Clan
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -231,10 +231,14 @@ def market_sector_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
     states = State.objects.all().order_by('name')
     market_sectors, search = _search_market_sector_data(request)
+    categories = MarketSectorCategory.objects.all()
+    sub_categories = MarketSectorSubCategory.objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
         'market_sectors': market_sectors,
+        'categories': categories,
+        'sub_categories': sub_categories,
     }
     return render(request, 'platform_admin/market_sector/market_sector-data-list-view.html', context)
 
@@ -467,3 +471,80 @@ def _load_market_sector_clan_location_details(request, clan_location_pk):
     return market_sector_clan_location_details
 
 ###################################### END OF CLANS LOCATION FOR MARKET_SECTOR DATA ###########################################
+
+
+###################################### BEGINNING OF Category FOR MARKET_SECTOR DATA ###########################################
+@login_required
+def market_sector_category_detail_view(request, category_pk):
+    object = MarketSectorCategory.objects.get(id=category_pk)
+    category_pk = category_pk
+    objects = _load_market_sector_category_details(request, category_pk)
+    context = {
+        'object': object,
+        'sub_categories': MarketSectorSubCategory.objects.filter(category=object).order_by('name'),
+        'objects': objects,
+        # 'market_sectors': Account.objects.all()
+    }
+    return render(request, 'platform_admin/market_sector/market_sector-category-detail.html', context)
+
+
+@login_required
+def list_load_market_sector_category_details_view(request, category_pk):
+    object = MarketSectorCategory.objects.get(id=category_pk)
+    market_sector_category_detail = _load_market_sector_category_details(request, category_pk)
+    context = {"objects": market_sector_category_detail, 'object': object}
+    return render(request, "platform_admin/market_sector/partials/market_sector_category_details.html", context)
+
+@login_required
+def _load_market_sector_category_details(request, category_pk):
+    page = request.GET.get("page")
+    market_sector_category_details = MarketSector.objects.filter(category=category_pk).order_by('-date_created')
+    paginator = Paginator(market_sector_category_details, 20)
+    try:
+        market_sector_category_details = paginator.page(page)
+    except PageNotAnInteger:
+        market_sector_category_details = paginator.page(1)
+    except EmptyPage:
+        market_sector_category_details = paginator.page(paginator.num_pages)
+    return market_sector_category_details
+
+
+###################################### END OF Category FOR MARKET_SECTOR DATA ###########################################
+
+
+
+###################################### BEGINNING OF SubCategory FOR MARKET_SECTOR DATA ###########################################
+@login_required
+def market_sector_subcategory_detail_view(request, subcategory_pk):
+    object = MarketSectorSubCategory.objects.get(id=subcategory_pk)
+    subcategory_pk = subcategory_pk
+    objects = _load_market_sector_subcategory_details(request, subcategory_pk)
+    context = {
+        'object': object,
+        'objects': objects,
+    }
+    return render(request, 'platform_admin/market_sector/market_sector-subcategory-detail.html', context)
+
+
+@login_required
+def list_load_market_sector_subcategory_details_view(request, subcategory_pk):
+    object = MarketSectorSubCategory.objects.get(id=subcategory_pk)
+    market_sector_subcategory_detail = _load_market_sector_subcategory_details(request, subcategory_pk)
+    context = {"objects": market_sector_subcategory_detail, 'object': object}
+    return render(request, "platform_admin/market_sector/partials/market_sector_subcategory_details.html", context)
+
+@login_required
+def _load_market_sector_subcategory_details(request, subcategory_pk):
+    page = request.GET.get("page")
+    market_sector_subcategory_details = MarketSector.objects.filter(sub_category=subcategory_pk).order_by('-date_created')
+    paginator = Paginator(market_sector_subcategory_details, 2)
+    try:
+        market_sector_subcategory_details = paginator.page(page)
+    except PageNotAnInteger:
+        market_sector_subcategory_details = paginator.page(1)
+    except EmptyPage:
+        market_sector_subcategory_details = paginator.page(paginator.num_pages)
+    return market_sector_subcategory_details
+
+
+###################################### END OF SubCategory FOR MARKET_SECTOR DATA ###########################################
