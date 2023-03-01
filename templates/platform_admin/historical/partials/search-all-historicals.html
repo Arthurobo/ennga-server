@@ -1,5 +1,6 @@
-{% if objects %}
-{% for object in objects %}
+{% if historicals %}
+
+{% for object in historicals %}
 <div class="row my-4">
   <div class="col-lg-3 py-2">
     <td>{{ object.geo_political_zone }}, {{ object.state }},</td><br>
@@ -20,24 +21,23 @@
   </div>
 </div>
 <hr>
-
-{% endfor %}
+            {% endfor %}
 {% else %}
 <div class="centralize-div">
-  <h3 class="ui header center aligned">No results!</h3>
+  <h4 class="text-center">No Search Results!</h4>
 </div>
 {% endif %}
 
+
 <div class="centralize-div py-5" id="load-more">
-  {% if objects.has_next %}
+  {% if historicals.has_next %}
   <div class="ui divider"></div>
   <div class="row mt-5 centered-btn-wrapper">
-    <button class="btn btn-primary"
-      hx-get="{{ object.get_list_load_market_sector_clan_location_details_url }}"
-      hx-vals='{"page": "{{ objects.next_page_number }}", "objects": "{{ objects }}"}' hx-target="#load-more"
-      hx-swap="outerHTML">
-      Load more
-    </button>
+    <button class="btn btn-primary" hx-get="{% url 'platform_admin:list-search-historical-data-view' %}"
+    hx-vals='{"page": "{{ historicals.next_page_number }}", "search": "{{ search }}"}' hx-target="#load-more"
+    hx-swap="outerHTML">
+    Load more
+  </button>
   </div>
   {% endif %}
 </div>

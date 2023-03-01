@@ -215,6 +215,48 @@ def geo_physical_data_list_view(request):
 
 
 
+########################### Beginning of GEO PHYSICAL Data List View With Search ######################################
+@login_required
+def geo_physical_data_list_view(request):
+    geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
+    states = State.objects.all().order_by('name')
+    geo_physicals, search = _search_geo_physical_data(request)
+    categories = GeoPhysicalCategory.objects.all()
+    context = {
+        'geo_politicals': geo_politicals,
+        'states' : states,
+        # 'geo_physicals': geo_physicals,
+        'categories': categories,
+    }
+    return render(request, 'platform_admin/geo_physical/geo_physical-data-list-view.html', context)
+
+
+def list_search_geo_physical_data_view(request):
+    geo_physicals, search = _search_geo_physical_data(request)
+    context = {"geo_physicals": geo_physicals, "search": search}
+    return render(request, "platform_admin/geo_physical/partials/search-all-geo-physical.html", context)
+
+def _search_geo_physical_data(request):
+    search = request.GET.get("search")
+    page = request.GET.get("page")
+    geo_physicals = GeoPhysicalData.objects.all().order_by('-id')
+    
+    if search:
+        geo_physicals = geo_physicals.filter(description__icontains=search)
+
+    paginator = Paginator(geo_physicals, 20)
+    try:
+        geo_physicals = paginator.page(page)
+    except PageNotAnInteger:
+        geo_physicals = paginator.page(1)
+    except EmptyPage:
+        geo_physicals = paginator.page(paginator.num_pages)
+
+    return geo_physicals, search or ""
+
+
+########################### End of GEO PHYSICAL Data List View With Search ######################################
+
 
 
 ###################################### BEGINNING OF LOGGED IN USER GEO_PHYSICAL DATA ###########################################

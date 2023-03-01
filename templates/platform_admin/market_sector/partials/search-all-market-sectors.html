@@ -1,36 +1,40 @@
-{% if search_results %}
+{% if market_sectors %}
 
-{% for object in search_results %}
+{% for object in market_sectors %}
 <div class="row my-4">
-  <div class="col-lg-4 py-2">
-    <td>{{ object.user.user.first_name }} {{ object.user.user.last_name }},</td><br>
-    <td>{{ object.state }} - {{ object.city }},</td><br>
+  <div class="col-lg-3 py-2">
+    <td>{{ object.geo_political_zone }}, {{ object.state }},</td><br>
+    <td>{{ object.city }}, {{ object.clan }},</td><br>
     <td>{{ object.date_created }}</td><br>
   </div>
-  <div class="col-lg-8 py-2">
+  <div class="col-lg-7 py-2">
     <div>
       <a href="{{ object.get_absolute_url }}" style="font-size: 14px;">
-        <p>{{ object.description|safe|truncatechars:200 }}
+        <p>{{ object.description|safe|truncatechars:75 }}
         </p>
       </a>
     </div>
+  </div>
+  <div class="col-lg-2">
+    <p>{{ object.category }}</p>
+    <p>{{ object.sub_category }}</p>
   </div>
 </div>
 <hr>
             {% endfor %}
 {% else %}
 <div class="centralize-div">
-  <h3 class="ui header center aligned">No results!</h3>
+  <h4 class="text-center">No Search Results!</h4>
 </div>
 {% endif %}
 
 
 <div class="centralize-div py-5" id="load-more">
-  {% if search.has_next %}
+  {% if market_sectors.has_next %}
   <div class="ui divider"></div>
   <div class="row mt-5 centered-btn-wrapper">
     <button class="btn btn-primary" hx-get="{% url 'platform_admin:list-search-market-sector-data-view' %}"
-    hx-vals='{"page": "{{ search.next_page_number }}", "search": "{{ search }}"}' hx-target="#load-more"
+    hx-vals='{"page": "{{ market_sectors.next_page_number }}", "search": "{{ search }}"}' hx-target="#load-more"
     hx-swap="outerHTML">
     Load more
   </button>

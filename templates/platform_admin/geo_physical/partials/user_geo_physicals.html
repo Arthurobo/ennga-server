@@ -2,18 +2,21 @@
 
 {% for object in user_geo_physicals %}
 <div class="row my-4">
-  <div class="col-lg-4 py-2">
-    <td>{{ object.user.user.first_name }} {{ object.user.user.last_name }},</td><br>
-    <td>{{ object.state }} - {{ object.city }},</td><br>
+  <div class="col-lg-3 py-2">
+    <td>{{ object.geo_political_zone }}, {{ object.state }},</td><br>
+    <td>{{ object.city }}, {{ object.clan }},</td><br>
     <td>{{ object.date_created }}</td><br>
   </div>
-  <div class="col-lg-8 py-2">
+  <div class="col-lg-7 py-2">
     <div>
       <a href="{{ object.get_absolute_url }}" style="font-size: 14px;">
-      <p>{{ object.description|safe|truncatechars:400 }}
-      </p>
-    </a>
+        <p>{{ object.description|safe|truncatechars:75 }}
+        </p>
+      </a>
     </div>
+  </div>
+  <div class="col-lg-2">
+    <p>{{ object.category }}</p>
   </div>
 </div>
 <hr>

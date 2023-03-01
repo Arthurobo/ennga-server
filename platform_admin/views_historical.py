@@ -210,22 +210,47 @@ def historical_clan_create_view(request, clan_location_pk):
 ################## END OF VARIOUS LOCATION DATA ENTRY CENTERS ###########################################
 
 
-
-
+########################### Beginning of HISTORICAL Data List View With Search ######################################
 @login_required
 def historical_data_list_view(request):
     geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
     states = State.objects.all().order_by('name')
-    cities = City.objects.all().order_by('name')
-    categories = HistoricalCategory.objects.all().order_by('name')
+    historicals, search = _search_historical_data(request)
+    categories = HistoricalCategory.objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
-        'cities' : cities,
+        # 'historicals': historicals,
         'categories': categories,
     }
     return render(request, 'platform_admin/historical/historical-data-list-view.html', context)
 
+
+def list_search_historical_data_view(request):
+    historicals, search = _search_historical_data(request)
+    context = {"historicals": historicals, "search": search}
+    return render(request, "platform_admin/historical/partials/search-all-historicals.html", context)
+
+def _search_historical_data(request):
+    search = request.GET.get("search")
+    page = request.GET.get("page")
+    historicals = Historical.objects.all().order_by('-id')
+    
+    if search:
+        historicals = historicals.filter(description__icontains=search)
+
+    paginator = Paginator(historicals, 20)
+    try:
+        historicals = paginator.page(page)
+    except PageNotAnInteger:
+        historicals = paginator.page(1)
+    except EmptyPage:
+        historicals = paginator.page(paginator.num_pages)
+
+    return historicals, search or ""
+
+
+########################### End of HISTORICAL Data List View With Search ######################################
 
 ###################################### BEGINNING OF LOGGED IN USER HISTORICAL DATA ###########################################
 @login_required

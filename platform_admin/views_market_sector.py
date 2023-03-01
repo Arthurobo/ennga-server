@@ -236,28 +236,28 @@ def market_sector_data_list_view(request):
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
-        'market_sectors': market_sectors,
         'categories': categories,
         'sub_categories': sub_categories,
+        # 'market_sectors': market_sectors,
     }
     return render(request, 'platform_admin/market_sector/market_sector-data-list-view.html', context)
 
 
 def list_search_market_sector_data_view(request):
     market_sectors, search = _search_market_sector_data(request)
-    context = {"market_sectors": market_sectors, "search_results": search}
+    context = {"market_sectors": market_sectors, "search": search}
     return render(request, "platform_admin/market_sector/partials/search-all-market-sectors.html", context)
-
 
 def _search_market_sector_data(request):
     search = request.GET.get("search")
     page = request.GET.get("page")
-    market_sectors = MarketSector.objects.all().order_by('-date_created')
+    market_sectors = MarketSector.objects.all().order_by('-id')
+    
     if search:
+        # orders = orders.filter(city__name__icontains=search)
         market_sectors = market_sectors.filter(description__icontains=search)
-        # market_sectors = market_sectors.filter(description__iexact=search)
 
-    paginator = Paginator(market_sectors, 2)
+    paginator = Paginator(market_sectors, 20)
     try:
         market_sectors = paginator.page(page)
     except PageNotAnInteger:
