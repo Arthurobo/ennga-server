@@ -6,8 +6,8 @@
 
 
 
-
-{% if request.user.account_profile in object.managers.all %}
+{% if request.user.account_profile in object.city.managers.all or request.user.is_admin %}
+{% if not request.user.account_profile in object.restricted_users.all %}
 <div class="main_content_iner overly_inner ">
   <div class="container-fluid p-0 ">
     {% if messages %}
@@ -42,6 +42,7 @@
 <div class="container p-5">
     <h4 class="text-center">You don't have permissions to add data to {{ object.name }} Clan</h4>
 </div>
+{% endif %}
 {% endif %}
 
 

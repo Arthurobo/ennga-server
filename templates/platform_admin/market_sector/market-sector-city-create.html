@@ -7,7 +7,7 @@
 
 
 
-{% if request.user.account_profile in object.managers.all %}
+{% if request.user.account_profile in object.managers.all or request.user.is_admin %}
 <div class="main_content_iner overly_inner ">
   <div class="container-fluid p-0 ">
     {% if messages %}

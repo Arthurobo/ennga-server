@@ -161,7 +161,8 @@ class Clan(models.Model):
     state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
-    managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_managers')    
+    managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_managers')
+    restricted_users = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_restricted_users')
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -201,3 +202,25 @@ class Clan(models.Model):
 
     def get_geo_physical_clan_create_view_url(self):
         return reverse('platform_admin:geo-physical-clan-create-view', kwargs={'clan_location_pk': self.pk})
+    
+
+class SubClan(models.Model):
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
+    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
+    state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL)
+    city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
+    clan = models.ForeignKey(Clan, null=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=255)
+    managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='subclan_managers')
+    restricted_users = models.ManyToManyField("accounts.Profile", blank=True, related_name='subclan_restricted_users')
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Clans"
+
+    class Meta:
+        ordering = ['name',]

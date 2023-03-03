@@ -67,6 +67,7 @@ class MarketSector(models.Model):
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
+    subclan = models.ForeignKey("utility.SubClan", blank=True, null=True, on_delete=models.SET_NULL)
     description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -103,6 +104,7 @@ class Historical(models.Model):
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
+    subclan = models.ForeignKey("utility.SubClan", blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(HistoricalCategory, null=True, on_delete=models.SET_NULL)
     description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -124,7 +126,7 @@ class GeoPhysicalCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Geo Political Categories'
+        verbose_name_plural = 'Geo Physical Categories'
     
     def get_geo_physical_category_detail_url(self):
         return reverse('platform_admin:geo-physical-category-detail-view', kwargs={'category_pk': self.pk})
@@ -140,6 +142,7 @@ class GeoPhysicalData(models.Model):
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
+    subclan = models.ForeignKey("utility.SubClan", blank=True, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(GeoPhysicalCategory, null=True, on_delete=models.SET_NULL)
     description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
