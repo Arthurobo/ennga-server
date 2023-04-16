@@ -11,27 +11,76 @@ from utility.models import Country, State, GeoPoliticalZone, City, Clan
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ( ListView, DetailView, CreateView, 
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
+from .forms_update import (MarketSectorUpdateForm,
+                            MarketSectorGeoPoliticalZoneUpdateForm,
+                            MarketSectorStateUpdateForm,
+                            MarketSectorCityUpdateForm,
+                            MarketSectorClanUpdateForm
+                        )
 
 
 @login_required
 def market_sector_detail_view(request, pk):
     object = MarketSector.objects.get(id=pk)
-    form = MarketSectorForm(request.POST or None, request.FILES or None, instance=object)
 
-    if request.htmx:
-        template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
+    if object.clan:
+        form = MarketSectorClanUpdateForm(request.POST or None, request.FILES or None, instance=object)
 
-    if form.is_valid():
-        # form.instance.user = request.user.account_profile
-        form.save()
-        messages.success(request, "Data added successfully!!!")
-        return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+        if request.htmx:
+            template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
 
-    context = {
-        'object': object,
-        'form': form,
-    }
-    return render(request, 'platform_admin/market_sector/market-sector-detail.html', context)
+        if form.is_valid():
+            clan = form.instance.clan
+            form.instance.geo_political_zone = clan.city.state.geo_political_zone
+            form.instance.state = clan.city.state
+            form.instance.city = clan.city
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/market_sector/market-sector-detail.html', context={'form': form, 'object': object,})
+
+    if object.city:
+        form = MarketSectorCityUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
+
+        if form.is_valid():
+            city = form.instance.city
+            form.instance.geo_political_zone = city.state.geo_political_zone
+            form.instance.state = city.state
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/market_sector/market-sector-detail.html', context={'form': form, 'object': object,})
+
+    if object.state:
+        form = MarketSectorStateUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
+
+        if form.is_valid():
+            state = form.instance.state
+            form.instance.geo_political_zone = state.geo_political_zone
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/market_sector/market-sector-detail.html', context={'form': form, 'object': object,})
+
+    if object.geo_political_zone:
+        form = MarketSectorGeoPoliticalZoneUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/market_sector/partials/ajax_market_sector_update.html'
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:market-sector-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/market_sector/market-sector-detail.html', context={'form': form, 'object': object,})
+    
+    return render(request, 'platform_admin/market_sector/market-sector-detail.html')
 
 @login_required
 def market_sector_list_view(request):
@@ -89,7 +138,7 @@ def market_sector_create_view(request):
 @login_required
 def market_sector_geo_political_zone_create_view(request, geozone_pk):
     geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
-    form = MarketSectorGeoPoliticalZoneForm(request.POST or None, request.FILES or None, geozone_pk=geozone_pk)
+    form = MarketSectorGeoPoliticalZoneForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-geo-political-zone-create.html'
@@ -114,7 +163,7 @@ def market_sector_geo_political_zone_create_view(request, geozone_pk):
 @login_required
 def market_sector_state_create_view(request, state_location_pk):
     state = State.objects.get(id=state_location_pk)
-    form = MarketSectorStateForm(request.POST or None, request.FILES or None, state_location_pk=state_location_pk)
+    form = MarketSectorStateForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-state-create.html'
@@ -140,7 +189,7 @@ def market_sector_state_create_view(request, state_location_pk):
 @login_required
 def market_sector_city_create_view(request, city_location_pk):
     city = City.objects.get(id=city_location_pk)
-    form = MarketSectorCityForm(request.POST or None, request.FILES or None, city_location_pk=city_location_pk)
+    form = MarketSectorCityForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-city-create.html'

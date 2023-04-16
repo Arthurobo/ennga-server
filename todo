@@ -18,9 +18,18 @@
 2. To add search to all the utility model instance ✅
 3. To Edit from Geo Political to Geo Physical in one of the data ✅
 
-4. To update the different data collections based on different locations. So if a data entering agent wants to add data for let's say the state level, they shouldn't see LGAs and clans. Instead every level of data entering should only show those data associated to the location level of either state, LGA, etc. This will prompt me to now create new Create forms for the different levels of data entering.
+4. To update the different data collections based on different locations. So if a data entering 
+agent wants to add data for let's say the state level, they shouldn't see LGAs and clans. 
+Instead every level of data entering should only show those data associated to the location 
+level of either state, LGA, etc. This will prompt me to now create new Create forms for the different levels of data entering.
 
 5. The Category Location Data needs to be changed to Category Checklist Data in the frontend ✅
 6. To make sure every admin user have the permission to add data in every state, LGA, clan etc and are not restricted ✅
 
-7. To work on the functionality where when permission is given to users in the LGA level, they automatically have access to their respective clans. So this time, if they have permission in clans, the only thing admins will have to do is to restrict in individual clans. ✅
+7. To work on the functionality where when permission is given to users in the LGA level, they automatically 
+have access to their respective clans. So this time, if they have permission in clans, the only 
+thing admins will have to do is to restrict in individual clans. ✅
+
+8. To create a Tribe model where every LGA will belong to.
+
+9. AWS Images updates

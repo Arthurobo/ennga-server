@@ -18,27 +18,79 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ( ListView, DetailView, CreateView, 
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
 from .forms import Historical
+from .forms_update import (HistoricalUpdateForm, 
+                           HistoricalGeoPoliticalZoneUpdateForm,
+                            HistoricalStateUpdateForm,
+                            HistoricalCityUpdateForm,
+                            HistoricalClanUpdateForm
+                        )
 
 
 @login_required
 def historical_detail_view(request, pk):
     object = Historical.objects.get(id=pk)
-    form = HistoricalForm(request.POST or None, request.FILES or None, instance=object)
 
-    if request.htmx:
-        template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+    if object.clan:
+        form = HistoricalClanUpdateForm(request.POST or None, request.FILES or None, instance=object)
 
-    if form.is_valid():
-        # form.instance.user = request.user.account_profile
-        form.save()
-        messages.success(request, "Data added successfully!!!")
-        return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
-    
-    context = {
-        'object': object,
-        'form': form,
-    }
-    return render(request, 'platform_admin/historical/historical-detail.html', context)
+        if request.htmx:
+            template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+
+        if form.is_valid():
+            clan = form.instance.clan
+            form.instance.geo_political_zone = clan.city.state.geo_political_zone
+            form.instance.state = clan.city.state
+            form.instance.city = clan.city
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/historical/historical-detail.html', context={'form': form, 'object': object,})
+
+
+    elif object.city:
+        form = HistoricalCityUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+
+        if form.is_valid():
+            city = form.instance.city
+            form.instance.geo_political_zone = city.state.geo_political_zone
+            form.instance.state = city.state
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/historical/historical-detail.html', context={'form': form, 'object': object,})
+
+
+    elif object.state:
+        form = HistoricalStateUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+
+        if form.is_valid():
+            state = form.instance.state
+            form.instance.geo_political_zone = state.geo_political_zone
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/historical/historical-detail.html', context={'form': form, 'object': object,})
+
+
+    elif object.geo_political_zone:
+        form = HistoricalGeoPoliticalZoneUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/historical/partials/ajax_historical_update.html'
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:historical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/historical/historical-detail.html', context={'form': form, 'object': object,})
+
+    return render(request, 'platform_admin/historical/historical-detail.html')
 
 
 
@@ -105,14 +157,13 @@ def historical_create_view(request):
 @login_required
 def historical_geo_political_zone_create_view(request, geozone_pk):
     geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
-    form = HistoricalGeoPoliticalZoneForm(request.POST or None, request.FILES or None, geozone_pk=geozone_pk)
+    form = HistoricalGeoPoliticalZoneForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/historical/partials/historical-geo-political-zone-create.html'
 
     if form.is_valid():
         nigeria_as_country_location = Country.objects.get(id=1)
-
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
         form.instance.geo_political_zone = geo_political_zone
@@ -130,7 +181,7 @@ def historical_geo_political_zone_create_view(request, geozone_pk):
 @login_required
 def historical_state_create_view(request, state_location_pk):
     state = State.objects.get(id=state_location_pk)
-    form = HistoricalStateForm(request.POST or None, request.FILES or None, state_location_pk=state_location_pk)
+    form = HistoricalStateForm(request.POST or None, request.FILES or None,)
 
     if request.htmx:
         template_name = 'platform_admin/historical/partials/historical-state-create.html'
@@ -156,7 +207,7 @@ def historical_state_create_view(request, state_location_pk):
 @login_required
 def historical_city_create_view(request, city_location_pk):
     city = City.objects.get(id=city_location_pk)
-    form = HistoricalCityForm(request.POST or None, request.FILES or None, city_location_pk=city_location_pk)
+    form = HistoricalCityForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/historical/partials/historical-city-create.html'

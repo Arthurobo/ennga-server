@@ -4,38 +4,10 @@ from utility.models import Country, State, City, Clan, GeoPoliticalZone
 from ckeditor_uploader.fields import RichTextUploadingFormField
 
 
-class MarketSectorBulkDataForm(forms.ModelForm):
-    state = forms.ModelChoiceField(
-            label='State Location',
-            widget=forms.Select(attrs={'class': 'form-control'}),
-            queryset=State.objects.all(),
-        )
 
 
-    city = forms.ModelChoiceField(
-            label='City',
-            widget=forms.Select(attrs={'class': 'form-control'}),
-            queryset=City.objects.all(),
-        )
-    class Meta:
-        model = MarketSectorBulkData
-        fields = ('filez', 'state', 'city')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['city'].queryset = City.objects.none()
-
-        if 'state' in self.data:
-            try:
-                state_id = int(self.data.get('state'))
-                self.fields['city'].queryset = City.objects.filter(state_id=state_id).order_by('name')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields['city'].queryset = self.instance.state.city_set.order_by('name')
-
-
-class MarketSectorForm(forms.ModelForm):
+class MarketSectorUpdateForm(forms.ModelForm):
     state = forms.ModelChoiceField(
             label='State Location',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -133,7 +105,12 @@ class MarketSectorForm(forms.ModelForm):
             self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
 
 
-class MarketSectorGeoPoliticalZoneForm(forms.ModelForm):
+class MarketSectorGeoPoliticalZoneUpdateForm(forms.ModelForm):
+    geo_political_zone = forms.ModelChoiceField(
+            label='Geo Political Zone',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=GeoPoliticalZone.objects.all(),
+        )
     category = forms.ModelChoiceField(
             label='Market Sector Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -151,7 +128,7 @@ class MarketSectorGeoPoliticalZoneForm(forms.ModelForm):
 
     class Meta:
         model = MarketSector
-        fields = ['category', 'sub_category', 'description']
+        fields = ['geo_political_zone', 'category', 'sub_category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -168,7 +145,13 @@ class MarketSectorGeoPoliticalZoneForm(forms.ModelForm):
             self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
 
 
-class MarketSectorStateForm(forms.ModelForm):
+class MarketSectorStateUpdateForm(forms.ModelForm):
+    state = forms.ModelChoiceField(
+            label='State Location',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=State.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Market Sector Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -186,7 +169,7 @@ class MarketSectorStateForm(forms.ModelForm):
 
     class Meta:
         model = MarketSector
-        fields = ['category', 'sub_category', 'description']
+        fields = ['state', 'category', 'sub_category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -203,7 +186,13 @@ class MarketSectorStateForm(forms.ModelForm):
             self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
 
 
-class MarketSectorCityForm(forms.ModelForm):
+class MarketSectorCityUpdateForm(forms.ModelForm):
+    city = forms.ModelChoiceField(
+            label='City',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=City.objects.all(),
+        )
+
     category = forms.ModelChoiceField(
             label='Market Sector Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -221,7 +210,7 @@ class MarketSectorCityForm(forms.ModelForm):
 
     class Meta:
         model = MarketSector
-        fields = ['category', 'sub_category', 'description']
+        fields = ['city', 'category', 'sub_category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -238,7 +227,13 @@ class MarketSectorCityForm(forms.ModelForm):
             self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
 
 
-class MarketSectorClanForm(forms.ModelForm):
+class MarketSectorClanUpdateForm(forms.ModelForm):
+    clan = forms.ModelChoiceField(
+            label='Clan',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=Clan.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Market Sector Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -256,7 +251,7 @@ class MarketSectorClanForm(forms.ModelForm):
 
     class Meta:
         model = MarketSector
-        fields = ['category', 'sub_category', 'description']
+        fields = ['clan', 'category', 'sub_category', 'description']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -274,7 +269,8 @@ class MarketSectorClanForm(forms.ModelForm):
 
 
 
-class HistoricalForm(forms.ModelForm):
+
+class HistoricalUpdateForm(forms.ModelForm):
     state = forms.ModelChoiceField(
             label='State Location',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -330,7 +326,7 @@ class HistoricalForm(forms.ModelForm):
 
         
 
-class HistoricalGeoPoliticalZoneForm(forms.ModelForm):
+class HistoricalGeoPoliticalZoneUpdateForm(forms.ModelForm):
     category = forms.ModelChoiceField(
             label='Historical Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -345,7 +341,13 @@ class HistoricalGeoPoliticalZoneForm(forms.ModelForm):
         fields = ['geo_political_zone', 'category', 'description']
 
 
-class HistoricalStateForm(forms.ModelForm):
+class HistoricalStateUpdateForm(forms.ModelForm):
+    state = forms.ModelChoiceField(
+            label='State Location',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=State.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Historical Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -357,10 +359,15 @@ class HistoricalStateForm(forms.ModelForm):
 
     class Meta:
         model = Historical
-        fields = ['category', 'description']
+        fields = ['state', 'category', 'description']
 
 
-class HistoricalCityForm(forms.ModelForm):
+class HistoricalCityUpdateForm(forms.ModelForm):
+    city = forms.ModelChoiceField(
+            label='City',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=City.objects.all(),
+        )
     category = forms.ModelChoiceField(
             label='Historical Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -372,10 +379,16 @@ class HistoricalCityForm(forms.ModelForm):
 
     class Meta:
         model = Historical
-        fields = ['category', 'description']
+        fields = ['city', 'category', 'description']
 
 
-class HistoricalClanForm(forms.ModelForm):
+class HistoricalClanUpdateForm(forms.ModelForm):
+
+    clan = forms.ModelChoiceField(
+            label='Clan',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=Clan.objects.all(),
+        )
     category = forms.ModelChoiceField(
             label='Historical Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -387,11 +400,13 @@ class HistoricalClanForm(forms.ModelForm):
 
     class Meta:
         model = Historical
-        fields = ['category', 'description']
+        fields = ['clan', 'category', 'description']
 
 
 
-class GeoPhysicalForm(forms.ModelForm):
+
+
+class GeoPhysicalUpdateForm(forms.ModelForm):
     state = forms.ModelChoiceField(
             label='State Location',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -465,7 +480,13 @@ class GeoPhysicalForm(forms.ModelForm):
 
             
 
-class GeoPhysicalGeoPoliticalZoneForm(forms.ModelForm):
+class GeoPhysicalGeoPoliticalZoneUpdateForm(forms.ModelForm):
+    geo_political_zone = forms.ModelChoiceField(
+            label='Geo Political Zone',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=GeoPoliticalZone.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Market Sector Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -477,10 +498,16 @@ class GeoPhysicalGeoPoliticalZoneForm(forms.ModelForm):
 
     class Meta:
         model = GeoPhysicalData
-        fields = ['category', 'description']
+        fields = ['geo_political_zone', 'category', 'description']
        
 
-class GeoPhysicalStateForm(forms.ModelForm):
+class GeoPhysicalStateUpdateForm(forms.ModelForm):
+    state = forms.ModelChoiceField(
+            label='State Location',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=State.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Geo Physical Data Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -492,11 +519,17 @@ class GeoPhysicalStateForm(forms.ModelForm):
 
     class Meta:
         model = GeoPhysicalData
-        fields = ['category', 'description']
+        fields = ['state', 'category', 'description']
 
             
 
-class GeoPhysicalCityForm(forms.ModelForm):
+class GeoPhysicalCityUpdateForm(forms.ModelForm):   
+    city = forms.ModelChoiceField(
+            label='City',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=City.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Geo Physical Data Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -508,9 +541,15 @@ class GeoPhysicalCityForm(forms.ModelForm):
 
     class Meta:
         model = GeoPhysicalData
-        fields = ['category', 'description']
+        fields = ['city', 'category', 'description']
 
-class GeoPhysicalClanForm(forms.ModelForm):
+class GeoPhysicalClanUpdateForm(forms.ModelForm):
+    clan = forms.ModelChoiceField(
+            label='Clan',
+            widget=forms.Select(attrs={'class': 'form-control'}),
+            queryset=Clan.objects.all(),
+        )
+    
     category = forms.ModelChoiceField(
             label='Geo Physical Data Category',
             widget=forms.Select(attrs={'class': 'form-control'}),
@@ -522,4 +561,4 @@ class GeoPhysicalClanForm(forms.ModelForm):
 
     class Meta:
         model = GeoPhysicalData
-        fields = ['category', 'description']
+        fields = ['clan', 'category', 'description']

@@ -12,26 +12,75 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.views.generic import ( ListView, DetailView, CreateView, 
                                     UpdateView, DeleteView, RedirectView, View, TemplateView)
 
+from .forms_update import (
+    GeoPhysicalGeoPoliticalZoneUpdateForm,
+    GeoPhysicalStateUpdateForm,
+    GeoPhysicalCityUpdateForm,
+    GeoPhysicalClanUpdateForm
+    )
 
 @login_required
 def geo_physical_detail_view(request, pk):
     object = GeoPhysicalData.objects.get(id=pk)
-    form = GeoPhysicalForm(request.POST or None, request.FILES or None, instance=object)
 
-    if request.htmx:
-        template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_update.html'
+    if object.clan:
+        form = GeoPhysicalClanUpdateForm(request.POST or None, request.FILES or None, instance=object)
 
-    if form.is_valid():
-        # form.instance.user = request.user.account_profile
-        form.save()
-        messages.success(request, "Data added successfully!!!")
-        return HttpResponseRedirect(reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': pk} ))
+        if request.htmx:
+            template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_update.html'
 
-    context = {
-        'object': object,
-        'form': form,
-    }
-    return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context)
+        if form.is_valid():
+            clan = form.instance.clan
+            form.instance.geo_political_zone = clan.city.state.geo_political_zone
+            form.instance.state = clan.city.state
+            form.instance.city = clan.city
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context = {'object': object, 'form': form})
+
+    if object.city:
+        form = GeoPhysicalCityUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_update.html'
+
+        if form.is_valid():
+            city = form.instance.city
+            form.instance.geo_political_zone = city.state.geo_political_zone
+            form.instance.state = city.state
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context = {'object': object, 'form': form})
+
+    if object.state:
+        form = GeoPhysicalStateUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_update.html'
+
+        if form.is_valid():
+            state = form.instance.state
+            form.instance.geo_political_zone = state.geo_political_zone
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context = {'object': object, 'form': form})
+
+    if object.geo_political_zone:
+        form = GeoPhysicalGeoPoliticalZoneUpdateForm(request.POST or None, request.FILES or None, instance=object)
+
+        if request.htmx:
+            template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_update.html'
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Data added successfully!!!")
+            return HttpResponseRedirect(reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': pk} ))
+        return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context = {'object': object, 'form': form})
+
+    return render(request, 'platform_admin/geo_physical/geo-physical-detail.html')
 
 
 
@@ -92,7 +141,7 @@ def geo_physical_create_view(request):
 @login_required
 def geo_physical_geo_political_zone_create_view(request, geozone_pk):
     geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
-    form = GeoPhysicalGeoPoliticalZoneForm(request.POST or None, request.FILES or None, geozone_pk=geozone_pk)
+    form = GeoPhysicalGeoPoliticalZoneForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-geo-political-zone-create.html'
@@ -117,7 +166,7 @@ def geo_physical_geo_political_zone_create_view(request, geozone_pk):
 @login_required
 def geo_physical_state_create_view(request, state_location_pk):
     state = State.objects.get(id=state_location_pk)
-    form = GeoPhysicalStateForm(request.POST or None, request.FILES or None, state_location_pk=state_location_pk)
+    form = GeoPhysicalStateForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-state-create.html'
@@ -143,7 +192,7 @@ def geo_physical_state_create_view(request, state_location_pk):
 @login_required
 def geo_physical_city_create_view(request, city_location_pk):
     city = City.objects.get(id=city_location_pk)
-    form = GeoPhysicalCityForm(request.POST or None, request.FILES or None, city_location_pk=city_location_pk)
+    form = GeoPhysicalCityForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-city-create.html'

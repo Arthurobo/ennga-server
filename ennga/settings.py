@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
+from decouple import config
 from pathlib import Path
 
 import django_heroku
@@ -28,7 +30,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pud1ka-bnw5$d=-yp-$=#x_for3s^72-vd&s*nn8*1+$0enepf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -105,9 +108,9 @@ WSGI_APPLICATION = 'ennga.wsgi.application'
 # }
 
 # Production Database
-DB_NAME = "ennga_db"
-DB_USER = "ennga"
-DB_PASSWORD = "password"
+DB_NAME = config("DB_NAME")
+DB_USER = config("DB_USER")
+DB_PASSWORD = config("DB_PASSWORD")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -173,12 +176,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-DEFAULT_FROM_EMAIL = "ennga@kulenga.org"
+# DEFAULT_FROM_EMAIL = "ennga@kulenga.org"
+DEFAULT_FROM_EMAIL='Ennga.com <ennga@kulenga.org>' 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-MAILJET_API_KEY = "ee02ca5ca3b4a37369b0d32729498a54"
-MAILJET_SECRET_KEY = "dd4049305ce296322411bd9a95511910"
+MAILJET_API_KEY = config("MAILJET_API_KEY")
+MAILJET_SECRET_KEY = config("MAILJET_SECRET_KEY")
 
 # Mailjet settings
 EMAIL_BACKEND = "anymail.backends.mailjet.EmailBackend"  # or sendgrid.EmailBackend, or...
@@ -194,17 +198,17 @@ ANYMAIL = {
 
 
 
-AWS_ACCESS_KEY_ID = 'AKIATJXSRU34GICVR6XX'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = "asfuniport"
-
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN")
 
 AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_DEFAULT_ACL = 'public-read'
+# AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
 AWS_QUERYSTRING_EXPIRE = 60*60*24*365*10
 

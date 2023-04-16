@@ -12,7 +12,23 @@ class Country(models.Model):
 
     class Meta:
         verbose_name_plural = 'Countries'
-        
+    
+
+class Tribe(models.Model):
+    name = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name_plural = "Tribes"
+
+    class Meta:
+        ordering = ['name',]
+
+
 class GeoPoliticalZone(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
@@ -112,6 +128,7 @@ class City(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
     state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL)
+    tribe = models.ForeignKey(Tribe, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='city_managers')
     date_created = models.DateTimeField(auto_now_add=True)
