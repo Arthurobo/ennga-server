@@ -5,11 +5,17 @@ from .models import (MarketSectorBulkData, MarketSector, Historical,
                     GeoPhysicalData, MarketSectorSubCategory
                 )
 
-admin.site.register(MarketSectorBulkData)
-admin.site.register(MarketSector)
-admin.site.register(Historical)
-admin.site.register(GeoPhysicalCategory)
-admin.site.register(HistoricalCategory)
-admin.site.register(GeoPhysicalData)
-admin.site.register(MarketSectorCategory)
-admin.site.register(MarketSectorSubCategory)
+
+class ModelAdminPreventDelete(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+
+admin.site.register(MarketSectorBulkData, ModelAdminPreventDelete)
+admin.site.register(MarketSector, ModelAdminPreventDelete)
+admin.site.register(Historical, ModelAdminPreventDelete)
+admin.site.register(GeoPhysicalCategory, ModelAdminPreventDelete)
+admin.site.register(HistoricalCategory, ModelAdminPreventDelete)
+admin.site.register(GeoPhysicalData, ModelAdminPreventDelete)
+admin.site.register(MarketSectorCategory, ModelAdminPreventDelete)
+admin.site.register(MarketSectorSubCategory, ModelAdminPreventDelete)

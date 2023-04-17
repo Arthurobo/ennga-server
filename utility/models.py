@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Country(models.Model):
@@ -16,6 +17,7 @@ class Country(models.Model):
 
 class Tribe(models.Model):
     name = models.CharField(max_length=255)
+    description = RichTextUploadingField(blank=True, null=True,)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

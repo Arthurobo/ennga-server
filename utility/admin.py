@@ -4,6 +4,11 @@ from django.contrib import admin
 from .models import Country, State, City, GeoPoliticalZone, Clan, SubClan, Tribe
 
 
+class ModelAdminPreventDelete(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+
 class SubClanInline(admin.TabularInline):
     model = SubClan
 
@@ -23,6 +28,9 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ['name',]
     # list_editable = ('quiz',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class ClanAdmin(admin.ModelAdmin):
     inlines = [SubClanInline]
@@ -30,12 +38,17 @@ class ClanAdmin(admin.ModelAdmin):
     search_fields = ['name',]
     # list_editable = ('quiz',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 class StateAdmin(admin.ModelAdmin):
     inlines = [CityInline]
     list_display = ('name', 'id')
     search_fields = ['name',]
     # list_editable = ('quiz',)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class GeoPoliticalZoneAdmin(admin.ModelAdmin):
@@ -44,6 +57,9 @@ class GeoPoliticalZoneAdmin(admin.ModelAdmin):
     search_fields = ['name',]
     # list_editable = ('quiz',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class TribeAdmin(admin.ModelAdmin):
     inlines = [CityInline]
@@ -51,11 +67,18 @@ class TribeAdmin(admin.ModelAdmin):
     search_fields = ['name',]
     # list_editable = ('quiz',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    
 class SubClanAdmin(admin.ModelAdmin):
     search_fields = ['name',]
 
+    def has_delete_permission(self, request, obj=None):
+        return False
 
-admin.site.register(Country)
+
+admin.site.register(Country, ModelAdminPreventDelete)
 admin.site.register(Tribe, TribeAdmin)
 admin.site.register(GeoPoliticalZone, GeoPoliticalZoneAdmin)
 admin.site.register(State, StateAdmin)

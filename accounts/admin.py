@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from accounts.models import Account, Profile
 
+class ModelAdminPreventDelete(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 class AccountAdmin(UserAdmin):
     list_display = ('username', 'is_active', 'email', 'first_name', 'last_name', 'is_staff')
@@ -13,6 +16,9 @@ class AccountAdmin(UserAdmin):
     fieldsets = ()
     ordering = ('-date_joined',)
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(Account, AccountAdmin)
-admin.site.register(Profile)
+admin.site.register(Profile, ModelAdminPreventDelete)
