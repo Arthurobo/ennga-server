@@ -21,7 +21,7 @@ from .forms_update import (MarketSectorUpdateForm,
 
 @login_required
 def market_sector_detail_view(request, pk):
-    object = MarketSector.objects.get(id=pk)
+    object = MarketSector.my_objects.get(id=pk)
 
     if object.clan:
         form = MarketSectorClanUpdateForm(request.POST or None, request.FILES or None, instance=object)
@@ -85,7 +85,7 @@ def market_sector_detail_view(request, pk):
 @login_required
 def market_sector_list_view(request):
     market_sectors = _load_market_sectors(request)
-    # objects = MarketSector.objects.all().order_by('-date_created')
+    # objects = MarketSector.my_objects.all().order_by('-date_created')
     context = {
         'market_sectors': market_sectors,
     }
@@ -100,7 +100,7 @@ def list_load_market_sectors_view(request):
 
 def _load_market_sectors(request):
     page = request.GET.get("page")
-    market_sectors = MarketSector.objects.all().order_by('-date_created')
+    market_sectors = MarketSector.my_objects.all().order_by('-date_created')
     paginator = Paginator(market_sectors, 50)
     try:
         market_sectors = paginator.page(page)
@@ -121,7 +121,7 @@ def market_sector_create_view(request):
         template_name = 'platform_admin/market_sector/partials/ajax_market_sector_create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -137,14 +137,14 @@ def market_sector_create_view(request):
 
 @login_required
 def market_sector_geo_political_zone_create_view(request, geozone_pk):
-    geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
+    geo_political_zone = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     form = MarketSectorGeoPoliticalZoneForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-geo-political-zone-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -162,14 +162,14 @@ def market_sector_geo_political_zone_create_view(request, geozone_pk):
 
 @login_required
 def market_sector_state_create_view(request, state_location_pk):
-    state = State.objects.get(id=state_location_pk)
+    state = State.my_objects.get(id=state_location_pk)
     form = MarketSectorStateForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-state-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -188,14 +188,14 @@ def market_sector_state_create_view(request, state_location_pk):
 
 @login_required
 def market_sector_city_create_view(request, city_location_pk):
-    city = City.objects.get(id=city_location_pk)
+    city = City.my_objects.get(id=city_location_pk)
     form = MarketSectorCityForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-city-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -215,14 +215,14 @@ def market_sector_city_create_view(request, city_location_pk):
 
 @login_required
 def market_sector_clan_create_view(request, clan_location_pk):
-    clan = Clan.objects.get(id=clan_location_pk)
+    clan = Clan.my_objects.get(id=clan_location_pk)
     form = MarketSectorClanForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/market_sector/partials/market-sector-clan-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -252,7 +252,7 @@ def market_sector_upload_view(request):
         template_name = 'platform_admin/ajax_progress_bar_upload.html'
 
     if form_bulk.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form_bulk.instance.user = request.user.account_profile
         form_bulk.instance.country = nigeria_as_country_location
@@ -277,11 +277,11 @@ def market_sector_upload_view(request):
 ########################### Beginning of Market Data List View With Search ######################################
 @login_required
 def market_sector_data_list_view(request):
-    geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
-    states = State.objects.all().order_by('name')
+    geo_politicals = GeoPoliticalZone.my_objects.all().order_by('name')
+    states = State.my_objects.all().order_by('name')
     market_sectors, search = _search_market_sector_data(request)
-    categories = MarketSectorCategory.objects.all()
-    sub_categories = MarketSectorSubCategory.objects.all()
+    categories = MarketSectorCategory.my_objects.all()
+    sub_categories = MarketSectorSubCategory.my_objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
@@ -300,7 +300,7 @@ def list_search_market_sector_data_view(request):
 def _search_market_sector_data(request):
     search = request.GET.get("search")
     page = request.GET.get("page")
-    market_sectors = MarketSector.objects.all().order_by('-id')
+    market_sectors = MarketSector.my_objects.all().order_by('-id')
     
     if search:
         # orders = orders.filter(city__name__icontains=search)
@@ -324,7 +324,7 @@ def _search_market_sector_data(request):
 @login_required
 def user_market_sector_list_view(request):
     user_market_sectors = _load_user_market_sectors(request)
-    # objects = MarketSector.objects.all().order_by('-date_created')
+    # objects = MarketSector.my_objects.all().order_by('-date_created')
     context = {
         'user_market_sectors': user_market_sectors,
     }
@@ -340,7 +340,7 @@ def list_load_user_market_sectors_view(request):
 def _load_user_market_sectors(request):
     page = request.GET.get("page")
     user = request.user.account_profile
-    user_market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
+    user_market_sectors = MarketSector.my_objects.filter(user=user).order_by('-date_created')
     paginator = Paginator(user_market_sectors, 20)
     try:
         user_market_sectors = paginator.page(page)
@@ -355,13 +355,13 @@ def _load_user_market_sectors(request):
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR MARKET_SECTOR DATA ###########################################
 @login_required
 def market_sector_geo_zone_detail_view(request, geozone_pk):
-    object = GeoPoliticalZone.objects.get(id=geozone_pk)
+    object = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     geozone_pk = geozone_pk
     objects = _load_market_sector_geo_zone_details(request, geozone_pk)
     context = {
         'object': object,
         'objects': objects,
-        'states': State.objects.filter(geo_political_zone=object).order_by('name'),
+        'states': State.my_objects.filter(geo_political_zone=object).order_by('name'),
     }
     return render(request, 'platform_admin/market_sector/market_sector-geo-zone-detail.html', context)
 
@@ -369,7 +369,7 @@ def market_sector_geo_zone_detail_view(request, geozone_pk):
 
 @login_required
 def list_load_market_sector_geo_zone_details_view(request, geozone_pk):
-    object = GeoPoliticalZone.objects.get(id=geozone_pk)
+    object = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     market_sector_geo_zone_detail = _load_market_sector_geo_zone_details(request, geozone_pk)
     context = {"objects": market_sector_geo_zone_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_geo_zone_details.html", context)
@@ -379,7 +379,7 @@ def list_load_market_sector_geo_zone_details_view(request, geozone_pk):
 @login_required
 def _load_market_sector_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
-    market_sector_geo_zone_details = MarketSector.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
+    market_sector_geo_zone_details = MarketSector.my_objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
     paginator = Paginator(market_sector_geo_zone_details, 20)
     try:
         market_sector_geo_zone_details = paginator.page(page)
@@ -398,13 +398,13 @@ def _load_market_sector_geo_zone_details(request, geozone_pk):
 
 @login_required
 def market_sector_state_location_detail_view(request, state_location_pk):
-    object = State.objects.get(id=state_location_pk)
+    object = State.my_objects.get(id=state_location_pk)
     state_location_pk = state_location_pk
     objects = _load_market_sector_state_location_details(request, state_location_pk)
     context = {
         'object': object,
         'objects': objects,
-        'cities': City.objects.filter(state=object).order_by('name'),
+        'cities': City.my_objects.filter(state=object).order_by('name'),
     }
     return render(request, 'platform_admin/market_sector/market_sector-state-location-detail.html', context)
 
@@ -412,7 +412,7 @@ def market_sector_state_location_detail_view(request, state_location_pk):
 
 @login_required
 def list_load_market_sector_state_location_details_view(request, state_location_pk):
-    object = State.objects.get(id=state_location_pk)
+    object = State.my_objects.get(id=state_location_pk)
     market_sector_state_location_detail = _load_market_sector_state_location_details(request, state_location_pk)
     context = {"objects": market_sector_state_location_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_state_location_details.html", context)
@@ -422,7 +422,7 @@ def list_load_market_sector_state_location_details_view(request, state_location_
 @login_required
 def _load_market_sector_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
-    market_sector_state_location_details = MarketSector.objects.filter(state=state_location_pk).order_by('-date_created')
+    market_sector_state_location_details = MarketSector.my_objects.filter(state=state_location_pk).order_by('-date_created')
     paginator = Paginator(market_sector_state_location_details, 20)
     try:
         market_sector_state_location_details = paginator.page(page)
@@ -442,13 +442,13 @@ def _load_market_sector_state_location_details(request, state_location_pk):
 
 @login_required
 def market_sector_city_location_detail_view(request, city_location_pk):
-    object = City.objects.get(id=city_location_pk)
+    object = City.my_objects.get(id=city_location_pk)
     city_location_pk = city_location_pk
     objects = _load_market_sector_city_location_details(request, city_location_pk)
     context = {
         'object': object,
         'objects': objects,
-        'clans': Clan.objects.filter(city=object).order_by('name'),
+        'clans': Clan.my_objects.filter(city=object).order_by('name'),
     }
     return render(request, 'platform_admin/market_sector/market_sector-city-location-detail.html', context)
 
@@ -456,7 +456,7 @@ def market_sector_city_location_detail_view(request, city_location_pk):
 
 @login_required
 def list_load_market_sector_city_location_details_view(request, city_location_pk):
-    object = City.objects.get(id=city_location_pk)
+    object = City.my_objects.get(id=city_location_pk)
     market_sector_city_location_detail = _load_market_sector_city_location_details(request, city_location_pk)
     context = {"objects": market_sector_city_location_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_city_location_details.html", context)
@@ -466,7 +466,7 @@ def list_load_market_sector_city_location_details_view(request, city_location_pk
 @login_required
 def _load_market_sector_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
-    market_sector_city_location_details = MarketSector.objects.filter(city=city_location_pk).order_by('-date_created')
+    market_sector_city_location_details = MarketSector.my_objects.filter(city=city_location_pk).order_by('-date_created')
     paginator = Paginator(market_sector_city_location_details, 20)
     try:
         market_sector_city_location_details = paginator.page(page)
@@ -486,7 +486,7 @@ def _load_market_sector_city_location_details(request, city_location_pk):
 
 @login_required
 def market_sector_clan_location_detail_view(request, clan_location_pk):
-    object = Clan.objects.get(id=clan_location_pk)
+    object = Clan.my_objects.get(id=clan_location_pk)
     clan_location_pk = clan_location_pk
     objects = _load_market_sector_clan_location_details(request, clan_location_pk)
     context = {
@@ -499,7 +499,7 @@ def market_sector_clan_location_detail_view(request, clan_location_pk):
 
 @login_required
 def list_load_market_sector_clan_location_details_view(request, clan_location_pk):
-    object = Clan.objects.get(id=clan_location_pk)
+    object = Clan.my_objects.get(id=clan_location_pk)
     market_sector_clan_location_detail = _load_market_sector_clan_location_details(request, clan_location_pk)
     context = {"objects": market_sector_clan_location_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_clan_location_details.html", context)
@@ -509,7 +509,7 @@ def list_load_market_sector_clan_location_details_view(request, clan_location_pk
 @login_required
 def _load_market_sector_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
-    market_sector_clan_location_details = MarketSector.objects.filter(clan=clan_location_pk).order_by('-date_created')
+    market_sector_clan_location_details = MarketSector.my_objects.filter(clan=clan_location_pk).order_by('-date_created')
     paginator = Paginator(market_sector_clan_location_details, 20)
     try:
         market_sector_clan_location_details = paginator.page(page)
@@ -525,12 +525,12 @@ def _load_market_sector_clan_location_details(request, clan_location_pk):
 ###################################### BEGINNING OF Category FOR MARKET_SECTOR DATA ###########################################
 @login_required
 def market_sector_category_detail_view(request, category_pk):
-    object = MarketSectorCategory.objects.get(id=category_pk)
+    object = MarketSectorCategory.my_objects.get(id=category_pk)
     category_pk = category_pk
     objects = _load_market_sector_category_details(request, category_pk)
     context = {
         'object': object,
-        'sub_categories': MarketSectorSubCategory.objects.filter(category=object).order_by('name'),
+        'sub_categories': MarketSectorSubCategory.my_objects.filter(category=object).order_by('name'),
         'objects': objects,
         # 'market_sectors': Account.objects.all()
     }
@@ -539,7 +539,7 @@ def market_sector_category_detail_view(request, category_pk):
 
 @login_required
 def list_load_market_sector_category_details_view(request, category_pk):
-    object = MarketSectorCategory.objects.get(id=category_pk)
+    object = MarketSectorCategory.my_objects.get(id=category_pk)
     market_sector_category_detail = _load_market_sector_category_details(request, category_pk)
     context = {"objects": market_sector_category_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_category_details.html", context)
@@ -547,7 +547,7 @@ def list_load_market_sector_category_details_view(request, category_pk):
 @login_required
 def _load_market_sector_category_details(request, category_pk):
     page = request.GET.get("page")
-    market_sector_category_details = MarketSector.objects.filter(category=category_pk).order_by('-date_created')
+    market_sector_category_details = MarketSector.my_objects.filter(category=category_pk).order_by('-date_created')
     paginator = Paginator(market_sector_category_details, 20)
     try:
         market_sector_category_details = paginator.page(page)
@@ -565,7 +565,7 @@ def _load_market_sector_category_details(request, category_pk):
 ###################################### BEGINNING OF SubCategory FOR MARKET_SECTOR DATA ###########################################
 @login_required
 def market_sector_subcategory_detail_view(request, subcategory_pk):
-    object = MarketSectorSubCategory.objects.get(id=subcategory_pk)
+    object = MarketSectorSubCategory.my_objects.get(id=subcategory_pk)
     subcategory_pk = subcategory_pk
     objects = _load_market_sector_subcategory_details(request, subcategory_pk)
     context = {
@@ -577,7 +577,7 @@ def market_sector_subcategory_detail_view(request, subcategory_pk):
 
 @login_required
 def list_load_market_sector_subcategory_details_view(request, subcategory_pk):
-    object = MarketSectorSubCategory.objects.get(id=subcategory_pk)
+    object = MarketSectorSubCategory.my_objects.get(id=subcategory_pk)
     market_sector_subcategory_detail = _load_market_sector_subcategory_details(request, subcategory_pk)
     context = {"objects": market_sector_subcategory_detail, 'object': object}
     return render(request, "platform_admin/market_sector/partials/market_sector_subcategory_details.html", context)
@@ -585,7 +585,7 @@ def list_load_market_sector_subcategory_details_view(request, subcategory_pk):
 @login_required
 def _load_market_sector_subcategory_details(request, subcategory_pk):
     page = request.GET.get("page")
-    market_sector_subcategory_details = MarketSector.objects.filter(sub_category=subcategory_pk).order_by('-date_created')
+    market_sector_subcategory_details = MarketSector.my_objects.filter(sub_category=subcategory_pk).order_by('-date_created')
     paginator = Paginator(market_sector_subcategory_details, 2)
     try:
         market_sector_subcategory_details = paginator.page(page)

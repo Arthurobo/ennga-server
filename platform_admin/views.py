@@ -22,8 +22,8 @@ from django.views.generic import ( ListView, DetailView, CreateView,
 @login_required
 def dashboard(request):
     users = Profile.objects.all()
-    market_sectors = MarketSector.objects.all()
-    historicals = Historical.objects.all()
+    market_sectors = MarketSector.my_objects.all()
+    historicals = Historical.my_objects.all()
     context = {
         'users': users,
         'historicals': historicals,
@@ -59,9 +59,9 @@ def admin_users(request):
 @login_required
 def edit_account_view(request, *args, **kwargs):
     user = request.user.account_profile
-    market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
-    historicals = Historical.objects.filter(user=user).order_by('-date_created')
-    geo_physicals = GeoPhysicalData.objects.filter(user=user).order_by('-date_created')
+    market_sectors = MarketSector.my_objects.filter(user=user).order_by('-date_created')
+    historicals = Historical.my_objects.filter(user=user).order_by('-date_created')
+    geo_physicals = GeoPhysicalData.my_objects.filter(user=user).order_by('-date_created')
 
     if not request.user.is_authenticated:
         return redirect('accounts:login')
@@ -130,7 +130,7 @@ class ProfileDetailView(DetailView):
     # override context data
     def get_context_data(self, *args, **kwargs):
         user = self.object
-        market_sectors = MarketSector.objects.filter(user=user)
+        market_sectors = MarketSector.my_objects.filter(user=user)
         context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
         context['market_sectors'] = market_sectors
         # context["category"] = "MISC"       
@@ -140,7 +140,7 @@ class ProfileDetailView(DetailView):
 def profile_market_sector_view(request, pk):
     user = Profile.objects.get(id=pk)
     market_sectors = _load_market_sectors(request, pk)
-    user_market_sectors = MarketSector.objects.filter(user=user)
+    user_market_sectors = MarketSector.my_objects.filter(user=user)
     context = {
         'market_sectors': market_sectors,
         'user': user,
@@ -158,7 +158,7 @@ def profile_load_market_sectors_view(request):
 def _load_market_sectors(request, pk):
     page = request.GET.get("page")
     user = Profile.objects.get(id=pk)
-    market_sectors = MarketSector.objects.filter(user=user).order_by('-date_created')
+    market_sectors = MarketSector.my_objects.filter(user=user).order_by('-date_created')
     paginator = Paginator(market_sectors, 50)
     try:
         market_sectors = paginator.page(page)

@@ -3,10 +3,19 @@ from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
+class CountryManager(models.Manager):
+    def get_queryset(self):
+        return super(CountryManager, self).get_queryset().filter(is_deleted=False)
+    
+
 class Country(models.Model):
     name = models.CharField(max_length=255)
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -18,8 +27,12 @@ class Country(models.Model):
 class Tribe(models.Model):
     name = models.CharField(max_length=255)
     description = RichTextUploadingField(blank=True, null=True,)
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -35,8 +48,12 @@ class GeoPoliticalZone(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='geo_political_zone_managers')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -83,8 +100,12 @@ class State(models.Model):
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='state_managers')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -133,8 +154,12 @@ class City(models.Model):
     tribe = models.ForeignKey(Tribe, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='city_managers')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -182,8 +207,12 @@ class Clan(models.Model):
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_managers')
     restricted_users = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_restricted_users')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name
@@ -232,8 +261,12 @@ class SubClan(models.Model):
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='subclan_managers')
     restricted_users = models.ManyToManyField("accounts.Profile", blank=True, related_name='subclan_restricted_users')
+    is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+    objects = models.Manager() 
+    my_objects = CountryManager()
 
     def __str__(self):
         return self.name

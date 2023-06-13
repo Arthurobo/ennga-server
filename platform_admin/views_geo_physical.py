@@ -21,7 +21,7 @@ from .forms_update import (
 
 @login_required
 def geo_physical_detail_view(request, pk):
-    object = GeoPhysicalData.objects.get(id=pk)
+    object = GeoPhysicalData.my_objects.get(id=pk)
 
     if object.clan:
         form = GeoPhysicalClanUpdateForm(request.POST or None, request.FILES or None, instance=object)
@@ -102,7 +102,7 @@ def list_load_geo_physicals_view(request):
 
 def _load_geo_physicals(request):
     page = request.GET.get("page")
-    geo_physicals = GeoPhysicalData.objects.all().order_by('-date_created')
+    geo_physicals = GeoPhysicalData.my_objects.all().order_by('-date_created')
     paginator = Paginator(geo_physicals, 20)
     try:
         geo_physicals = paginator.page(page)
@@ -124,7 +124,7 @@ def geo_physical_create_view(request):
         template_name = 'platform_admin/geo_physical/partials/ajax_geo_physical_create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -140,14 +140,14 @@ def geo_physical_create_view(request):
 
 @login_required
 def geo_physical_geo_political_zone_create_view(request, geozone_pk):
-    geo_political_zone = GeoPoliticalZone.objects.get(id=geozone_pk)
+    geo_political_zone = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     form = GeoPhysicalGeoPoliticalZoneForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-geo-political-zone-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -165,14 +165,14 @@ def geo_physical_geo_political_zone_create_view(request, geozone_pk):
 
 @login_required
 def geo_physical_state_create_view(request, state_location_pk):
-    state = State.objects.get(id=state_location_pk)
+    state = State.my_objects.get(id=state_location_pk)
     form = GeoPhysicalStateForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-state-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -191,14 +191,14 @@ def geo_physical_state_create_view(request, state_location_pk):
 
 @login_required
 def geo_physical_city_create_view(request, city_location_pk):
-    city = City.objects.get(id=city_location_pk)
+    city = City.my_objects.get(id=city_location_pk)
     form = GeoPhysicalCityForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-city-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -218,14 +218,14 @@ def geo_physical_city_create_view(request, city_location_pk):
 
 @login_required
 def geo_physical_clan_create_view(request, clan_location_pk):
-    clan = Clan.objects.get(id=clan_location_pk)
+    clan = Clan.my_objects.get(id=clan_location_pk)
     form = GeoPhysicalClanForm(request.POST or None, request.FILES or None)
 
     if request.htmx:
         template_name = 'platform_admin/geo_physical/partials/geo-physical-clan-create.html'
 
     if form.is_valid():
-        nigeria_as_country_location = Country.objects.get(id=1)
+        nigeria_as_country_location = Country.my_objects.get(id=1)
 
         form.instance.user = request.user.account_profile
         form.instance.country = nigeria_as_country_location
@@ -250,10 +250,10 @@ def geo_physical_clan_create_view(request, clan_location_pk):
 
 @login_required
 def geo_physical_data_list_view(request):
-    geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
-    states = State.objects.all().order_by('name')
-    cities = City.objects.all().order_by('name')
-    categories = GeoPhysicalCategory.objects.all()
+    geo_politicals = GeoPoliticalZone.my_objects.all().order_by('name')
+    states = State.my_objects.all().order_by('name')
+    cities = City.my_objects.all().order_by('name')
+    categories = GeoPhysicalCategory.my_objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
@@ -267,10 +267,10 @@ def geo_physical_data_list_view(request):
 ########################### Beginning of GEO PHYSICAL Data List View With Search ######################################
 @login_required
 def geo_physical_data_list_view(request):
-    geo_politicals = GeoPoliticalZone.objects.all().order_by('name')
-    states = State.objects.all().order_by('name')
+    geo_politicals = GeoPoliticalZone.my_objects.all().order_by('name')
+    states = State.my_objects.all().order_by('name')
     geo_physicals, search = _search_geo_physical_data(request)
-    categories = GeoPhysicalCategory.objects.all()
+    categories = GeoPhysicalCategory.my_objects.all()
     context = {
         'geo_politicals': geo_politicals,
         'states' : states,
@@ -288,7 +288,7 @@ def list_search_geo_physical_data_view(request):
 def _search_geo_physical_data(request):
     search = request.GET.get("search")
     page = request.GET.get("page")
-    geo_physicals = GeoPhysicalData.objects.all().order_by('-id')
+    geo_physicals = GeoPhysicalData.my_objects.all().order_by('-id')
     
     if search:
         geo_physicals = geo_physicals.filter(description__icontains=search)
@@ -328,7 +328,7 @@ def list_load_user_geo_physicals_view(request):
 def _load_user_geo_physicals(request):
     page = request.GET.get("page")
     user = request.user.account_profile
-    user_geo_physicals = GeoPhysicalData.objects.filter(user=user).order_by('-date_created')
+    user_geo_physicals = GeoPhysicalData.my_objects.filter(user=user).order_by('-date_created')
     paginator = Paginator(user_geo_physicals, 20)
     try:
         user_geo_physicals = paginator.page(page)
@@ -346,13 +346,13 @@ def _load_user_geo_physicals(request):
 ###################################### BEGINNING OF GEOPOLITICAL ZONES FOR GEO_PHYSICAL DATA ###########################################
 @login_required
 def geo_physical_geo_zone_detail_view(request, geozone_pk):
-    object = GeoPoliticalZone.objects.get(id=geozone_pk)
+    object = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     geozone_pk = geozone_pk
     objects = _load_geo_physical_geo_zone_details(request, geozone_pk)
     context = {
         'object': object,
         'objects': objects,
-        'states': State.objects.filter(geo_political_zone=object).order_by('name'),
+        'states': State.my_objects.filter(geo_political_zone=object).order_by('name'),
     }
     return render(request, 'platform_admin/geo_physical/geo_physical-geo-zone-detail.html', context)
 
@@ -360,7 +360,7 @@ def geo_physical_geo_zone_detail_view(request, geozone_pk):
 
 @login_required
 def list_load_geo_physical_geo_zone_details_view(request, geozone_pk):
-    object = GeoPoliticalZone.objects.get(id=geozone_pk)
+    object = GeoPoliticalZone.my_objects.get(id=geozone_pk)
     geo_physical_geo_zone_detail = _load_geo_physical_geo_zone_details(request, geozone_pk)
     context = {"objects": geo_physical_geo_zone_detail, 'object': object}
     return render(request, "platform_admin/geo_physical/partials/geo_physical_geo_zone_details.html", context)
@@ -370,7 +370,7 @@ def list_load_geo_physical_geo_zone_details_view(request, geozone_pk):
 @login_required
 def _load_geo_physical_geo_zone_details(request, geozone_pk):
     page = request.GET.get("page")
-    geo_physical_geo_zone_details = GeoPhysicalData.objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
+    geo_physical_geo_zone_details = GeoPhysicalData.my_objects.filter(geo_political_zone=geozone_pk).order_by('-date_created')
     paginator = Paginator(geo_physical_geo_zone_details, 20)
     try:
         geo_physical_geo_zone_details = paginator.page(page)
@@ -386,13 +386,13 @@ def _load_geo_physical_geo_zone_details(request, geozone_pk):
 ###################################### BEGINNING OF STATES LOCATION FOR GEO_PHYSICAL DATA ###########################################
 @login_required
 def geo_physical_state_location_detail_view(request, state_location_pk):
-    object = State.objects.get(id=state_location_pk)
+    object = State.my_objects.get(id=state_location_pk)
     state_location_pk = state_location_pk
     objects = _load_geo_physical_state_location_details(request, state_location_pk)
     context = {
         'object': object,
         'objects': objects,
-        'cities': City.objects.filter(state=object).order_by('name'),
+        'cities': City.my_objects.filter(state=object).order_by('name'),
     }
     return render(request, 'platform_admin/geo_physical/geo_physical-state-location-detail.html', context)
 
@@ -400,7 +400,7 @@ def geo_physical_state_location_detail_view(request, state_location_pk):
 
 @login_required
 def list_load_geo_physical_state_location_details_view(request, state_location_pk):
-    object = State.objects.get(id=state_location_pk)
+    object = State.my_objects.get(id=state_location_pk)
     geo_physical_state_location_detail = _load_geo_physical_state_location_details(request, state_location_pk)
     context = {"objects": geo_physical_state_location_detail, 'object': object}
     return render(request, "platform_admin/geo_physical/partials/geo_physical_state_location_details.html", context)
@@ -410,7 +410,7 @@ def list_load_geo_physical_state_location_details_view(request, state_location_p
 @login_required
 def _load_geo_physical_state_location_details(request, state_location_pk):
     page = request.GET.get("page")
-    geo_physical_state_location_details = GeoPhysicalData.objects.filter(state=state_location_pk).order_by('-date_created')
+    geo_physical_state_location_details = GeoPhysicalData.my_objects.filter(state=state_location_pk).order_by('-date_created')
     paginator = Paginator(geo_physical_state_location_details, 20)
     try:
         geo_physical_state_location_details = paginator.page(page)
@@ -428,13 +428,13 @@ def _load_geo_physical_state_location_details(request, state_location_pk):
 
 @login_required
 def geo_physical_city_location_detail_view(request, city_location_pk):
-    object = City.objects.get(id=city_location_pk)
+    object = City.my_objects.get(id=city_location_pk)
     city_location_pk = city_location_pk
     objects = _load_geo_physical_city_location_details(request, city_location_pk)
     context = {
         'object': object,
         'objects': objects,
-        'clans': Clan.objects.filter(city=object).order_by('name'),
+        'clans': Clan.my_objects.filter(city=object).order_by('name'),
     }
     return render(request, 'platform_admin/geo_physical/geo_physical-city-location-detail.html', context)
 
@@ -442,7 +442,7 @@ def geo_physical_city_location_detail_view(request, city_location_pk):
 
 @login_required
 def list_load_geo_physical_city_location_details_view(request, city_location_pk):
-    object = City.objects.get(id=city_location_pk)
+    object = City.my_objects.get(id=city_location_pk)
     geo_physical_city_location_detail = _load_geo_physical_city_location_details(request, city_location_pk)
     context = {"objects": geo_physical_city_location_detail, 'object': object}
     return render(request, "platform_admin/geo_physical/partials/geo_physical_city_location_details.html", context)
@@ -452,7 +452,7 @@ def list_load_geo_physical_city_location_details_view(request, city_location_pk)
 @login_required
 def _load_geo_physical_city_location_details(request, city_location_pk):
     page = request.GET.get("page")
-    geo_physical_city_location_details = GeoPhysicalData.objects.filter(city=city_location_pk).order_by('-date_created')
+    geo_physical_city_location_details = GeoPhysicalData.my_objects.filter(city=city_location_pk).order_by('-date_created')
     paginator = Paginator(geo_physical_city_location_details, 20)
     try:
         geo_physical_city_location_details = paginator.page(page)
@@ -470,7 +470,7 @@ def _load_geo_physical_city_location_details(request, city_location_pk):
 
 @login_required
 def geo_physical_clan_location_detail_view(request, clan_location_pk):
-    object = Clan.objects.get(id=clan_location_pk)
+    object = Clan.my_objects.get(id=clan_location_pk)
     clan_location_pk = clan_location_pk
     objects = _load_geo_physical_clan_location_details(request, clan_location_pk)
     context = {
@@ -483,7 +483,7 @@ def geo_physical_clan_location_detail_view(request, clan_location_pk):
 
 @login_required
 def list_load_geo_physical_clan_location_details_view(request, clan_location_pk):
-    object = Clan.objects.get(id=clan_location_pk)
+    object = Clan.my_objects.get(id=clan_location_pk)
     geo_physical_clan_location_detail = _load_geo_physical_clan_location_details(request, clan_location_pk)
     context = {"objects": geo_physical_clan_location_detail, 'object': object}
     return render(request, "platform_admin/geo_physical/partials/geo_physical_clan_location_details.html", context)
@@ -493,7 +493,7 @@ def list_load_geo_physical_clan_location_details_view(request, clan_location_pk)
 @login_required
 def _load_geo_physical_clan_location_details(request, clan_location_pk):
     page = request.GET.get("page")
-    geo_physical_clan_location_details = GeoPhysicalData.objects.filter(clan=clan_location_pk).order_by('-date_created')
+    geo_physical_clan_location_details = GeoPhysicalData.my_objects.filter(clan=clan_location_pk).order_by('-date_created')
     paginator = Paginator(geo_physical_clan_location_details, 20)
     try:
         geo_physical_clan_location_details = paginator.page(page)
@@ -510,7 +510,7 @@ def _load_geo_physical_clan_location_details(request, clan_location_pk):
 ###################################### BEGINNING OF Category FOR GEO_PHYSICAL DATA ###########################################
 @login_required
 def geo_physical_category_detail_view(request, category_pk):
-    object = GeoPhysicalCategory.objects.get(id=category_pk)
+    object = GeoPhysicalCategory.my_objects.get(id=category_pk)
     category_pk = category_pk
     objects = _load_geo_physical_category_details(request, category_pk)
     context = {
@@ -523,7 +523,7 @@ def geo_physical_category_detail_view(request, category_pk):
 
 @login_required
 def list_load_geo_physical_category_details_view(request, category_pk):
-    object = GeoPhysicalCategory.objects.get(id=category_pk)
+    object = GeoPhysicalCategory.my_objects.get(id=category_pk)
     geo_physical_category_detail = _load_geo_physical_category_details(request, category_pk)
     context = {"objects": geo_physical_category_detail, 'object': object}
     return render(request, "platform_admin/geo_physical/partials/geo_physical_category_details.html", context)
@@ -531,7 +531,7 @@ def list_load_geo_physical_category_details_view(request, category_pk):
 @login_required
 def _load_geo_physical_category_details(request, category_pk):
     page = request.GET.get("page")
-    geo_physical_category_details = GeoPhysicalData.objects.filter(category=category_pk).order_by('-date_created')
+    geo_physical_category_details = GeoPhysicalData.my_objects.filter(category=category_pk).order_by('-date_created')
     paginator = Paginator(geo_physical_category_details, 2)
     try:
         geo_physical_category_details = paginator.page(page)
