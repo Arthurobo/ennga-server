@@ -7,6 +7,13 @@ from ckeditor_uploader.fields import RichTextUploadingFormField
 
 
 
+class MarketSectorDeleteDataForm(forms.ModelForm):
+    is_deleted = forms.BooleanField(required=False)
+    class Meta:
+        model = MarketSector
+        fields = ['is_deleted',]
+
+
 class MarketSectorUpdateForm(forms.ModelForm):
     state = forms.ModelChoiceField(
             label='State Location',
@@ -268,6 +275,11 @@ class MarketSectorClanUpdateForm(forms.ModelForm):
             self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
 
 
+class HistoricalDeleteDataForm(forms.ModelForm):
+    is_deleted = forms.BooleanField(required=False)
+    class Meta:
+        model = Historical
+        fields = ['is_deleted',]
 
 
 class HistoricalUpdateForm(forms.ModelForm):
@@ -404,6 +416,14 @@ class HistoricalClanUpdateForm(forms.ModelForm):
 
 
 
+
+
+
+class GeoPhysicalDeleteDataForm(forms.ModelForm):
+    is_deleted = forms.BooleanField(required=False)
+    class Meta:
+        model = GeoPhysicalData
+        fields = ['is_deleted',]
 
 
 class GeoPhysicalUpdateForm(forms.ModelForm):

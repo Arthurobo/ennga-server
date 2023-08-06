@@ -111,6 +111,9 @@ class MarketSector(models.Model):
     
     def get_absolute_url(self):
         return reverse('platform_admin:market-sector-detail-view', kwargs={'pk': self.pk})
+    
+    def get_delete_data_url(self):
+        return reverse('platform_admin:market-sector-delete-data-view', kwargs={'pk': self.pk})
 
 
 
@@ -167,6 +170,9 @@ class Historical(models.Model):
     
     def get_absolute_url(self):
         return reverse('platform_admin:historical-detail-view', kwargs={'pk': self.pk})
+    
+    def get_delete_data_url(self):
+        return reverse('platform_admin:historical-delete-data-view', kwargs={'pk': self.pk})
 
 
 
@@ -223,3 +229,6 @@ class GeoPhysicalData(models.Model):
     
     def get_absolute_url(self):
         return reverse('platform_admin:geo-physical-detail-view', kwargs={'pk': self.pk})
+    
+    def get_delete_data_url(self):
+        return reverse('platform_admin:geo-physical-delete-data-view', kwargs={'pk': self.pk})

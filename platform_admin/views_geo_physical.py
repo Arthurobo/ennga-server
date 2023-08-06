@@ -16,7 +16,8 @@ from .forms_update import (
     GeoPhysicalGeoPoliticalZoneUpdateForm,
     GeoPhysicalStateUpdateForm,
     GeoPhysicalCityUpdateForm,
-    GeoPhysicalClanUpdateForm
+    GeoPhysicalClanUpdateForm,
+    GeoPhysicalDeleteDataForm
     )
 
 @login_required
@@ -81,6 +82,25 @@ def geo_physical_detail_view(request, pk):
         return render(request, 'platform_admin/geo_physical/geo-physical-detail.html', context = {'object': object, 'form': form})
 
     return render(request, 'platform_admin/geo_physical/geo-physical-detail.html')
+
+@login_required
+def geo_physical_delete_data(request, pk):
+    geo_physical_object = GeoPhysicalData.my_objects.get(id=pk)
+    form = GeoPhysicalDeleteDataForm(request.POST or None, request.FILES or None, instance=geo_physical_object)
+        
+    if request.method == 'POST':
+        form = GeoPhysicalDeleteDataForm(request.POST or None, request.FILES or None, instance=geo_physical_object)
+        if form.is_valid():
+            geo_physical_object.is_deleted = True
+            form.save()
+            return redirect("platform_admin:geo-physical-data-list-view")
+            print("COMPLETED!!!")
+    else:
+        form = GeoPhysicalDeleteDataForm(request.POST or None, request.FILES or None, instance=geo_physical_object)
+    context = {
+        "form": form
+    }
+    return render(request, 'platform_admin/geo_physical/geo-physical-delete.html', context)
 
 
 

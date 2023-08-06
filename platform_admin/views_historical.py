@@ -22,7 +22,8 @@ from .forms_update import (HistoricalUpdateForm,
                            HistoricalGeoPoliticalZoneUpdateForm,
                             HistoricalStateUpdateForm,
                             HistoricalCityUpdateForm,
-                            HistoricalClanUpdateForm
+                            HistoricalClanUpdateForm,
+                            HistoricalDeleteDataForm
                         )
 
 
@@ -92,6 +93,26 @@ def historical_detail_view(request, pk):
 
     return render(request, 'platform_admin/historical/historical-detail.html')
 
+
+@login_required
+def historical_delete_data(request, pk):
+    historical_object = Historical.my_objects.get(id=pk)
+    form = HistoricalDeleteDataForm(request.POST or None, request.FILES or None, instance=historical_object)
+
+        
+    if request.method == 'POST':
+        form = HistoricalDeleteDataForm(request.POST or None, request.FILES or None, instance=historical_object)
+        if form.is_valid():
+            historical_object.is_deleted = True
+            form.save()
+            return redirect("platform_admin:historical-data-list-view")
+            print("COMPLETED!!!")
+    else:
+        form = HistoricalDeleteDataForm(request.POST or None, request.FILES or None, instance=historical_object)
+    context = {
+        "form": form
+    }
+    return render(request, 'platform_admin/historical/historical-delete.html', context)
 
 
 @login_required

@@ -15,7 +15,8 @@ from .forms_update import (MarketSectorUpdateForm,
                             MarketSectorGeoPoliticalZoneUpdateForm,
                             MarketSectorStateUpdateForm,
                             MarketSectorCityUpdateForm,
-                            MarketSectorClanUpdateForm
+                            MarketSectorClanUpdateForm,
+                            MarketSectorDeleteDataForm
                         )
 
 
@@ -81,6 +82,26 @@ def market_sector_detail_view(request, pk):
         return render(request, 'platform_admin/market_sector/market-sector-detail.html', context={'form': form, 'object': object,})
     
     return render(request, 'platform_admin/market_sector/market-sector-detail.html')
+
+@login_required
+def market_sector_delete_data(request, pk):
+    market_sector_object = MarketSector.my_objects.get(id=pk)
+    form = MarketSectorDeleteDataForm(request.POST or None, request.FILES or None, instance=market_sector_object)
+
+        
+    if request.method == 'POST':
+        form = MarketSectorDeleteDataForm(request.POST or None, request.FILES or None, instance=market_sector_object)
+        if form.is_valid():
+            market_sector_object.is_deleted = True
+            form.save()
+            return redirect("platform_admin:market-sector-data-list-view")
+            print("COMPLETED!!!")
+    else:
+        form = MarketSectorDeleteDataForm(request.POST or None, request.FILES or None, instance=market_sector_object)
+    context = {
+        "form": form
+    }
+    return render(request, 'platform_admin/market_sector/market-sector-delete.html', context)
 
 @login_required
 def market_sector_list_view(request):

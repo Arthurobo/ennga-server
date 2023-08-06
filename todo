@@ -33,3 +33,16 @@ thing admins will have to do is to restrict in individual clans. ✅
 8. To create a Tribe model where every LGA will belong to.
 
 9. AWS Images updates
+
+----------------------------------------
+1. All the delete buttons has disappeared everywhere. Both on the front end and backend ✅
+
+2. The subclans does not show on the front end. ✅
+
+3. How do you add images and tables in the editor boxes? U could copy and paste, but it tends to show a few with lots of error messages. ✅
+
+4. The tribes checklist that is in the backend and is supposed to show up at the front end has a static view on all historical 
+data slide on the front end. Not a good idea considering that the historical data has many sub options. If it canine harmonized, 
+maybe we can leave since we will be using Ai for content. The scaling problem might be reduced. But if there is a way, it will really help 
+
+5. The box to indicate the tribe resident in a particular territory is stil very important

@@ -67,7 +67,7 @@
   <div class="row edit-account-form-wrapper">
     <div class="form-wrapper">
 
-      {% if request.user.account_profile == object.user %}
+      {% if request.user.account_profile == object.user or request.user.is_admin  %}
       <div class="">
       <div class="text-center mt-4 pt-5">
         <h2>Update Data</h2>

@@ -8,7 +8,7 @@ from .views_market_sector import (
     market_sector_state_location_detail_view, list_load_market_sector_state_location_details_view, 
     market_sector_city_location_detail_view,
     list_load_market_sector_city_location_details_view, market_sector_clan_location_detail_view, list_load_market_sector_clan_location_details_view,
-    market_sector_detail_view, user_market_sector_list_view, list_load_user_market_sectors_view, 
+    market_sector_detail_view, market_sector_delete_data, user_market_sector_list_view, list_load_user_market_sectors_view, 
     market_sector_category_detail_view, list_load_market_sector_category_details_view, market_sector_subcategory_detail_view,
     list_load_market_sector_subcategory_details_view
 )
@@ -22,7 +22,7 @@ from .views_historical import (historical_list_view,
     list_load_historical_city_location_details_view, historical_clan_location_detail_view, list_load_historical_clan_location_details_view,
     historical_detail_view, historical_create_view, user_historical_list_view, list_load_user_historicals_view, historical_geo_political_zone_create_view, historical_state_create_view,
     historical_city_create_view, historical_clan_create_view, historical_category_detail_view, list_load_historical_category_details_view, 
-    list_search_historical_data_view
+    list_search_historical_data_view, historical_delete_data
 )
 
 from .views_geo_physical import (
@@ -32,7 +32,8 @@ from .views_geo_physical import (
     geo_physical_city_location_detail_view, list_load_geo_physical_city_location_details_view,
     geo_physical_clan_location_detail_view, list_load_geo_physical_clan_location_details_view, geo_physical_geo_political_zone_create_view,
     geo_physical_state_create_view, geo_physical_city_create_view, geo_physical_clan_create_view,
-    geo_physical_category_detail_view, list_load_geo_physical_category_details_view, list_search_geo_physical_data_view
+    geo_physical_category_detail_view, list_load_geo_physical_category_details_view, list_search_geo_physical_data_view,
+    geo_physical_delete_data
 )
 
 from .views import dashboard, edit_account_view, UpdatePassword, ProfileDetailView, profile_market_sector_view, profile_load_market_sectors_view, all_users, approved_users, admin_users
@@ -72,6 +73,7 @@ urlpatterns = [
     path('historical-data-list/', historical_data_list_view, name='historical-data-list-view'),
     path('historical/list-search-historical-data-view/', list_search_historical_data_view, name='list-search-historical-data-view'),
     path('historical-detail/<int:pk>/', historical_detail_view, name='historical-detail-view'),
+    path('historical-delete-data/<int:pk>/', historical_delete_data, name='historical-delete-data-view'),
 
 
     ###################################### BEGINNING OF LOGGED IN USER HISTORICAL DATA ###########################################
@@ -129,6 +131,7 @@ urlpatterns = [
     path('market-sector-data-list/', market_sector_data_list_view, name='market-sector-data-list-view'),
     path('market-sector/list-search-market-sector-data-view/', list_search_market_sector_data_view, name='list-search-market-sector-data-view'),
     path('market-sector-detail/<int:pk>/', market_sector_detail_view, name='market-sector-detail-view'),
+    path('market-sector-delete-data/<int:pk>/', market_sector_delete_data, name='market-sector-delete-data-view'),
 
     
     
@@ -206,6 +209,7 @@ urlpatterns = [
     path('geo-physical-data-list/', geo_physical_data_list_view, name='geo-physical-data-list-view'),
     path('geo-physical/list-search-geo-physical-data-view/', list_search_geo_physical_data_view, name='list-search-geo-physical-data-view'),
     path('geo-physical-detail/<int:pk>/', geo_physical_detail_view, name='geo-physical-detail-view'),
+    path('geo-physical-delete-data/<int:pk>/', geo_physical_delete_data, name='geo-physical-delete-data-view'),
 
     # ###################################### BEGINNING OF LOGGED IN USER GEO_PHYSICAL DATA ###########################################
     path('geo-physical/user/', user_geo_physical_list_view, name="user-geo-physical-list-view"), # Lists all the data in market sectors

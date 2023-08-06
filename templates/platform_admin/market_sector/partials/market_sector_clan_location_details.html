@@ -2,9 +2,11 @@
 {% for object in objects %}
 <div class="row my-4">
   <div class="col-lg-3 py-2">
+    <a href="{{ object.get_absolute_url }}" style="color: black">
     <td>{{ object.geo_political_zone }}, {{ object.state }},</td><br>
     <td>{{ object.city }}, {{ object.clan }},</td><br>
     <td>{{ object.date_created }}</td><br>
+    </a>
   </div>
   <div class="col-lg-7 py-2">
     <div>
