@@ -70,6 +70,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
     last_name = models.CharField(max_length=20, blank=True, null=True)
     sex = models.CharField(max_length=10, choices=SEX_CHOICES, blank=True, null=True)
     forgot_password_code = models.CharField(max_length=40, blank=True, null=True)
+    activate_account_code = models.CharField(max_length=40, blank=True, null=True)
 
     profile_image = models.ImageField(max_length=255, upload_to=get_profile_image_filepath, 
                                         null=True, blank=True, default=get_default_profile_image)
@@ -161,6 +162,23 @@ class MobileAppForgotPasswordRequest(models.Model):
     password = models.CharField(max_length=100, blank=True, null=True)
     confirm_password = models.CharField(max_length=100, blank=True, null=True)
 
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email
+
+class MobileAppAccountAuthenticationRequest(models.Model):
+    email = models.EmailField(max_length=255)
+    
+    # This will be used by users to activate their accounts
+    activate_account_code = models.CharField(max_length=40, blank=True, null=True)
+
+    # This will be used to know if users entered password is correct
+    forgot_password_code = models.CharField(max_length=40, blank=True, null=True)
+    password = models.CharField(max_length=100, blank=True, null=True)
+    confirm_password = models.CharField(max_length=100, blank=True, null=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)

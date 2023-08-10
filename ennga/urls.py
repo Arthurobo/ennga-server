@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
@@ -23,4 +28,15 @@ urlpatterns = [
     path('', include('public.urls', namespace='public')),
     path('dashboard/', include('platform_admin.urls', namespace='platform_admin')),
     path('utility/', include('utility.urls', namespace='utility')),
+
+
+    path('api/v1/auth/api-auth/', include('rest_framework.urls')),
+    path('api/v1/auth/rest-auth/', include('rest_auth.urls')),
+    path('api/v1/auth/rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/v1/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('api/v1/auth/', include('accounts.api.urls', namespace="accounts_api")),
+
+    path('api/v1/utility/', include('utility.api.urls', namespace="utility_api")),
 ]
