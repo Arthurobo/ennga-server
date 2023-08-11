@@ -146,12 +146,12 @@ class Profile(models.Model):
         
 
 
-def profile_receiver(sender, instance, created, *args, **kwargs):
-    if created:
-        profile = Profile.objects.create(user=instance)
+# def profile_receiver(sender, instance, created, *args, **kwargs):
+#     if created:
+#         profile = Profile.objects.create(user=instance)
 
 
-post_save.connect(profile_receiver, sender=settings.AUTH_USER_MODEL)
+# post_save.connect(profile_receiver, sender=settings.AUTH_USER_MODEL)
 
 
 class MobileAppForgotPasswordRequest(models.Model):
