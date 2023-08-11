@@ -39,4 +39,5 @@ urlpatterns = [
     path('api/v1/auth/', include('accounts.api.urls', namespace="accounts_api")),
 
     path('api/v1/utility/', include('utility.api.urls', namespace="utility_api")),
+    path('api/v1/platform-admin/', include('platform_admin.api.urls', namespace="platform_admin_api")),
 ]
