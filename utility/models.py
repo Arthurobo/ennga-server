@@ -45,7 +45,7 @@ class Tribe(models.Model):
 
 
 class GeoPoliticalZone(models.Model):
-    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, related_name='geo_political_zone_countries')
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='geo_political_zone_managers')
     is_deleted = models.BooleanField(default=False)
@@ -96,8 +96,8 @@ class GeoPoliticalZone(models.Model):
 
 
 class State(models.Model):
-    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
-    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, related_name='state_countries')
+    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL, related_name='state_geo_political_zones')
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='state_managers')
     is_deleted = models.BooleanField(default=False)
@@ -148,10 +148,10 @@ class State(models.Model):
 
 
 class City(models.Model):
-    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
-    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
-    state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL)
-    tribe = models.ForeignKey(Tribe, blank=True, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, related_name='city_countries')
+    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL, related_name='city_geo_political_zones')
+    state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL, related_name='city_states')
+    tribe = models.ForeignKey(Tribe, blank=True, null=True, on_delete=models.SET_NULL, related_name='city_tribes')
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='city_managers')
     is_deleted = models.BooleanField(default=False)
@@ -200,10 +200,10 @@ class City(models.Model):
     
 
 class Clan(models.Model):
-    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL)
-    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL)
-    state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL)
-    city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
+    country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, related_name='clan_countries')
+    geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL, related_name='clan_geo_political_zones')
+    state = models.ForeignKey(State, null=True, on_delete=models.SET_NULL, related_name='clan_states')
+    city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL, related_name='clan_cities')
     name = models.CharField(max_length=255)
     managers = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_managers')
     restricted_users = models.ManyToManyField("accounts.Profile", blank=True, related_name='clan_restricted_users')

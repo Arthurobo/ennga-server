@@ -221,6 +221,8 @@ AWS_QUERYSTRING_EXPIRE = 60*60*24*365*10
 
 SITE_URL = 'https://ennga.com'
 
+SITE_ID = 1
+
 # CELERY SETTINGS
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 # CELERY_BROKER_URL = 'rediss://:pa4cd541ac58e26357078bdf9d04b5b65be73f2f18cd66d5840e4dc1513db97cd@ec2-34-193-69-177.compute-1.amazonaws.com:19720'

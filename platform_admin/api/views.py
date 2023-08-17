@@ -5,10 +5,15 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
 
 from platform_admin.models import (
-    MarketSector
+    MarketSector,
+    MarketSectorCategory,
+    MarketSectorSubCategory
 )
 from .serializers import (
-    MarketSectorSerializer
+    MarketSectorSerializer,
+    MarketSectorCreateSerializer,
+    MarketSectorCategorySerializer,
+    MarketSectorSubCategorySerializer
 )
 
 
@@ -26,3 +31,18 @@ class MarketSectorDetailAPIView(generics.RetrieveAPIView):
     serializer_class = MarketSectorSerializer
     permission_classes = (permissions.AllowAny,)
     lookup_field = 'id'
+
+class MarketSectorCreateAPIView(generics.CreateAPIView):
+    queryset = MarketSector.objects.all()
+    serializer_class = MarketSectorCreateSerializer
+    permission_classes = (permissions.AllowAny,)
+
+class MarketSectorCategoryListAPIView(generics.ListCreateAPIView):
+    queryset = MarketSectorCategory.objects.all()
+    serializer_class = MarketSectorCategorySerializer
+    permission_classes = (permissions.AllowAny,)
+
+class MarketSectorSubCategoryListAPIView(generics.ListAPIView):
+    queryset = MarketSectorSubCategory.objects.all()
+    serializer_class = MarketSectorSubCategorySerializer
+    permission_classes = (permissions.AllowAny,)

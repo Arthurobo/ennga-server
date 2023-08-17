@@ -36,7 +36,7 @@ class MarketSectorSubCategoryManager(models.Manager):
         return super(MarketSectorSubCategoryManager, self).get_queryset().filter(is_deleted=False)
 
 class MarketSectorSubCategory(models.Model):
-    category = models.ForeignKey(MarketSectorCategory, blank=True, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(MarketSectorCategory, blank=True, null=True, on_delete=models.SET_NULL, related_name='subcategories')
     name = models.CharField(max_length=255)
     is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)

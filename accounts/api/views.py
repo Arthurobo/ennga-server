@@ -175,4 +175,3 @@ class MobileAppEnterNewPasswordView(generics.CreateAPIView):
             # I am not returning serializer.data below cos of security reasons
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-

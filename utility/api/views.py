@@ -8,11 +8,13 @@ from rest_framework import generics
 
 from utility.models import (
     GeoPoliticalZone,
-    State
+    State,
 )
 from .serializers import (
     GeoPoliticalZoneSerializer,
-    StateSerializer
+    StateSerializer,
+    GeoPoliticalZoneDetailSerializer,
+    StateDetailSerializer
 )
 
 
@@ -22,7 +24,21 @@ class GeoPoliticalZoneListAPIView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
 
 
+class GeoPoliticalZoneDetailAPIView(generics.RetrieveAPIView):
+    queryset = GeoPoliticalZone.objects.all()
+    serializer_class = GeoPoliticalZoneDetailSerializer
+    permission_classes = (permissions.AllowAny,)
+    lookup_field = 'id'
+
+
 class StatesListAPIView(generics.ListAPIView):
     queryset = State.objects.all()
     serializer_class = StateSerializer
     permission_classes = (permissions.AllowAny,)
+
+
+class StateDetailAPIView(generics.RetrieveAPIView):
+    queryset = State.objects.all()
+    serializer_class = StateDetailSerializer
+    permission_classes = (permissions.AllowAny,)
+    lookup_field = 'id'
