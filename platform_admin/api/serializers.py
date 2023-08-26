@@ -45,4 +45,4 @@ class MarketSectorSerializer(serializers.ModelSerializer):
 class MarketSectorCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = MarketSector
-        fields = ['category', 'sub_category', 'description', 'country', 'geo_political_zone', 'state', 'city']
+        fields = ['category', 'sub_category', 'description', 'country', 'geo_political_zone', 'state', 'city', 'clan', 'subclan']

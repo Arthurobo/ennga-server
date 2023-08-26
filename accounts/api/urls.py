@@ -21,4 +21,6 @@ urlpatterns = [
 
     path('forgot-password/', MobileAppForgotPasswordView.as_view(), name="forgot-password"),
     path('forgot-password/enter-new/', MobileAppEnterNewPasswordView.as_view(), name="forgot-password-enter-new"),
+
+    # START HERE
 ]

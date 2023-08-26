@@ -166,6 +166,3 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         model = Profile
         fields = "__all__"
 
-
-
-          

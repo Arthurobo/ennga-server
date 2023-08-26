@@ -270,9 +270,12 @@ class MarketSectorClanUpdateForm(forms.ModelForm):
                 self.fields['sub_category'].queryset = MarketSectorSubCategory.objects.filter(category_id=category_id).order_by('name')
             except (ValueError, TypeError):
                 pass  # invalid input from the client; ignore and fallback to empty City queryset
+        # elif self.instance.pk:
+        #     # self.fields['sub_category'].queryset = self.instance.category.sub_category.order_by('name')
+        #     self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
+
         elif self.instance.pk:
-            # self.fields['sub_category'].queryset = self.instance.category.sub_category.order_by('name')
-            self.fields['sub_category'].queryset = self.instance.category.marketsectorsubcategory_set.order_by('name')
+            self.fields['sub_category'].queryset = MarketSectorSubCategory.objects.filter(category=self.instance.category).order_by('name')
 
 
 class HistoricalDeleteDataForm(forms.ModelForm):

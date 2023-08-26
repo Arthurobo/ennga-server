@@ -175,3 +175,8 @@ class MobileAppEnterNewPasswordView(generics.CreateAPIView):
             # I am not returning serializer.data below cos of security reasons
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+# # START HERE
+# 1. Profile Detail - Profile models (You can easily call both the Profile and the Account objects in a single API endpoint)
+# 2. Profile Update - Profile models
+# 3. Account Update - Account models

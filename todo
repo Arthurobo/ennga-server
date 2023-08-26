@@ -37,7 +37,7 @@ thing admins will have to do is to restrict in individual clans. ✅
 ----------------------------------------
 1. All the delete buttons has disappeared everywhere. Both on the front end and backend ✅
 
-2. The subclans does not show on the front end. ✅
+2. The subclans does not show on the front end.
 
 3. How do you add images and tables in the editor boxes? U could copy and paste, but it tends to show a few with lots of error messages. ✅
 
@@ -46,3 +46,8 @@ data slide on the front end. Not a good idea considering that the historical dat
 maybe we can leave since we will be using Ai for content. The scaling problem m ight be reduced. But if there is a way, it will really help 
 
 5. The box to indicate the tribe resident in a particular territory is stil very important
+
+----------------------------------------
+1. To update the Tribe model with new fields which selects all the clans and subclans
+2. To add a search in the admin panel for all the subclans, clans, city models
+3. 
