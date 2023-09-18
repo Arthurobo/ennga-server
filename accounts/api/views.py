@@ -84,11 +84,11 @@ class UserAccountUpdateDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Account.objects.all()
     serializer_class = AccountUpdateSerializer
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
 
-    def perform_update(self, serializer):
-        instance = serializer.save()
-        # send_email_confirmation(user=self.request.user, modified=instance)
+    # def perform_update(self, serializer):
+    #     instance = serializer.save()
+    #     # send_email_confirmation(user=self.request.user, modified=instance)
 
 
 class ProfileAccountUpdateDetailView(generics.RetrieveUpdateAPIView):

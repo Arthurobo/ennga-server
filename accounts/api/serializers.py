@@ -127,7 +127,6 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ('id', 
-                  'email', 
                   'phone_number', 
                   'first_name', 
                   'last_name', 
@@ -140,17 +139,20 @@ class AccountSerializer(serializers.ModelSerializer):
                 )
 
     def get_age(self, obj):
-        today = date.today()
-        age = today.year - obj.date_of_birth.year
-        if today.month < obj.date_of_birth.month or (today.month == obj.date_of_birth.month and today.day < obj.date_of_birth.day):
-            age -= 1
-        return age
+        if obj.date_of_birth:
+            today = date.today()
+            age = today.year - obj.date_of_birth.year
+            if today.month < obj.date_of_birth.month or (today.month == obj.date_of_birth.month and today.day < obj.date_of_birth.day):
+                age -= 1
+            return age
+        else:
+            return None
 
 
 class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('id', 'phone_number', 'first_name', 'last_name', 'profile_image')
+        fields = ('id', 'phone_number', 'first_name', 'last_name',)
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
@@ -158,11 +160,11 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = "__all__"
+        fields = ["phone_number", "country", "state", "city", "address_location", "user"]
         
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = "__all__"
+        fields = ["phone_number", "country", "state", "city", "address_location"]
 
