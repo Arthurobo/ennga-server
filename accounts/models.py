@@ -71,6 +71,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
     sex = models.CharField(max_length=10, choices=SEX_CHOICES, blank=True, null=True)
     forgot_password_code = models.CharField(max_length=40, blank=True, null=True)
     activate_account_code = models.CharField(max_length=40, blank=True, null=True)
+    date_of_birth = models.DateField(null=True, blank=True,)
 
     profile_image = models.ImageField(max_length=255, upload_to=get_profile_image_filepath, 
                                         null=True, blank=True, default=get_default_profile_image)
