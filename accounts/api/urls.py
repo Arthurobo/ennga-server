@@ -6,7 +6,8 @@ from .views import (UserAccountDetailView,
                     UserAccountUpdateDetailView, 
                     ProfileAccountUpdateDetailView,
                     CustomRegistrationAPIView,
-                    CustomAccountActivationAPIView
+                    CustomAccountActivationAPIView,
+                    MobileAppChangePasswordView
                 )
 
 app_name = 'accounts_api'
@@ -21,6 +22,7 @@ urlpatterns = [
 
     path('forgot-password/', MobileAppForgotPasswordView.as_view(), name="forgot-password"),
     path('forgot-password/enter-new/', MobileAppEnterNewPasswordView.as_view(), name="forgot-password-enter-new"),
+    path('change-password/', MobileAppChangePasswordView.as_view(), name="change-password"),
 
     # START HERE
 ]
