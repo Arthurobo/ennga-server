@@ -152,7 +152,7 @@ class AccountSerializer(serializers.ModelSerializer):
 class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ('id', 'phone_number', 'first_name', 'last_name',)
+        fields = ('id', 'phone_number', 'first_name', 'last_name', 'email')
 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):

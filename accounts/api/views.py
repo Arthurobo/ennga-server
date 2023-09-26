@@ -8,7 +8,7 @@ from rest_framework import generics
 
 
 from accounts.models import Account, Profile, MobileAppAccountAuthenticationRequest
-from accounts.tasks import send_password_activate_token_to_user, send_password_reset_token_to_user
+from accounts.tasks import send_password_activate_token_to_user, send_password_reset_token_to_user, send_password_change_token_to_user
 from .serializers import (CustomRegistrationSerializer, 
                             MobileAppAccountAuthenticationRequestSerializer, 
                             AccountSerializer, 
@@ -174,6 +174,41 @@ class MobileAppEnterNewPasswordView(generics.CreateAPIView):
             # raise Http404
             # I am not returning serializer.data below cos of security reasons
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+# This is when a user wants to reset their password when they are already logged in
+class MobileAppChangePasswordView(generics.CreateAPIView):
+    queryset = MobileAppAccountAuthenticationRequest.objects.all()
+    serializer_class = ForgotPasswordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = self.serializer_class(**{'data': request.data})
+        serializer.is_valid()
+        # serializer.save()
+        # if 
+        entered_email = serializer.data['email']
+        accounts = Account.objects.all()
+
+        if Account.objects.filter(email=entered_email).exists():
+            # print("Account Rhyme oh")
+            user_account_id = Account.objects.get(email=entered_email)
+            account_id = user_account_id.id
+            _forgot_password_code = random.randint(100000, 999999)
+            Account.objects.filter(email=entered_email).update(forgot_password_code=_forgot_password_code)
+            # print(_forgot_password_code)
+
+            # Send password reset token to user
+            send_password_change_token_to_user(account_id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        else:
+            # print("Account no Rhyme oh")
+            # pass
+
+            # return Response(status=status.HTTP_201_CREATED)
+            # raise Http404
+            return Response(serializer.data, status=status.HTTP_403_FORBIDDEN)
 
 
 # # START HERE
