@@ -76,7 +76,7 @@ class CustomRegistrationSerializer(serializers.ModelSerializer):
         users_number = random.randint(00000,99999)
         username = str(users_alphabets) + str(users_number)
 
-        _activate_account_code = random.randint(000000,999999)
+        _activate_account_code = random.randint(100000, 999999)
         
         print("llllllllllllllllllllwwwwwwwwwwwwwwwwwwww")
 
