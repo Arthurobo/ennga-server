@@ -21,7 +21,6 @@ class UserCreateSerializer(UserCreateSerializer):
         return account
 
 
-
 class UserDetailsSerializer(serializers.ModelSerializer):
     """
     User model w/o password
