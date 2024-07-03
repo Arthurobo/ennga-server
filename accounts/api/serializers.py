@@ -78,8 +78,7 @@ class CustomRegistrationSerializer(serializers.ModelSerializer):
 
         _activate_account_code = random.randint(000000,999999)
         
-        print("llllllllllllllllllllwwwwwwwwwwwwwwwwwwww")
-
+        
         user = Account.objects.create(
             username=username,
             email=email,
@@ -93,7 +92,6 @@ class CustomRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         new_account_id = user.id
-        print("NEW ACCOUNT ID: " + str(new_account_id))
         email = send_password_activate_token_to_user(new_account_id)
         return user
     
