@@ -248,3 +248,27 @@ class ProfilePasswordUpdateAPIView(APIView):
         user_account.save()
         
         return Response({"password": new_password}, status=status.HTTP_200_OK)
+
+class ProfileImageUpdateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self,request, *args, **kwargs):
+        accepted_file_extensions = ["jpeg", "jpg", "png"]
+        user_id = request.user.id
+        profile_image = request.FILES.get("profile_image")
+        extension = profile_image.name.split(".")[-1]
+        
+        if extension not in accepted_file_extensions:
+            return Response(
+                {"document": "Not supported file Type"},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            )
+        
+        account = Account.objects.get(id=user_id)
+        
+        
+        Account.objects.update(profile_image=profile_image)
+        
+        return Response({
+            "profile_picture" : account.profile_image.url,
+        })
