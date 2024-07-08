@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'utility',
     'public',
     'platform_admin',
+    'search_data',
 ]
 
 # Custom user model
