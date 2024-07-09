@@ -7,7 +7,9 @@ from .views import (UserAccountDetailView,
                     ProfileAccountUpdateDetailView,
                     CustomRegistrationAPIView,
                     CustomAccountActivationAPIView,
-                    MobileAppChangePasswordView
+                    MobileAppChangePasswordView,
+                    ProfilePasswordUpdateAPIView,
+                    ProfileImageUpdateAPIView
                 )
 
 app_name = 'accounts_api'
@@ -18,11 +20,14 @@ urlpatterns = [
     path('resend-registration-otp-code/', ResendRegistrationOTPCodeAPIView.as_view(), name='resend-registration-otp-code'),
     path('account/<int:pk>/', UserAccountDetailView.as_view(), name='account-view'),
     path('account/update/<int:pk>/', UserAccountUpdateDetailView.as_view(), name='account-update-view'),
-    path('profile/<int:pk>/', ProfileAccountUpdateDetailView.as_view(), name='profile-update-view'),
-
+    
     path('forgot-password/', MobileAppForgotPasswordView.as_view(), name="forgot-password"),
     path('forgot-password/enter-new/', MobileAppEnterNewPasswordView.as_view(), name="forgot-password-enter-new"),
     path('change-password/', MobileAppChangePasswordView.as_view(), name="change-password"),
 
     # START HERE
+    path('profile/<int:pk>/', ProfileAccountUpdateDetailView.as_view(), name='profile-update-view'),
+    path("profile/change-password/",ProfilePasswordUpdateAPIView.as_view(), name="profile-change-password"),
+    path("profile/image/update/", ProfileImageUpdateAPIView.as_view(), name="profile-image-update")
+
 ]
