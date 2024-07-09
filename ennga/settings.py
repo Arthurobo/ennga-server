@@ -62,6 +62,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    
+    "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
 
     'accounts',
     'utility',
@@ -268,4 +271,13 @@ REST_FRAMEWORK = {
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer'
+}
+ELASTIC_USER = config("ELASTIC_USER")
+ELASTIC_PASSWORD = config("ELASTIC_PASSWORD")
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "http://localhost:9200",
+        "http_auth": (ELASTIC_USER, ELASTIC_PASSWORD),
+    }
 }
