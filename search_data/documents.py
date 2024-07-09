@@ -1,14 +1,8 @@
 from django_elasticsearch_dsl import Document, Index, fields
 from elasticsearch_dsl import analyzer, tokenizer
 from .models import SearchData
+from django_elasticsearch_dsl.registries import registry
 
-
-INDEX = Index("search_data")
-
-INDEX.settings(
-    number_of_shards=1,
-    number_of_replicas=1
-)
 
 
 autocomplete_analyzer = analyzer(
@@ -17,9 +11,10 @@ autocomplete_analyzer = analyzer(
         filter=['lowercase']
     )
 
-
+@registry.register_document
 class SearchDocument(Document):
     id = fields.IntegerField(attr='id')
+    fielddata = True
     data_type = fields.TextField(analyzer=autocomplete_analyzer)
     country = fields.ObjectField(
         properties={
@@ -65,5 +60,22 @@ class SearchDocument(Document):
     sub_category = fields.TextField()
     description = fields.TextField(fields={'raw': fields.KeywordField()})
 
-    class Django:
+    class Django(object):
         model = SearchData
+
+    class Index:
+        name = 'search_data'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 0,
+            'max_ngram_diff': 20
+        }
+
+    def get_queryset(self):
+        return (
+            super(SearchDocument, self)
+            .get_queryset()
+            .filter(is_deleted=False)
+        )
+
+        
