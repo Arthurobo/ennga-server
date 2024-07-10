@@ -4,13 +4,11 @@ from .models import SearchData
 from django_elasticsearch_dsl.registries import registry
 
 
-
 autocomplete_analyzer = analyzer(
     'autocomplete_analyzer',
     tokenizer=tokenizer('trigram', 'ngram', min_gram=1, max_gram=20),
         filter=['lowercase']
     )
-
 @registry.register_document
 class SearchDocument(Document):
     id = fields.IntegerField(attr='id')
@@ -24,12 +22,8 @@ class SearchDocument(Document):
     )
     geo_political_zone = fields.ObjectField(
         properties={
-            "country" : fields.ObjectField(properties={
-                "id" : fields.IntegerField(attr="id"),
-                "name" : fields.TextField()
-            }),
+            "id" :fields.IntegerField(attr='id'),
             "name" : fields.TextField(),
-
         }
     )
     state = fields.ObjectField(
@@ -39,18 +33,6 @@ class SearchDocument(Document):
         }
     )
     city =  fields.ObjectField(
-        properties= {
-            "id" :fields.IntegerField(attr='id'),
-            "name" : fields.TextField(),
-        }
-    ) 
-    clan = fields.ObjectField(
-        properties= {
-            "id" :fields.IntegerField(attr='id'),
-            "name" : fields.TextField(),
-        }
-    )
-    subclan = fields.ObjectField(
         properties= {
             "id" :fields.IntegerField(attr='id'),
             "name" : fields.TextField(),
