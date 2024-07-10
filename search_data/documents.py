@@ -77,5 +77,3 @@ class SearchDocument(Document):
             .get_queryset()
             .filter(is_deleted=False)
         )
-
-        

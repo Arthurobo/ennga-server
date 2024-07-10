@@ -7,7 +7,7 @@ class SearchData(models.Model):
     data_id = models.IntegerField(blank=True, null=True)
     data_type = models.CharField(max_length=100, choices=DATA_TYPE_CHOICES, blank=True, null=True)
     country = models.ForeignKey("utility.Country", blank=True, null=True, on_delete=models.SET_NULL)
-    geo_political_zone = models.ForeignKey("utility.GeoPoliticalZone", null=True, on_delete=models.SET_NULL)
+    geo_political_zone = models.ForeignKey("utility.GeoPoliticalZone", blank=True, null=True, on_delete=models.SET_NULL)
     state = models.ForeignKey("utility.State", blank=True, null=True, on_delete=models.SET_NULL)
     city = models.ForeignKey("utility.City", blank=True, null=True, on_delete=models.SET_NULL)
     clan = models.ForeignKey("utility.Clan", blank=True, null=True, on_delete=models.SET_NULL)
