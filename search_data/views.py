@@ -37,3 +37,5 @@ class SearchDocumentView(DocumentViewSet):
         "last_updated": "last_updated",
     }
     ordering = ("-date_created", "-last_updated")
+
+

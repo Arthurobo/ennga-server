@@ -12,6 +12,7 @@ autocomplete_analyzer = analyzer(
 @registry.register_document
 class SearchDocument(Document):
     id = fields.IntegerField(attr='id')
+    data_id = fields.IntegerField()
     fielddata = True
     data_type = fields.TextField(analyzer=autocomplete_analyzer)
     country = fields.ObjectField(
