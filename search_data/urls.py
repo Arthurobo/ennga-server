@@ -1,5 +1,5 @@
 from django.urls import path
-from .views_search import SearchDocumentView
+from .views import SearchDocumentView
 
 
 app_name = "search_data"
