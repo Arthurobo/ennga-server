@@ -17,15 +17,16 @@ class SearchDocumentView(DocumentViewSet):
     serializer_class = SearchDocumentSerializer
     permission_classes = [IsAuthenticated]
     
-    lookup_field = "description"
+    lookup_field = "title"
     fielddata = True
     filter_backends = [
         FilteringFilterBackend,
         OrderingFilterBackend,
         CompoundSearchFilterBackend,
     ]
-    search_fields = ("description",)
+    search_fields = ("title","description",)
     multi_match_search_fields = (
+        "title",
         "description",
     )
 
@@ -37,5 +38,3 @@ class SearchDocumentView(DocumentViewSet):
         "last_updated": "last_updated",
     }
     ordering = ("-date_created", "-last_updated")
-
-
