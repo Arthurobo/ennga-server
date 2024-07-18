@@ -39,8 +39,8 @@ class SearchDocument(Document):
             "name" : fields.TextField(),
         }
     )
-    category = fields.TextField()
-    sub_category = fields.TextField()
+    category = fields.TextField() # Implement the data_category Here
+    sub_category = fields.TextField() # Implement the data_sub_category Here
     description = fields.TextField(fields={'raw': fields.KeywordField()})
 
     class Django(object):
