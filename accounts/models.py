@@ -131,6 +131,14 @@ class Profile(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
+    show_historical_data = models.BooleanField(default=False)
+    show_geographical_data = models.BooleanField(default=False)
+    show_market_sector_data = models.BooleanField(default=False)
+    show_stored_data = models.BooleanField(default=False)
+    use_analytics_tools = models.BooleanField(default=False)
+    auto_analyze_data = models.BooleanField(default=False)
+    public_data_uploads = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return str(self.user.email)
