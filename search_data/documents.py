@@ -12,6 +12,7 @@ autocomplete_analyzer = analyzer(
 @registry.register_document
 class SearchDocument(Document):
     id = fields.IntegerField(attr='id')
+    title = fields.TextField()
     data_id = fields.IntegerField()
     fielddata = True
     data_type = fields.TextField(analyzer=autocomplete_analyzer)
@@ -40,7 +41,22 @@ class SearchDocument(Document):
         }
     )
     category = fields.TextField() # Implement the data_category Here
+    data_category = fields.ObjectField(
+        properties= {
+            "id" :fields.IntegerField(attr='id'),
+            "name" : fields.TextField(),
+            "data_type" : fields.KeywordField()
+        }
+    )
+    
     sub_category = fields.TextField() # Implement the data_sub_category Here
+    data_sub_category = fields.ObjectField(
+        properties= {
+            "id" :fields.IntegerField(attr='id'),
+            "name" : fields.TextField(),
+            "data_type" : fields.KeywordField() 
+        }
+    )
     description = fields.TextField(fields={'raw': fields.KeywordField()})
 
     class Django(object):
