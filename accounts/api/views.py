@@ -1,10 +1,11 @@
 import random
-
+from django.contrib.auth.hashers import check_password, make_password
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
+from rest_framework.views import APIView
 
 
 from accounts.models import Account, Profile, MobileAppAccountAuthenticationRequest
@@ -17,7 +18,8 @@ from .serializers import (CustomRegistrationSerializer,
                             ResendRegistrationOTPCodeSerializer, 
                             AccountUpdateSerializer,
                             ProfileDetailSerializer,
-                            ProfileUpdateSerializer
+                            ProfileUpdateSerializer,
+                            ProfilePasswordUpdateSerializer
                         )
 
 
@@ -91,21 +93,6 @@ class UserAccountUpdateDetailView(generics.RetrieveUpdateDestroyAPIView):
     #     # send_email_confirmation(user=self.request.user, modified=instance)
 
 
-class ProfileAccountUpdateDetailView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Profile.objects.all()
-    serializer_class = ProfileDetailSerializer
-    # parser_classes = [MultiPartParser, FormParser]
-
-    def get_serializer_class(self):
-        if self.request.method == 'PUT':
-            return ProfileUpdateSerializer
-        else:
-            return ProfileDetailSerializer
-
-    def perform_update(self, serializer):
-        instance = serializer.save()
-        # send_email_confirmation(user=self.request.user, modified=instance)
 
 
 class MobileAppForgotPasswordView(generics.CreateAPIView):
@@ -215,3 +202,73 @@ class MobileAppChangePasswordView(generics.CreateAPIView):
 # 1. Profile Detail - Profile models (You can easily call both the Profile and the Account objects in a single API endpoint)
 # 2. Profile Update - Profile models
 # 3. Account Update - Account models
+
+
+class ProfileAccountUpdateDetailView(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Profile.objects.all()
+    serializer_class = ProfileDetailSerializer
+    # parser_classes = [MultiPartParser, FormParser]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return ProfileUpdateSerializer
+        else:
+            return ProfileDetailSerializer
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        # send_email_confirmation(user=self.request.user, modified=instance)
+
+
+class ProfilePasswordUpdateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self,request, *args, **kwargs):
+        user_id = self.request.user.id
+        if user_id is None:
+            return Response({"error": "Not Authenticated", "message": "You must logged in to access this resource"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        serializer = ProfilePasswordUpdateSerializer(**{'data': request.data})
+        serializer.is_valid(raise_exception=True)
+        old_password = serializer.data.get("old_password")
+        user_account = Account.objects.get(id=user_id)
+        password = user_account.password
+        new_password = serializer.data.get("new_password")
+        confirm_password = serializer.data.get("confirm_password")
+        
+        if not check_password(old_password, password):
+            return Response({"error": "Invalid old Password", "message": "The old password you entered is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not new_password == confirm_password:
+            return Response({"error": "Password MisMatch", "message": "Confirm Password does not match with new_password" }, status=status.HTTP_400_BAD_REQUEST)
+        
+        new_password = make_password(new_password)
+        user_account.password = new_password
+        user_account.save()
+        
+        return Response({"password": new_password}, status=status.HTTP_200_OK)
+
+class ProfileImageUpdateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self,request, *args, **kwargs):
+        accepted_file_extensions = ["jpeg", "jpg", "png"]
+        user_id = request.user.id
+        profile_image = request.FILES.get("profile_image")
+        extension = profile_image.name.split(".")[-1]
+        
+        if extension not in accepted_file_extensions:
+            return Response(
+                {"document": "Not supported file Type"},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            )
+        
+        account = Account.objects.get(id=user_id)
+        
+        
+        Account.objects.update(profile_image=profile_image)
+        
+        return Response({
+            "profile_picture" : account.profile_image.url,
+        })

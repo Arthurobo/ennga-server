@@ -35,9 +35,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,11 +62,15 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    
+    "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
 
     'accounts',
     'utility',
     'public',
     'platform_admin',
+    'search_data',
 ]
 
 # Custom user model
@@ -241,9 +243,6 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-
-
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
@@ -268,9 +267,17 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
         'PAGE_SIZE': 100
-    
 }
 
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserDetailsSerializer'
+}
+ELASTIC_USER = config("ELASTIC_USER")
+ELASTIC_PASSWORD = config("ELASTIC_PASSWORD")
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "http://localhost:9200",
+        "http_auth": (ELASTIC_USER, ELASTIC_PASSWORD),
+    }
 }
