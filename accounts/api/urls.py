@@ -9,7 +9,9 @@ from .views import (UserAccountDetailView,
                     CustomAccountActivationAPIView,
                     MobileAppChangePasswordView,
                     ProfilePasswordUpdateAPIView,
-                    ProfileImageUpdateAPIView
+                    ProfileImageUpdateAPIView,
+                    PreferencesUpdateAPIView,
+                    PrivacyUpdateAPIView
                 )
 
 app_name = 'accounts_api'
@@ -28,6 +30,9 @@ urlpatterns = [
     # START HERE
     path('profile/<int:pk>/', ProfileAccountUpdateDetailView.as_view(), name='profile-update-view'),
     path("profile/change-password/",ProfilePasswordUpdateAPIView.as_view(), name="profile-change-password"),
-    path("profile/image/update/", ProfileImageUpdateAPIView.as_view(), name="profile-image-update")
+    path("profile/image/update/", ProfileImageUpdateAPIView.as_view(), name="profile-image-update"),
+
+    path("profile/privacy/update/<int:pk>/", PrivacyUpdateAPIView.as_view(), name="profile-preferences-update"),
+    path("profile/preferences/update/<int:pk>/", PreferencesUpdateAPIView.as_view(), name="profile-preferences-update")
 
 ]
