@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import reverse
 from phonenumber_field.modelfields import PhoneNumberField
+from utility.utils import PRIVACY_CHOICES
 # from store.models import Store
 
 # Store = store.models.Store
@@ -138,6 +139,27 @@ class Profile(models.Model):
     use_analytics_tools = models.BooleanField(default=False)
     auto_analyze_data = models.BooleanField(default=False)
     public_data_uploads = models.BooleanField(default=False)
+
+    who_can_find_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_message_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_share_data_with_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
     
 
     def __str__(self):
@@ -155,12 +177,12 @@ class Profile(models.Model):
         
 
 
-def profile_receiver(sender, instance, created, *args, **kwargs):
-    if created:
-        profile = Profile.objects.create(user=instance)
+# def profile_receiver(sender, instance, created, *args, **kwargs):
+#     if created:
+#         profile = Profile.objects.create(user=instance)
 
 
-post_save.connect(profile_receiver, sender=settings.AUTH_USER_MODEL)
+# post_save.connect(profile_receiver, sender=settings.AUTH_USER_MODEL)
 
 
 class MobileAppForgotPasswordRequest(models.Model):
