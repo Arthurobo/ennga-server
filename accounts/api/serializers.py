@@ -157,12 +157,16 @@ class AccountProfileDetailSerializer(serializers.ModelSerializer):
         model = Account
         fields = ["id","first_name", "last_name", "email"]
  
+
 class ProfileDetailSerializer(serializers.ModelSerializer):
     user = AccountProfileDetailSerializer(read_only=True)
-
     class Meta:
         model = Profile
-        fields = ["user", "id","phone_number", "address_location"]
+        fields = ["user", "id","phone_number", 
+                  "address_location", "show_historical_data", "show_geographical_data", 
+                  "show_market_sector_data","show_stored_data", 
+                  "use_analytics_tools", "auto_analyze_data", 
+                  "public_data_uploads", "who_can_find_me", "who_can_message_me", "who_can_share_data_with_me"]
         
 
 
