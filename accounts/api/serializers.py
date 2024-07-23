@@ -162,7 +162,7 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ["user", "id","phone_number", "address_location", ]
+        fields = ["user", "id","phone_number", "address_location"]
         
 
 
@@ -192,4 +192,10 @@ class ProfilePasswordUpdateSerializer(serializers.Serializer):
      old_password = serializers.CharField()
      new_password = serializers.CharField()
      confirm_password = serializers.CharField()
+
+
+class PrivacyUpdateSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = Profile
+          fields = ["who_can_find_me", "who_can_message_me", "who_can_share_data_with_me"]
      

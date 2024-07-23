@@ -19,7 +19,8 @@ from .serializers import (CustomRegistrationSerializer,
                             AccountUpdateSerializer,
                             ProfileDetailSerializer,
                             ProfileUpdateSerializer,
-                            ProfilePasswordUpdateSerializer
+                            ProfilePasswordUpdateSerializer,
+                            PrivacyUpdateSerializer
                         )
 
 
@@ -272,3 +273,11 @@ class ProfileImageUpdateAPIView(APIView):
         return Response({
             "profile_picture" : account.profile_image.url,
         })
+    
+        
+    
+class PrivacyUpdateAPIView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = PrivacyUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
