@@ -199,3 +199,10 @@ class PrivacyUpdateSerializer(serializers.ModelSerializer):
           model = Profile
           fields = ["who_can_find_me", "who_can_message_me", "who_can_share_data_with_me"]
      
+
+
+
+class PreferencesUpdateSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = Profile
+          fields = ["show_historical_data", "show_geographical_data", "show_stored_data","use_analytics_tools", "auto_analyze_data", "public_data_uploads"]

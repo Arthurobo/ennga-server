@@ -10,7 +10,8 @@ from .views import (UserAccountDetailView,
                     MobileAppChangePasswordView,
                     ProfilePasswordUpdateAPIView,
                     ProfileImageUpdateAPIView,
-                    PreferencesUpdateAPIView
+                    PreferencesUpdateAPIView,
+                    PrivacyUpdateAPIView
                 )
 
 app_name = 'accounts_api'
@@ -31,6 +32,7 @@ urlpatterns = [
     path("profile/change-password/",ProfilePasswordUpdateAPIView.as_view(), name="profile-change-password"),
     path("profile/image/update/", ProfileImageUpdateAPIView.as_view(), name="profile-image-update"),
 
-    path("profile/privacy/update/<int:pk>/", PreferencesUpdateAPIView.as_view(), name="profile-preferences-update")
+    path("profile/privacy/update/<int:pk>/", PrivacyUpdateAPIView.as_view(), name="profile-preferences-update"),
+    path("profile/preferences/update/<int:pk>/", PreferencesUpdateAPIView.as_view(), name="profile-preferences-update")
 
 ]

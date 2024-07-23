@@ -20,7 +20,8 @@ from .serializers import (CustomRegistrationSerializer,
                             ProfileDetailSerializer,
                             ProfileUpdateSerializer,
                             ProfilePasswordUpdateSerializer,
-                            PrivacyUpdateSerializer
+                            PrivacyUpdateSerializer,
+                            PreferencesUpdateSerializer
                         )
 
 
@@ -279,5 +280,12 @@ class ProfileImageUpdateAPIView(APIView):
 class PrivacyUpdateAPIView(generics.UpdateAPIView):
     queryset = Profile.objects.all()
     serializer_class = PrivacyUpdateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
+
+
+
+class PreferencesUpdateAPIView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = PreferencesUpdateSerializer
+    # permission_classes = [permissions.IsAuthenticated]
