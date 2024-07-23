@@ -40,7 +40,6 @@ class SearchDocument(Document):
             "name" : fields.TextField(),
         }
     )
-    category = fields.TextField() # Implement the data_category Here
     data_category = fields.ObjectField(
         properties= {
             "id" :fields.IntegerField(attr='id'),
@@ -49,7 +48,6 @@ class SearchDocument(Document):
         }
     )
     
-    sub_category = fields.TextField() # Implement the data_sub_category Here
     data_sub_category = fields.ObjectField(
         properties= {
             "id" :fields.IntegerField(attr='id'),
