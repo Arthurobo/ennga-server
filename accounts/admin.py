@@ -9,7 +9,7 @@ class ModelAdminPreventDelete(admin.ModelAdmin):
 class AccountAdmin(UserAdmin):
     list_display = ('username', 'is_active', 'email', 'first_name', 'last_name', 'is_staff')
     list_editable = ('email',)
-    search_fields = ('email', 'username', 'status')
+    search_fields = ('email', 'username')
     readonly_fields = ("id", "date_joined", "last_login")
 
     filter_horizontal = ()

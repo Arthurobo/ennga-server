@@ -57,6 +57,13 @@ class SearchDocument(Document):
     )
     description = fields.TextField(fields={'raw': fields.KeywordField()})
 
+    # videos = fields.ObjectField(
+    #     property = {
+    #         "id": fields.IntegerField(attr='id'),
+    #         "main_video": fields.TextField(),
+    #     }
+    # )
+
     class Django(object):
         model = SearchData
 

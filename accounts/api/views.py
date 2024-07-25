@@ -19,6 +19,7 @@ from .serializers import (CustomRegistrationSerializer,
                             AccountUpdateSerializer,
                             ProfileDetailSerializer,
                             ProfileUpdateSerializer,
+                            ProfileDetailUpdateSerializer,
                             ProfilePasswordUpdateSerializer,
                             PrivacyUpdateSerializer,
                             PreferencesUpdateSerializer
@@ -214,7 +215,7 @@ class ProfileAccountUpdateDetailView(generics.RetrieveUpdateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
-            return ProfileUpdateSerializer
+            return ProfileDetailUpdateSerializer
         else:
             return ProfileDetailSerializer
 
