@@ -78,8 +78,7 @@ class CustomRegistrationSerializer(serializers.ModelSerializer):
 
         _activate_account_code = random.randint(100000, 999999)
         
-        print("llllllllllllllllllllwwwwwwwwwwwwwwwwwwww")
-
+        
         user = Account.objects.create(
             username=username,
             email=email,
@@ -93,7 +92,6 @@ class CustomRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         new_account_id = user.id
-        print("NEW ACCOUNT ID: " + str(new_account_id))
         email = send_password_activate_token_to_user(new_account_id)
         return user
     
@@ -154,17 +152,91 @@ class AccountUpdateSerializer(serializers.ModelSerializer):
         model = Account
         fields = ('id', 'phone_number', 'first_name', 'last_name', 'email')
 
+class AccountProfileDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ["id","first_name", "last_name", "email"]
+ 
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
-    user = AccountSerializer(read_only=True)
-
+    user = AccountProfileDetailSerializer(read_only=True)
     class Meta:
         model = Profile
-        fields = ["phone_number", "country", "state", "city", "address_location", "user"]
+        fields = [
+            "id",
+            "user",
+            "phone_number", 
+            "address_location",
+            "show_historical_data", 
+            "show_geographical_data", 
+            "show_market_sector_data",
+            "show_stored_data", 
+            "use_analytics_tools", 
+            "auto_analyze_data", 
+            "public_data_uploads", 
+            "who_can_find_me", 
+            "who_can_message_me", 
+            "who_can_share_data_with_me"
+        ]
+
+class ProfileDetailUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            "id",
+            "phone_number", 
+            "address_location",
+            "show_historical_data", 
+            "show_geographical_data", 
+            "show_market_sector_data",
+            "show_stored_data", 
+            "use_analytics_tools", 
+            "auto_analyze_data", 
+            "public_data_uploads", 
+            "who_can_find_me", 
+            "who_can_message_me", 
+            "who_can_share_data_with_me"
+        ]
         
 
+
+
+
+class AccountProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Account
+         fields = ["first_name","last_name","email"]
+
+
+
 class ProfileUpdateSerializer(serializers.ModelSerializer):
+    user = AccountProfileUpdateSerializer()
     class Meta:
         model = Profile
-        fields = ["phone_number", "country", "state", "city", "address_location"]
+        fields = ["user", "phone_number", "address_location"]
 
+    def update(self, instance, validated_data):
+         account_details = validated_data.pop("user")
+         Account.objects.update(**account_details)
+         Profile.objects.update(**validated_data)
+         return instance
+    
+
+class ProfilePasswordUpdateSerializer(serializers.Serializer):
+     old_password = serializers.CharField()
+     new_password = serializers.CharField()
+     confirm_password = serializers.CharField()
+
+
+class PrivacyUpdateSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = Profile
+          fields = ["who_can_find_me", "who_can_message_me", "who_can_share_data_with_me"]
+     
+
+
+
+class PreferencesUpdateSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = Profile
+          fields = ["show_historical_data", "show_geographical_data", "show_stored_data","use_analytics_tools", "auto_analyze_data", "public_data_uploads"]

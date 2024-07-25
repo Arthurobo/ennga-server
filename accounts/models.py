@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import reverse
 from phonenumber_field.modelfields import PhoneNumberField
+from utility.utils import PRIVACY_CHOICES
 # from store.models import Store
 
 # Store = store.models.Store
@@ -81,6 +82,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
     is_data_agent = models.BooleanField(default=False)
     is_editor = models.BooleanField(default=False)
     is_proof_reader = models.BooleanField(default=False)
+    # is_deleted = models.BooleanField(default=False)
 
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
@@ -130,6 +132,35 @@ class Profile(models.Model):
     shipping_address_confirm = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    
+    show_historical_data = models.BooleanField(default=False)
+    show_geographical_data = models.BooleanField(default=False)
+    show_market_sector_data = models.BooleanField(default=False)
+    show_stored_data = models.BooleanField(default=False)
+    use_analytics_tools = models.BooleanField(default=False)
+    auto_analyze_data = models.BooleanField(default=False)
+    public_data_uploads = models.BooleanField(default=False)
+
+    who_can_find_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_message_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_share_data_with_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
     
 
     def __str__(self):

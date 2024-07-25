@@ -147,6 +147,7 @@ class State(models.Model):
         return reverse('platform_admin:geo-physical-state-create-view', kwargs={'state_location_pk': self.pk})
 
 
+# Also the LGAs/Towns
 class City(models.Model):
     country = models.ForeignKey(Country, null=True, on_delete=models.SET_NULL, related_name='city_countries')
     geo_political_zone = models.ForeignKey(GeoPoliticalZone, null=True, on_delete=models.SET_NULL, related_name='city_geo_political_zones')

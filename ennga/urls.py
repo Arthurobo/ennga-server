@@ -26,6 +26,9 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('', include('public.urls', namespace='public')),
+    
+    path('api/v1/public/',include('public.api.urls', namespace='public-api') ),
+    
     path('dashboard/', include('platform_admin.urls', namespace='platform_admin')),
     path('utility/', include('utility.urls', namespace='utility')),
 
@@ -40,4 +43,5 @@ urlpatterns = [
 
     path('api/v1/utility/', include('utility.api.urls', namespace="utility_api")),
     path('api/v1/platform-admin/', include('platform_admin.api.urls', namespace="platform_admin_api")),
+    path("api/v1/search-data/", include("search_data.urls", namespace="search_data_api")),
 ]

@@ -182,22 +182,6 @@ urlpatterns = [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     #""" Beginning of MARKET SECTOR DATA 
     path('geo-physical/create/', geo_physical_create_view, name="geo-physical-create-view"),
     path('geo-physical-geo-political-zone/<int:geozone_pk>/create/', geo_physical_geo_political_zone_create_view, name="geo-physical-geo-political-zone-create-view"),
