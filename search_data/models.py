@@ -42,7 +42,6 @@ class SearchData(models.Model):
     data_category = models.ForeignKey("search_data.SearchDataCategory", blank=True, null=True, on_delete=models.SET_NULL)
     data_sub_category = models.ForeignKey("search_data.SearchDataSubCategory", blank=True, null=True, on_delete=models.SET_NULL)
     is_deleted = models.BooleanField(default=False)
-    visualization_link = models.URLField(max_length=255, blank=True, null=True)
     other_references = models.JSONField(blank=True, null=True)
     visualization_link = models.URLField(max_length=255, blank=True, null=True)
     original_date_created = models.DateTimeField(blank=True, null=True)
@@ -56,7 +55,7 @@ class SearchData(models.Model):
 
 class SearchDataImages(models.Model):
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
-    main_video = models.FileField(blank=True, null=True)
+    main_image = models.FileField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 

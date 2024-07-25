@@ -82,6 +82,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
     is_data_agent = models.BooleanField(default=False)
     is_editor = models.BooleanField(default=False)
     is_proof_reader = models.BooleanField(default=False)
+    # is_deleted = models.BooleanField(default=False)
 
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
