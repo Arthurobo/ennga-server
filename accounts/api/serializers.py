@@ -261,4 +261,4 @@ class PreferencesUpdateSerializer(serializers.ModelSerializer):
 class UserAccountDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ["is_deleted"]
+        fields = ["id", "is_deleted"]
