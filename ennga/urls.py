@@ -20,12 +20,32 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Ennga API",
+        default_version="v1",
+        description="Ennga API Description",
+        terms_of_service="https://www.ennga.com/terms/",
+        contact=openapi.Contact(email="info@ennga.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('', include('public.urls', namespace='public')),
+    
+    path('api/v1/public/',include('public.api.urls', namespace='public-api') ),
+    
     path('dashboard/', include('platform_admin.urls', namespace='platform_admin')),
     path('utility/', include('utility.urls', namespace='utility')),
 
@@ -40,5 +60,7 @@ urlpatterns = [
 
     path('api/v1/utility/', include('utility.api.urls', namespace="utility_api")),
     path('api/v1/platform-admin/', include('platform_admin.api.urls', namespace="platform_admin_api")),
-    path("api/v1/search-data/", include("search_data.urls", namespace="search_data_api")),
+    # path("api/v1/search-data/", include("search_data.urls", namespace="search_data_api")),
+    # APIs Documentation
+    path("api/docs/v1/", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
 ]

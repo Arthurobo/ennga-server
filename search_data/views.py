@@ -15,7 +15,7 @@ from .serializers import SearchDocumentSerializer
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
     serializer_class = SearchDocumentSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     lookup_field = "title"
     fielddata = True

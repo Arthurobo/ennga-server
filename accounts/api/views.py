@@ -19,7 +19,12 @@ from .serializers import (CustomRegistrationSerializer,
                             AccountUpdateSerializer,
                             ProfileDetailSerializer,
                             ProfileUpdateSerializer,
-                            ProfilePasswordUpdateSerializer
+                            ProfileDetailUpdateSerializer,
+                            ProfilePasswordUpdateSerializer,
+                            PrivacyUpdateSerializer,
+                            PreferencesUpdateSerializer,
+                            UserAccountDeleteSerializer,
+                            AccountDetailSerializer,
                         )
 
 
@@ -203,16 +208,21 @@ class MobileAppChangePasswordView(generics.CreateAPIView):
 # 2. Profile Update - Profile models
 # 3. Account Update - Account models
 
+class AccountDetailAPIView(generics.RetrieveAPIView):
+    queryset = Account.actives.all()
+    serializer_class = AccountDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class ProfileAccountUpdateDetailView(generics.RetrieveUpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     queryset = Profile.objects.all()
     serializer_class = ProfileDetailSerializer
     # parser_classes = [MultiPartParser, FormParser]
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
-            return ProfileUpdateSerializer
+            return ProfileDetailUpdateSerializer
         else:
             return ProfileDetailSerializer
 
@@ -272,3 +282,28 @@ class ProfileImageUpdateAPIView(APIView):
         return Response({
             "profile_picture" : account.profile_image.url,
         })
+    
+# This endpoint is used to delete a user account
+class UserAccountDeleteAPIView(generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Account.actives.all()
+    serializer_class = UserAccountDeleteSerializer
+
+    def perform_update(self, serializer):
+        obj = self.get_object()
+        obj.is_deleted = True
+        obj.save()
+        
+    
+class PrivacyUpdateAPIView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = PrivacyUpdateSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+
+
+
+
+class PreferencesUpdateAPIView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = PreferencesUpdateSerializer
+    # permission_classes = [permissions.IsAuthenticated]

@@ -9,4 +9,4 @@ class SearchDocumentSerializer(DocumentSerializer):
     class Meta(object):
         model = SearchData.objects.all()
         document = SearchDocument
-        fields = ["id","data_id" ,"description"]
+        fields = ["id","data_id", "title", "description"]

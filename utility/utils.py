@@ -3,3 +3,9 @@ DATA_TYPE_CHOICES = (
     ('market', 'Market',),
     ('geophysical', 'Geophysical',),
 )
+
+
+PRIVACY_CHOICES = (
+    ('everyone', 'Everyone'),
+    ('users', 'Users')
+)

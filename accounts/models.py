@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import reverse
 from phonenumber_field.modelfields import PhoneNumberField
+from utility.utils import PRIVACY_CHOICES
 # from store.models import Store
 
 # Store = store.models.Store
@@ -16,6 +17,12 @@ import os
 from autoslug import AutoSlugField
 from PIL import Image
 from io import BytesIO
+
+
+class ActiveAccountManager(BaseUserManager):
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset().filter(is_deleted=False)
+
 
 
 class CustomAccountManager(BaseUserManager):
@@ -81,6 +88,7 @@ class Account(PermissionsMixin, AbstractBaseUser):
     is_data_agent = models.BooleanField(default=False)
     is_editor = models.BooleanField(default=False)
     is_proof_reader = models.BooleanField(default=False)
+    # is_deleted = models.BooleanField(default=False)
 
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(verbose_name="last login", auto_now=True)
@@ -88,12 +96,14 @@ class Account(PermissionsMixin, AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     hide_email = models.BooleanField(default=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     objects = CustomAccountManager()
+    actives = ActiveAccountManager()
 
     def __str__(self):
         return self.username
@@ -138,6 +148,27 @@ class Profile(models.Model):
     use_analytics_tools = models.BooleanField(default=False)
     auto_analyze_data = models.BooleanField(default=False)
     public_data_uploads = models.BooleanField(default=False)
+
+    who_can_find_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_message_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
+    
+    who_can_share_data_with_me = models.CharField(
+        max_length=50,
+        choices=PRIVACY_CHOICES,
+        blank=True,
+        null=True
+    )
     
 
     def __str__(self):

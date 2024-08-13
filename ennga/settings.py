@@ -65,12 +65,13 @@ INSTALLED_APPS = [
     
     "django_elasticsearch_dsl",
     "django_elasticsearch_dsl_drf",
+    "drf_yasg",
 
     'accounts',
     'utility',
     'public',
     'platform_admin',
-    'search_data',
+    # 'search_data',
 ]
 
 # Custom user model
@@ -280,4 +281,20 @@ ELASTICSEARCH_DSL = {
         "hosts": "http://localhost:9200",
         "http_auth": (ELASTIC_USER, ELASTIC_PASSWORD),
     }
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=4320),  # 3 Days
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=15),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=21600),
+    "SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD": timedelta(days=30),
+    "SLIDING_TOKEN_REFRESH_SYNC_REFRESH": False,
+    "SLIDING_TOKEN_REFRESH_EPOCHAL_REFRESH": False,
+    "SLIDING_TOKEN_REFRESH_STRATEGY": "keep",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    # Token blacklist settings
+    "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": False,
 }
