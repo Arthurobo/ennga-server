@@ -65,12 +65,13 @@ INSTALLED_APPS = [
     
     "django_elasticsearch_dsl",
     "django_elasticsearch_dsl_drf",
+    "drf_yasg",
 
     'accounts',
     'utility',
     'public',
     'platform_admin',
-    'search_data',
+    # 'search_data',
 ]
 
 # Custom user model

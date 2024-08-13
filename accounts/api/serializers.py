@@ -153,11 +153,19 @@ class AccountUpdateSerializer(serializers.ModelSerializer):
         fields = ('id', 'phone_number', 'first_name', 'last_name', 'email')
 
 class AccountProfileDetailSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    email = serializers.CharField(required=False)
+    
     class Meta:
         model = Account
         fields = ["id","first_name", "last_name", "email"]
  
 
+class AccountDetailSerializer(serializers.ModelSerializer):
+     class Meta:
+          model = Account
+          fields = ["id","first_name", "last_name", "username", "profile_image"]
 class ProfileDetailSerializer(serializers.ModelSerializer):
     user = AccountProfileDetailSerializer(read_only=True)
     class Meta:
@@ -180,10 +188,12 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
         ]
 
 class ProfileDetailUpdateSerializer(serializers.ModelSerializer):
+    user = AccountProfileDetailSerializer()
     class Meta:
         model = Profile
         fields = [
             "id",
+            "user",
             "phone_number", 
             "address_location",
             "show_historical_data", 
@@ -199,6 +209,10 @@ class ProfileDetailUpdateSerializer(serializers.ModelSerializer):
         ]
         
 
+    def update(self, instance, validated_data):
+         user = validated_data.pop("user")
+         Account.actives.update(**user)
+         return super().update(instance, validated_data)
 
 
 
@@ -240,3 +254,11 @@ class PreferencesUpdateSerializer(serializers.ModelSerializer):
      class Meta:
           model = Profile
           fields = ["show_historical_data", "show_geographical_data", "show_stored_data","use_analytics_tools", "auto_analyze_data", "public_data_uploads"]
+
+
+
+
+class UserAccountDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ["id", "is_deleted"]
