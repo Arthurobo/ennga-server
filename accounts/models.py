@@ -19,6 +19,12 @@ from PIL import Image
 from io import BytesIO
 
 
+class ActiveAccountManager(BaseUserManager):
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset().filter(is_deleted=False)
+
+
+
 class CustomAccountManager(BaseUserManager):
     def create_superuser(self, email, username, first_name, last_name, password):
         user = self.create_user(
@@ -90,12 +96,14 @@ class Account(PermissionsMixin, AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     hide_email = models.BooleanField(default=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     objects = CustomAccountManager()
+    actives = ActiveAccountManager()
 
     def __str__(self):
         return self.username
