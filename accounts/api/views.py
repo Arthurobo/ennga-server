@@ -40,7 +40,7 @@ class ResendRegistrationOTPCodeAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user_email = self.request.data.get("email", None)
-        _activate_account_code = random.randint(000000,999999)
+        _activate_account_code = random.randint(100000, 999999)
         user_account = Account.objects.filter(email=user_email)[0]
         user_account_update = Account.objects.filter(email=user_email).update(activate_account_code=_activate_account_code)
 
