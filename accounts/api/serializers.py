@@ -165,7 +165,7 @@ class AccountProfileDetailSerializer(serializers.ModelSerializer):
 class AccountDetailSerializer(serializers.ModelSerializer):
      class Meta:
           model = Account
-          fields = ["id","first_name", "last_name", "username", "profile_image"]
+          fields = ["id","first_name", "last_name", "username", "email", "phone_number","profile_image"]
 class ProfileDetailSerializer(serializers.ModelSerializer):
     user = AccountProfileDetailSerializer(read_only=True)
     class Meta:
