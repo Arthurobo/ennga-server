@@ -286,12 +286,13 @@ class ProfileImageUpdateAPIView(APIView):
 # This endpoint is used to delete a user account
 class UserAccountDeleteAPIView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Account.actives.all()
+    queryset = Account.objects.all()
     serializer_class = UserAccountDeleteSerializer
 
     def perform_update(self, serializer):
         obj = self.get_object()
         obj.is_deleted = True
+        obj.active = False
         obj.save()
         
     
