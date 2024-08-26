@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 
 from accounts.models import Account, Profile, MobileAppAccountAuthenticationRequest
+from utility.generators import generate_email
 from accounts.tasks import send_password_activate_token_to_user, send_password_reset_token_to_user, send_password_change_token_to_user
 from .serializers import (CustomRegistrationSerializer, 
                             MobileAppAccountAuthenticationRequestSerializer, 
@@ -293,6 +294,7 @@ class UserAccountDeleteAPIView(generics.UpdateAPIView):
         obj = self.get_object()
         obj.is_deleted = True
         obj.active = False
+        obj.email = generate_email()
         obj.save()
         
     
