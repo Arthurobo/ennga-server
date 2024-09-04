@@ -1,6 +1,8 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from utility.utils import DATA_TYPE_CHOICES
+from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
 
 class SearchDataCategory(models.Model):
@@ -24,9 +26,11 @@ class SearchDataSubCategory(models.Model):
 
     def __str__(self):
         return str(self.name)
-
-
+# user_bookmark = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='search_data')
+    
 class SearchData(models.Model):
+    # This is the user that imported the data
+    user_import = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='search_data')
     data_id = models.IntegerField(blank=True, null=True)
     data_type = models.CharField(max_length=100, choices=DATA_TYPE_CHOICES, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -49,10 +53,11 @@ class SearchData(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    # custom manager to get all imported data
+    
     def __str__(self):
         return str(self.id)
     
-
 class SearchDataImages(models.Model):
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     main_image = models.FileField(blank=True, null=True)
@@ -71,6 +76,11 @@ class SearchDataVideos(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+class SearchHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True, blank=True, related_name='search_history')
+    search_term = models.CharField(max_length=255)
+    date_created = models.DateTimeField(auto_now_add=True)
     
 
 class SearchDataMaps(models.Model):
