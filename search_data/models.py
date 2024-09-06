@@ -84,7 +84,7 @@ class SearchDataVideos(models.Model):
         return str(self.id)
     
 class SearchHistory(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True, blank=True, related_name='search_history')
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE,null=True, blank=True, related_name='search_history')
     search_term = models.CharField(max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     
