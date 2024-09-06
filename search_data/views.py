@@ -12,11 +12,16 @@ from rest_framework.permissions import IsAuthenticated
 from .documents import SearchDocument
 from .serializers import (
     SearchDocumentSerializer, 
-    SearchDataSerializer,
+    SearchDataImportListSerializer,
+    SearchDataImportSerializer,
+    SearchDataBookmarkListSerializer,
+    SearchDataBookmarkSerializer,
     )
 from rest_framework import generics
 from .permissions import IsOwner
-from .models import SearchData, SearchHistory
+from .models import (SearchHistory, 
+                     SearchDataImport, 
+                     SearchDataBookmark) 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -56,51 +61,33 @@ class SearchDocumentView(DocumentViewSet):
 
 
 # List all imported data for a particular user
-class ImportDataListAPIView(generics.ListAPIView):
-    queryset = SearchData.objects.all()
-    serializer_class = SearchDataSerializer
+class SearchDataImportListAPIView(generics.ListAPIView):
+    queryset = SearchDataImport.objects.all()
+    serializer_class = SearchDataImportListSerializer
     permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self):
-        user = self.request.user
-        return super().get_queryset().filter(user_import=user)
+        user = self.request.user.account_profile
+        return super().get_queryset().filter(user=user).order_by("date_created")
 
 # Import Data
-class ImportDataAPIView(APIView):
+class SearchDataImportAPIView(generics.CreateAPIView):
+    queryset = SearchDataImport.objects.all()
+    serializer_class = SearchDataImportSerializer
+    permission_classes = [IsAuthenticated]
+
+# List all BookMark data for a particular user
+class SearchDataBookmarkListAPIView(generics.ListAPIView):
+    queryset = SearchDataBookmark.objects.all()
+    serializer_class = SearchDataBookmarkListSerializer
     permission_classes = [IsAuthenticated, IsOwner]
 
-    def put(self, request, *args, **kwargs):
-        user = self.request.user
-        search_data = self.kwargs["pk"]
-        search_data = SearchData.objects.get(id=search_data)
-        
-        search_data.user_import.add(user)
-        search_data.save()
-        
-        return Response({
-            "search_data" : search_data.id,
-            "user_id" : user.id
-        })
+    def get_queryset(self):
+        user = self.request.user.account_profile
+        return super().get_queryset().filter(user=user).order_by("date_created")
 
-
-
-# Remove imported data
-class RemoveDataAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsOwner]
-
-    def put(self, request, *args, **kwargs):
-        user = self.request.user
-        search_data = self.kwargs["pk"]
-        search_data = SearchData.objects.filter(id=search_data,user=user)
-        if search_data.exists() :
-            search_data = search_data[0]
-            search_data.user_import.remove(user)
-            search_data.save()
-            
-            return Response({
-            "search_data" : search_data.id,
-            "user_id" : user.id
-            }) 
-        
-        return Response({})
-
+# BookMark Data
+class SearchDataBookmarkAPIView(generics.CreateAPIView):
+    queryset = SearchDataBookmark.objects.all()
+    serializer_class = SearchDataBookmarkSerializer
+    permission_classes = [IsAuthenticated]
