@@ -11,14 +11,14 @@ class SearchDocumentSerializer(DocumentSerializer):
     class Meta(object):
         model = SearchData.objects.all()
         document = SearchDocument
-        fields = ["id","data_id", "title", "description"]
+        fields = ["id", "title", "description"]
 
 
 
 class SearchDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchData
-        fields = ["id","data_id", "title", "description"]
+        fields = ["id", "title", "description"]
 
 class SearchDataImportListSerializer(serializers.ModelSerializer):
     search_data = SearchDataSerializer()
