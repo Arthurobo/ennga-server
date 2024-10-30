@@ -91,3 +91,32 @@ class SearchDataNews(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class SearchDataHistory(models.Model):
+    user = models.ForeignKey("accounts.Profile", on_delete=models.SET_NULL, blank=True, null=True)
+    search_query = models.CharField(max_length=255, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class SearchDataSaved(models.Model):
+    user = models.ForeignKey("accounts.Profile", on_delete=models.SET_NULL, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+    
+# 1. Share Data - We'll receive a post request from the frontend to tell us which platform the data was shared to by the user. This means
+    # we need a new field to handle the record for the platform the data was shared to. 
+
+# 2. Upload Data - for CRUD operations: 
+    # - DELETE: add a is_deleted boolean field to indicate deletion,
+    # - UPDATE: add a last_updated field to indicate the last time the data was updated,
+    # - CREATE: add a field named file which will have the following file formats - json, pdf, csv and ppt 
+    # - List: We need an endpoint the returns all the files uploaded by a user.
