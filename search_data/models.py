@@ -135,7 +135,7 @@ class SearchDataBookmark(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
-class SearchDateShare(models.Model):
+class SearchDataShare(models.Model):
     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_share")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     platform = models.CharField(max_length=255)

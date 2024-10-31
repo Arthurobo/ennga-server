@@ -9,7 +9,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 )
 from rest_framework import permissions
 from rest_framework.views import APIView
-from .models import SearchDataHistory, SearchData
+from .models import SearchDataHistory, SearchData, SearchDataShare
 from .documents import SearchDocument
 from .serializers import (
     SearchDocumentSerializer, 
@@ -19,7 +19,8 @@ from .serializers import (
     SearchDataBookmarkSerializer,
     SearchDataCreateSerializer,
     SearchDataUpdateSerializer,
-    SearchDataDeleteSerializer
+    SearchDataDeleteSerializer,
+    SearchDataShareSerializer
     )
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -125,8 +126,10 @@ class SearchDataBookmarkAPIView(generics.CreateAPIView):
     serializer_class = SearchDataBookmarkSerializer
     permission_classes = [IsAuthenticated]
 
-
-
+class SearchDateShareAPIView(generics.CreateAPIView):
+    queryset = SearchDataShare.objects.all()
+    serializer_class = SearchDataShareSerializer
+    
 
 class SearchTotalListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]

@@ -1,7 +1,8 @@
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from .models import (SearchData, 
                      SearchDataImport,
-                     SearchDataBookmark
+                     SearchDataBookmark,
+                     SearchDataShare,
 )
 from .documents import SearchDocument
 from rest_framework import serializers
@@ -69,3 +70,9 @@ class SearchDataDeleteSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchData
         fields = ["is_deleted"]
+        
+        
+class SearchDataShareSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataShare
+        fields = ["user", "search_data", "platform"]
