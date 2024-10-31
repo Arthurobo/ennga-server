@@ -19,6 +19,7 @@ from .serializers import (
     SearchDataBookmarkSerializer,
     )
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
 from .models import (SearchHistory, 
                      SearchDataImport, 

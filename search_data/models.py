@@ -126,7 +126,20 @@ class SearchDataSaved(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class SearchDataImport(models.Model):
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_import")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+class SearchDataBookmark(models.Model):
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_bookmark")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     
+        
 # 1. Share Data - We'll receive a post request from the frontend to tell us which platform the data was shared to by the user. This means
     # we need a new field to handle the record for the platform the data was shared to. 
 
