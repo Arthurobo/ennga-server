@@ -1,12 +1,47 @@
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
-from .models import SearchData
+from .models import (SearchData, 
+                     SearchDataImport,
+                     SearchDataBookmark
+)
 from .documents import SearchDocument
-
-
+from rest_framework import serializers
 
 
 class SearchDocumentSerializer(DocumentSerializer):
     class Meta(object):
         model = SearchData.objects.all()
         document = SearchDocument
-        fields = ["id","data_id", "title", "description"]
+        fields = ["id", "title", "description"]
+
+
+
+class SearchDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchData
+        fields = ["id", "title", "description"]
+
+class SearchDataImportListSerializer(serializers.ModelSerializer):
+    search_data = SearchDataSerializer()
+    class Meta:
+        model = SearchDataImport
+        fields = ["id", "search_data"]
+
+
+class SearchDataImportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataImport
+        fields = ["user", "search_data"]
+
+
+
+class SearchDataBookmarkListSerializer(serializers.ModelSerializer):
+    search_data = SearchDataSerializer()
+    class Meta:
+        model = SearchDataBookmark
+        fields = ["id", "search_data"]
+
+class SearchDataBookmarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataBookmark
+        fields = ["user", "search_data"]
+
