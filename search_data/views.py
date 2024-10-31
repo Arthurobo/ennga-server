@@ -29,11 +29,13 @@ from rest_framework.response import Response
 
 from accounts.models import Profile
 from rest_framework.response import Response
+from .paginators.SearchDataPagination import SearchDataPagination
 
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
     serializer_class = SearchDocumentSerializer
-    # permission_classes = [IsAuthenticated]
+    pagination_class = SearchDataPagination
+    permission_classes = [IsAuthenticated]
     
     lookup_field = "title"
     fielddata = True
@@ -58,10 +60,18 @@ class SearchDocumentView(DocumentViewSet):
     ordering = ("-date_created", "-last_updated")
     def list(self, request, *args, **kwargs):
         search_query = request.query_params.get("search")
-        user = request.user
+        user = request.user.account_profile
 
         SearchDataHistory.objects.create(user=user, search_query=search_query)
         return super().list(request, *args, **kwargs)
+    
+
+# Searchdata create endpoint
+# search data update
+# search data delete
+
+
+
 
 
 # List all imported data for a particular user

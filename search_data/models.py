@@ -3,7 +3,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from utility.utils import DATA_TYPE_CHOICES
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
-
+from .helpers.validatefilextension import validate_file_extension
 
 class SearchDataCategory(models.Model):
     data_type = models.CharField(max_length=100, choices=DATA_TYPE_CHOICES, blank=True, null=True)
@@ -142,6 +142,15 @@ class SearchDateShare(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+class SearchDataUpload(models.Model):
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_upload")
+    file = models.FileField(validators=[validate_file_extension])
+    is_deleted = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+
+    
 
 
 # 1. Share Data - We'll receive a post request from the frontend to tell us which platform the data was shared to by the user. This means
