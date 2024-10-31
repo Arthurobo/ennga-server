@@ -21,7 +21,7 @@ from .serializers import (
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
-from .models import (SearchHistory, 
+from .models import (SearchDataHistory, 
                      SearchDataImport, 
                      SearchDataBookmark) 
 from rest_framework.views import APIView
@@ -57,10 +57,10 @@ class SearchDocumentView(DocumentViewSet):
     }
     ordering = ("-date_created", "-last_updated")
     def list(self, request, *args, **kwargs):
-        search_term = request.query_params.get("search")
+        search_query = request.query_params.get("search")
         user = request.user
 
-        SearchHistory.objects.create(user=user, search_term=search_term)
+        SearchDataHistory.objects.create(user=user, search_query=search_query)
         return super().list(request, *args, **kwargs)
 
 
