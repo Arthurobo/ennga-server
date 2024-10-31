@@ -45,3 +45,27 @@ class SearchDataBookmarkSerializer(serializers.ModelSerializer):
         model = SearchDataBookmark
         fields = ["user", "search_data"]
 
+
+
+class SearchDataCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchData
+        fields = ["data_id", "data_type", "title", "description", "country", 
+                  "geo_political_zone","state","city","clan", "subclan", 
+                  "category", "sub_category", "data_category", "data_sub_category", "other_references", "visualization_link"]
+
+
+
+class SearchDataUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchData
+        fields = ["data_id", "data_type", "title", "description", "country", 
+                  "geo_political_zone","state","city","clan", "subclan", 
+                  "category", "sub_category", "data_category", "data_sub_category", "other_references", "visualization_link"]
+
+
+
+class SearchDataDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchData
+        fields = ["is_deleted"]

@@ -3,7 +3,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from utility.utils import DATA_TYPE_CHOICES
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
-from .helpers.validatefilextension import validate_file_extension
+from .helpers.validate_filextension import validate_file_extension
 
 class SearchDataCategory(models.Model):
     data_type = models.CharField(max_length=100, choices=DATA_TYPE_CHOICES, blank=True, null=True)

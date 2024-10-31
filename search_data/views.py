@@ -9,7 +9,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 )
 from rest_framework import permissions
 from rest_framework.views import APIView
-from .models import SearchDataHistory
+from .models import SearchDataHistory, SearchData
 from .documents import SearchDocument
 from .serializers import (
     SearchDocumentSerializer, 
@@ -17,6 +17,9 @@ from .serializers import (
     SearchDataImportSerializer,
     SearchDataBookmarkListSerializer,
     SearchDataBookmarkSerializer,
+    SearchDataCreateSerializer,
+    SearchDataUpdateSerializer,
+    SearchDataDeleteSerializer
     )
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -29,7 +32,8 @@ from rest_framework.response import Response
 
 from accounts.models import Profile
 from rest_framework.response import Response
-from .paginators.SearchDataPagination import SearchDataPagination
+from .paginators.search_data_pagination import SearchDataPagination
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
@@ -67,11 +71,26 @@ class SearchDocumentView(DocumentViewSet):
     
 
 # Searchdata create endpoint
+
+class SearchDataCreateAPIView(CreateAPIView):
+    queryset = SearchData.objects.all()
+    serializer_class = SearchDataCreateSerializer
+
 # search data update
+class SearchDataUpdateAPIView(UpdateAPIView):
+    queryset = SearchData.objects.all()
+    serializer_class = SearchDataUpdateSerializer
+
 # search data delete
-
-
-
+class SearchDataDeleteAPIView(UpdateAPIView):
+    queryset = SearchData.objects.all()
+    serializer_class = SearchDataDeleteSerializer
+    
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        instance.is_deleted = True
+        instance.save()
+    
 
 
 # List all imported data for a particular user

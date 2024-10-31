@@ -6,13 +6,19 @@ from .views import (
     SearchDataImportAPIView,
     SearchDataBookmarkListAPIView,
     SearchDataBookmarkAPIView,
+    SearchDataCreateAPIView,
+    SearchDataUpdateAPIView,
+    SearchDataDeleteAPIView,
     )
 
 
 app_name = "search_data"
 urlpatterns = [
     path("search/", SearchDocumentView.as_view({'get': 'list'})),
-    path("search/total/<int:id>/", SearchTotalListAPIView.as_view()),
+    path("search/create/", SearchDataCreateAPIView.as_view()),
+    path("search/update/<int:pk>/", SearchDataUpdateAPIView.as_view()),
+    path("search/delete/<int:pk>/", SearchDataDeleteAPIView.as_view()),
+    path("search/total/<int:pk>/", SearchTotalListAPIView.as_view()),
     path("search/import/list/",SearchDataImportListAPIView.as_view() ),
     path("search/import/",SearchDataImportAPIView.as_view()),
 
