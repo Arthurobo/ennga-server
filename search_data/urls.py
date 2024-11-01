@@ -11,6 +11,7 @@ from .views import (
     SearchDataUpdateAPIView,
     SearchDataDeleteAPIView,
     SearchDateShareAPIView,
+    SearchDataRetrieveAPIView,
     
     # SearchDataUploadCreateView,
     # SearchDataUploadDetailView,
@@ -27,6 +28,8 @@ urlpatterns = [
     path("search/create/", SearchDataCreateAPIView.as_view()),
     path("search/update/<int:pk>/", SearchDataUpdateAPIView.as_view()),
     path("search/delete/<int:pk>/", SearchDataDeleteAPIView.as_view()),
+    path("search/retrieve/<int:pk>/", SearchDataRetrieveAPIView.as_view()),
+    
     path("search/share/", SearchDateShareAPIView.as_view()),
     path("search/total/<int:pk>/", SearchTotalListAPIView.as_view()),
     path("search/import/list/",SearchDataImportListAPIView.as_view() ),

@@ -23,7 +23,8 @@ from .serializers import (
     SearchDataShareSerializer,
     SearchDataUploadSerializer,
     SearchDataBookmarkDeleteSerializer,
-    TopSearchSerializer
+    TopSearchSerializer,
+    SearchDataSerializer
     )
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -90,6 +91,12 @@ class SearchDataCreateAPIView(CreateAPIView):
 class SearchDataUpdateAPIView(UpdateAPIView):
     queryset = SearchData.objects.all()
     serializer_class = SearchDataUpdateSerializer
+    
+
+# search data retrieve
+class SearchDataRetrieveAPIView(generics.RetrieveAPIView):
+    queryset = SearchData.objects.all()
+    serializer_class = SearchDataSerializer
 
 # search data delete
 class SearchDataDeleteAPIView(UpdateAPIView):
