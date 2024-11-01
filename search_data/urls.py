@@ -6,10 +6,18 @@ from .views import (
     SearchDataImportAPIView,
     SearchDataBookmarkListAPIView,
     SearchDataBookmarkAPIView,
+    SearchDataBookmarkDeleteAPIView,
     SearchDataCreateAPIView,
     SearchDataUpdateAPIView,
     SearchDataDeleteAPIView,
-    SearchDateShareAPIView
+    SearchDateShareAPIView,
+    
+    # SearchDataUploadCreateView,
+    # SearchDataUploadDetailView,
+    # SearchDataUploadUpdateView,
+    # SearchDataUploadListView,
+    # SearchDataUploadDeleteView,
+    TopSearchesView
     )
 
 
@@ -24,6 +32,15 @@ urlpatterns = [
     path("search/import/list/",SearchDataImportListAPIView.as_view() ),
     path("search/import/",SearchDataImportAPIView.as_view()),
 
-    path("search/bookmark/list/",SearchDataBookmarkListAPIView.as_view() ),
+    path("search/bookmark/list/",SearchDataBookmarkListAPIView.as_view()),
     path("search/bookmark/",SearchDataBookmarkAPIView.as_view()),
+    path("search/bookmark/delete/",SearchDataBookmarkDeleteAPIView.as_view()),
+    
+    # path("search/upload/create/",SearchDataUploadCreateView.as_view()),
+    # path("search/upload/update/<int:pk>/", SearchDataUploadUpdateView.as_view()),
+    # path("search/upload/list/",SearchDataUploadListView.as_view()),
+    # path("search/upload/delete/<int:pk>/",SearchDataUploadDeleteView.as_view()),
+    # path("search/upload/retrieve/<int:pk>/",SearchDataUploadDetailView.as_view()),
+    path("search/top/",TopSearchesView.as_view()),
+    
 ]

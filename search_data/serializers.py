@@ -6,6 +6,8 @@ from .models import (SearchData,
 )
 from .documents import SearchDocument
 from rest_framework import serializers
+from .models import SearchDataUpload
+
 
 
 class SearchDocumentSerializer(DocumentSerializer):
@@ -41,6 +43,13 @@ class SearchDataBookmarkListSerializer(serializers.ModelSerializer):
         model = SearchDataBookmark
         fields = ["id", "search_data"]
 
+
+class SearchDataBookmarkDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataBookmark
+        fields = ["id"]
+        
+        
 class SearchDataBookmarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchDataBookmark
@@ -76,3 +85,16 @@ class SearchDataShareSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchDataShare
         fields = ["user", "search_data", "platform"]
+        
+        
+
+class SearchDataUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataUpload
+        fields = ['id', 'user', 'file', 'is_deleted', 'date_created', 'last_updated']
+        read_only_fields = ['date_created', 'last_updated']
+
+
+class TopSearchSerializer(serializers.Serializer):
+    search_query = serializers.CharField()
+    count = serializers.IntegerField()

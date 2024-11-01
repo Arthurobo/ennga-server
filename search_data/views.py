@@ -20,14 +20,20 @@ from .serializers import (
     SearchDataCreateSerializer,
     SearchDataUpdateSerializer,
     SearchDataDeleteSerializer,
-    SearchDataShareSerializer
+    SearchDataShareSerializer,
+    SearchDataUploadSerializer,
+    SearchDataBookmarkDeleteSerializer,
+    TopSearchSerializer
     )
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
 from .models import (SearchDataHistory, 
                      SearchDataImport, 
-                     SearchDataBookmark) 
+                     SearchDataBookmark,
+                     SearchDataUpload,
+                     SearchDataHistory,
+                     ) 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -35,6 +41,9 @@ from accounts.models import Profile
 from rest_framework.response import Response
 from .paginators.search_data_pagination import SearchDataPagination
 from rest_framework.generics import CreateAPIView, UpdateAPIView
+from django.db.models import Count
+from rest_framework import status
+
 
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
@@ -120,11 +129,58 @@ class SearchDataBookmarkListAPIView(generics.ListAPIView):
         user = self.request.user.account_profile
         return super().get_queryset().filter(user=user).order_by("date_created")
 
-# BookMark Data
+# user BookMark Data
 class SearchDataBookmarkAPIView(generics.CreateAPIView):
     queryset = SearchDataBookmark.objects.all()
     serializer_class = SearchDataBookmarkSerializer
     permission_classes = [IsAuthenticated]
+    
+class SearchDataBookmarkDeleteAPIView(generics.DestroyAPIView):
+    queryset = SearchDataBookmark.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = SearchDataBookmarkDeleteSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(request.data)
+        id = serializer.data.get("id")
+        
+        instance = SearchDataBookmark.objects.filter(id=id)
+        
+        if not instance:
+            return Response({"error": "bookmark does not exist"})
+        
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    # def get_object(self):
+    #     """
+    #     Returns the object the view is displaying.
+
+    #     You may want to override this if you need to provide non-standard
+    #     queryset lookups.  Eg if objects are referenced using multiple
+    #     keyword arguments in the url conf.
+    #     """
+    #     queryset = self.filter_queryset(self.get_queryset())
+
+    #     # Perform the lookup filtering.
+    #     lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+    #     assert lookup_url_kwarg in self.kwargs, (
+    #         'Expected view %s to be called with a URL keyword argument '
+    #         'named "%s". Fix your URL conf, or set the `.lookup_field` '
+    #         'attribute on the view correctly.' %
+    #         (self.__class__.__name__, lookup_url_kwarg)
+    #     )
+
+    #     filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+    #     obj = get_object_or_404(queryset, **filter_kwargs)
+
+    #     # May raise a permission denied
+    #     self.check_object_permissions(self.request, obj)
+
+    #     return obj
+    
+    
 
 class SearchDateShareAPIView(generics.CreateAPIView):
     queryset = SearchDataShare.objects.all()
@@ -141,3 +197,48 @@ class SearchTotalListAPIView(APIView):
             "user" : user.id,
             "total_searches" : total_searches
         })
+        
+        
+
+# # Create (POST)
+# class SearchDataUploadCreateView(generics.CreateAPIView):
+#     queryset = SearchDataUpload.objects.all()
+#     serializer_class = SearchDataUploadSerializer
+
+# # Retrieve (GET single instance)
+# class SearchDataUploadDetailView(generics.RetrieveAPIView):
+#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
+#     serializer_class = SearchDataUploadSerializer
+
+# # Update (PUT)
+# class SearchDataUploadUpdateView(generics.UpdateAPIView):
+#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
+#     serializer_class = SearchDataUploadSerializer
+
+# # List (GET all non-deleted)
+# class SearchDataUploadListView(generics.ListAPIView):
+#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
+#     serializer_class = SearchDataUploadSerializer
+
+# # Soft Delete (custom DELETE)
+# class SearchDataUploadDeleteView(generics.DestroyAPIView):
+#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
+#     serializer_class = SearchDataUploadSerializer
+
+#     def delete(self, request, *args, **kwargs):
+#         instance = self.get_object()
+#         instance.is_deleted = True
+#         instance.save()
+#         return Response({"message": "Data successfully marked as deleted."}, status=status.HTTP_204_NO_CONTENT)
+    
+# Top 3 search keyword
+class TopSearchesView(generics.ListAPIView):
+    serializer_class = TopSearchSerializer
+
+    def get_queryset(self):
+        return (
+            SearchDataHistory.objects
+            .values('search_query')
+            .annotate(count=Count('search_query'))
+            .order_by('-count')[:3]
+        )
