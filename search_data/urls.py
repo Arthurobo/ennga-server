@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     SearchDocumentView,
-    SearchTotalListAPIView,
+    SearchDataTotalListAPIView,
     SearchDataImportListAPIView,
     SearchDataImportAPIView,
     SearchDataBookmarkListAPIView,
@@ -10,7 +10,7 @@ from .views import (
     SearchDataCreateAPIView,
     SearchDataUpdateAPIView,
     SearchDataDeleteAPIView,
-    SearchDateShareAPIView,
+    SearchDataShareAPIView,
     SearchDataRetrieveAPIView,
     
     # SearchDataUploadCreateView,
@@ -18,7 +18,8 @@ from .views import (
     # SearchDataUploadUpdateView,
     # SearchDataUploadListView,
     # SearchDataUploadDeleteView,
-    TopSearchesView
+    SearchDataCountAPIView,
+    SearchDataTopSearchesView
     )
 
 
@@ -30,8 +31,8 @@ urlpatterns = [
     path("search/delete/<int:pk>/", SearchDataDeleteAPIView.as_view()),
     path("search/retrieve/<int:pk>/", SearchDataRetrieveAPIView.as_view()),
     
-    path("search/share/", SearchDateShareAPIView.as_view()),
-    path("search/total/<int:pk>/", SearchTotalListAPIView.as_view()),
+    path("search/share/", SearchDataShareAPIView.as_view()),
+    path("search/total/<int:pk>/", SearchDataTotalListAPIView.as_view()),
     path("search/import/list/",SearchDataImportListAPIView.as_view() ),
     path("search/import/",SearchDataImportAPIView.as_view()),
 
@@ -44,6 +45,7 @@ urlpatterns = [
     # path("search/upload/list/",SearchDataUploadListView.as_view()),
     # path("search/upload/delete/<int:pk>/",SearchDataUploadDeleteView.as_view()),
     # path("search/upload/retrieve/<int:pk>/",SearchDataUploadDetailView.as_view()),
-    path("search/top/",TopSearchesView.as_view()),
+    path("search/top/",SearchDataTopSearchesView.as_view()),
+    path("search/count/", SearchDataCountAPIView.as_view()),
     
 ]

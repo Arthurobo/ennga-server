@@ -9,7 +9,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 )
 from rest_framework import permissions
 from rest_framework.views import APIView
-from .models import SearchDataHistory, SearchData, SearchDataShare
+from .models import SearchDataHistory, SearchData, SearchDataShare, SearchDataSaved, SearchDataUpload
 from .documents import SearchDocument
 from .serializers import (
     SearchDocumentSerializer, 
@@ -158,43 +158,16 @@ class SearchDataBookmarkDeleteAPIView(generics.DestroyAPIView):
         
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    # def get_object(self):
-    #     """
-    #     Returns the object the view is displaying.
-
-    #     You may want to override this if you need to provide non-standard
-    #     queryset lookups.  Eg if objects are referenced using multiple
-    #     keyword arguments in the url conf.
-    #     """
-    #     queryset = self.filter_queryset(self.get_queryset())
-
-    #     # Perform the lookup filtering.
-    #     lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-
-    #     assert lookup_url_kwarg in self.kwargs, (
-    #         'Expected view %s to be called with a URL keyword argument '
-    #         'named "%s". Fix your URL conf, or set the `.lookup_field` '
-    #         'attribute on the view correctly.' %
-    #         (self.__class__.__name__, lookup_url_kwarg)
-    #     )
-
-    #     filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
-    #     obj = get_object_or_404(queryset, **filter_kwargs)
-
-    #     # May raise a permission denied
-    #     self.check_object_permissions(self.request, obj)
-
-    #     return obj
+  
     
     
 
-class SearchDateShareAPIView(generics.CreateAPIView):
+class SearchDataShareAPIView(generics.CreateAPIView):
     queryset = SearchDataShare.objects.all()
     serializer_class = SearchDataShareSerializer
     
 
-class SearchTotalListAPIView(APIView):
+class SearchDataTotalListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -239,7 +212,7 @@ class SearchTotalListAPIView(APIView):
 #         return Response({"message": "Data successfully marked as deleted."}, status=status.HTTP_204_NO_CONTENT)
     
 # Top 3 search keyword
-class TopSearchesView(generics.ListAPIView):
+class SearchDataTopSearchesView(generics.ListAPIView):
     serializer_class = TopSearchSerializer
 
     def get_queryset(self):
@@ -249,3 +222,15 @@ class TopSearchesView(generics.ListAPIView):
             .annotate(count=Count('search_query'))
             .order_by('-count')[:3]
         )
+        
+class SearchDataCountAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        saved_data = SearchDataSaved.objects.count()
+        uploaded_data = SearchDataUpload.objects.count()
+        shared_data =  SearchDataShare.objects.count()
+        return Response({
+            "saved_data" : saved_data,
+            "uploaded_data" : uploaded_data,
+            "shared_data" : shared_data,
+            
+        })
