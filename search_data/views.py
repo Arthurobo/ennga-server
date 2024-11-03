@@ -9,7 +9,8 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 )
 from rest_framework import permissions
 from rest_framework.views import APIView
-from .models import SearchDataHistory, SearchData, SearchDataShare, SearchDataSaved, SearchDataUpload
+from .models import (SearchDataHistory, SearchData, SearchDataShare, SearchDataDownloads,
+                     SearchDataSaved, SearchDataUpload, SearchDataExport)
 from .documents import SearchDocument
 from .serializers import (
     SearchDocumentSerializer, 
@@ -23,8 +24,12 @@ from .serializers import (
     SearchDataShareSerializer,
     SearchDataUploadSerializer,
     SearchDataBookmarkDeleteSerializer,
-    TopSearchSerializer,
-    SearchDataSerializer
+    SearchDataTopSerializer,
+    SearchDataSerializer,
+    SearchDataExportSerializer,
+    SearchDataExportListSerializer,
+    SearchDataDownloadsCreateSerializer
+    
     )
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -46,10 +51,16 @@ from django.db.models import Count
 from rest_framework import status
 
 
+
+"""
+
+    This is the view that handles get request for getting search data.
+    It also records searches using the (SearchDataHistory) model
+"""
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
-    serializer_class = SearchDocumentSerializer
     pagination_class = SearchDataPagination
+    serializer_class = SearchDocumentSerializer
     permission_classes = [IsAuthenticated]
     
     lookup_field = "title"
@@ -81,24 +92,35 @@ class SearchDocumentView(DocumentViewSet):
         return super().list(request, *args, **kwargs)
     
 
-# Searchdata create endpoint
-
+"""
+    This endpoint is responsible got creating a new search data object
+"""
 class SearchDataCreateAPIView(CreateAPIView):
     queryset = SearchData.objects.all()
     serializer_class = SearchDataCreateSerializer
 
-# search data update
+
+"""
+    This endpoint is responsible got updating an existing search data object
+"""
 class SearchDataUpdateAPIView(UpdateAPIView):
     queryset = SearchData.objects.all()
     serializer_class = SearchDataUpdateSerializer
     
 
-# search data retrieve
+"""
+    This endpoint is responsible got retrieving a particular search data object.
+    It acts as a detail view
+"""
 class SearchDataRetrieveAPIView(generics.RetrieveAPIView):
     queryset = SearchData.objects.all()
     serializer_class = SearchDataSerializer
 
-# search data delete
+"""
+    This endpoint is responsible got deleting a particular search data object.
+    Note: We are not deleting data from the platform. The is_deleted flag is
+    set to signify a deleted data
+"""
 class SearchDataDeleteAPIView(UpdateAPIView):
     queryset = SearchData.objects.all()
     serializer_class = SearchDataDeleteSerializer
@@ -110,23 +132,69 @@ class SearchDataDeleteAPIView(UpdateAPIView):
     
 
 
-# List all imported data for a particular user
+"""
+    This endpoint is responsible Listing all imported data by a
+    particular user
+"""
 class SearchDataImportListAPIView(generics.ListAPIView):
     queryset = SearchDataImport.objects.all()
     serializer_class = SearchDataImportListSerializer
     permission_classes = [IsAuthenticated, IsOwner]
-
+    
     def get_queryset(self):
         user = self.request.user.account_profile
         return super().get_queryset().filter(user=user).order_by("date_created")
 
-# Import Data
+
+
+
+"""
+    This endpoint is used for importing data
+"""
 class SearchDataImportAPIView(generics.CreateAPIView):
     queryset = SearchDataImport.objects.all()
     serializer_class = SearchDataImportSerializer
     permission_classes = [IsAuthenticated]
 
-# List all BookMark data for a particular user
+
+
+
+
+"""
+    This endpoint is responsible for exporting data
+"""
+class SearchDataExportAPIView(generics.CreateAPIView):
+    queryset = SearchDataExport.objects.all()
+    serializer_class = SearchDataExportSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+
+"""
+    This endpoint is responsible Listing all exported data by a
+    particular user
+"""
+class SearchDataExportListAPIView(generics.ListAPIView):
+    queryset = SearchDataExport.objects.all()
+    serializer_class = SearchDataExportListSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+    
+    def get_queryset(self):
+        user = self.request.user.account_profile
+        return super().get_queryset().filter(user=user).order_by("date_created")
+
+
+
+
+
+
+"""
+    This endpoint is responsible for listing all data bookmarked by a
+    particular user
+"""
 class SearchDataBookmarkListAPIView(generics.ListAPIView):
     queryset = SearchDataBookmark.objects.all()
     serializer_class = SearchDataBookmarkListSerializer
@@ -136,12 +204,17 @@ class SearchDataBookmarkListAPIView(generics.ListAPIView):
         user = self.request.user.account_profile
         return super().get_queryset().filter(user=user).order_by("date_created")
 
-# user BookMark Data
+"""
+    This endpoint is responsible for bookmarking data
+"""
 class SearchDataBookmarkAPIView(generics.CreateAPIView):
     queryset = SearchDataBookmark.objects.all()
     serializer_class = SearchDataBookmarkSerializer
     permission_classes = [IsAuthenticated]
     
+"""
+    This endpoint is responsible for deleting/removing bookmarked data
+"""
 class SearchDataBookmarkDeleteAPIView(generics.DestroyAPIView):
     queryset = SearchDataBookmark.objects.all()
     permission_classes = [IsAuthenticated]
@@ -161,12 +234,16 @@ class SearchDataBookmarkDeleteAPIView(generics.DestroyAPIView):
   
     
     
-
+"""
+    This endpoint is responsible sharing data
+"""
 class SearchDataShareAPIView(generics.CreateAPIView):
     queryset = SearchDataShare.objects.all()
     serializer_class = SearchDataShareSerializer
     
-
+"""
+    This endpoint is lists all total searches for a particular user
+"""
 class SearchDataTotalListAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, *args, **kwargs):
@@ -212,8 +289,13 @@ class SearchDataTotalListAPIView(APIView):
 #         return Response({"message": "Data successfully marked as deleted."}, status=status.HTTP_204_NO_CONTENT)
     
 # Top 3 search keyword
+
+"""
+    This endpoint is responsible Listing Top 3 search keywords in
+    ascending order.
+"""
 class SearchDataTopSearchesView(generics.ListAPIView):
-    serializer_class = TopSearchSerializer
+    serializer_class = SearchDataTopSerializer
 
     def get_queryset(self):
         return (
@@ -223,14 +305,30 @@ class SearchDataTopSearchesView(generics.ListAPIView):
             .order_by('-count')[:3]
         )
         
+"""
+    This endpoint is responsible returning total number of 
+    data in the platform
+"""
 class SearchDataCountAPIView(APIView):
     def get(self, request, *args, **kwargs):
         saved_data = SearchDataSaved.objects.count()
         uploaded_data = SearchDataUpload.objects.count()
         shared_data =  SearchDataShare.objects.count()
+        exported_data = SearchDataExport.objects.count()
         return Response({
             "saved_data" : saved_data,
             "uploaded_data" : uploaded_data,
             "shared_data" : shared_data,
+            "exported_data" : exported_data
             
         })
+    
+    
+    
+"""
+    This endpoint records download history information to
+    keep track of downloaded files by the user
+"""
+class SearchDataDownloadsCreateAPIView(CreateAPIView):
+    queryset = SearchDataDownloads.objects.all()
+    serializer_class = SearchDataDownloadsCreateSerializer

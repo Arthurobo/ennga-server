@@ -83,6 +83,13 @@ class SearchDataVideos(models.Model):
     def __str__(self):
         return str(self.id)
     
+class SearchDataDownloads(models.Model):
+    user = models.ForeignKey("accounts.Profile", on_delete=models.SET_NULL, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    
     
 
 class SearchDataMaps(models.Model):
@@ -112,6 +119,7 @@ class SearchDataHistory(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
 
 
 class SearchDataSaved(models.Model):
@@ -129,11 +137,20 @@ class SearchDataImport(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+class SearchDataExport(models.Model):
+    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_export")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+
 class SearchDataBookmark(models.Model):
     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_bookmark")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+
+
 
 class SearchDataShare(models.Model):
     user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_share")

@@ -3,6 +3,8 @@ from .models import (SearchData,
                      SearchDataImport,
                      SearchDataBookmark,
                      SearchDataShare,
+                     SearchDataExport,
+                     SearchDataDownloads
 )
 from .documents import SearchDocument
 from rest_framework import serializers
@@ -29,12 +31,58 @@ class SearchDataImportListSerializer(serializers.ModelSerializer):
         model = SearchDataImport
         fields = ["id", "search_data"]
 
+    def create(self, validated_data):
+        
+        user = validated_data.get('user', None)
+        search_data = validated_data.get('search_data', None)
+        
+       
+        # Prevents user for exporting the same data twice
+        instance = SearchDataImport.objects.filter(user=user,search_data=search_data)
+        if instance.exists():
+            return instance.first()
+            
+        
+        return super().create(validated_data)
+
 
 class SearchDataImportSerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchDataImport
         fields = ["user", "search_data"]
 
+
+
+class SearchDataExportListSerializer(serializers.ModelSerializer):
+    search_data = SearchDataSerializer()
+    class Meta:
+        model = SearchDataExport
+        fields = ["id", "search_data"]
+        
+    
+        
+
+
+class SearchDataExportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataExport
+        fields = ["user", "search_data"]
+        
+        
+    
+    def create(self, validated_data):
+        
+        user = validated_data.get('user', None)
+        search_data = validated_data.get('search_data', None)
+        
+       
+        # Prevents user for exporting the same data twice
+        instance = SearchDataExport.objects.filter(user=user,search_data=search_data)
+        if instance.exists():
+            return instance.first()
+            
+
+        return super().create(validated_data)
 
 
 class SearchDataBookmarkListSerializer(serializers.ModelSerializer):
@@ -95,6 +143,11 @@ class SearchDataUploadSerializer(serializers.ModelSerializer):
         read_only_fields = ['date_created', 'last_updated']
 
 
-class TopSearchSerializer(serializers.Serializer):
+class SearchDataTopSerializer(serializers.Serializer):
     search_query = serializers.CharField()
     count = serializers.IntegerField()
+    
+class SearchDataDownloadsCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchDataDownloads
+        fields = ["user", "search_data"]
