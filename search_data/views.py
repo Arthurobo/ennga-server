@@ -257,36 +257,40 @@ class SearchDataTotalListAPIView(APIView):
         
         
 
-# # Create (POST)
-# class SearchDataUploadCreateView(generics.CreateAPIView):
-#     queryset = SearchDataUpload.objects.all()
-#     serializer_class = SearchDataUploadSerializer
+# Create (POST)
+class SearchDataUploadCreateView(generics.CreateAPIView):
+    queryset = SearchDataUpload.objects.all()
+    serializer_class = SearchDataUploadSerializer
 
-# # Retrieve (GET single instance)
-# class SearchDataUploadDetailView(generics.RetrieveAPIView):
-#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
-#     serializer_class = SearchDataUploadSerializer
+# Retrieve (GET single instance)
+class SearchDataUploadDetailView(generics.RetrieveAPIView):
+    queryset = SearchDataUpload.objects.filter(is_deleted=False)
+    serializer_class = SearchDataUploadSerializer
 
-# # Update (PUT)
-# class SearchDataUploadUpdateView(generics.UpdateAPIView):
-#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
-#     serializer_class = SearchDataUploadSerializer
+# Update (PUT)
+class SearchDataUploadUpdateView(generics.UpdateAPIView):
+    queryset = SearchDataUpload.objects.filter(is_deleted=False)
+    serializer_class = SearchDataUploadSerializer
 
-# # List (GET all non-deleted)
-# class SearchDataUploadListView(generics.ListAPIView):
-#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
-#     serializer_class = SearchDataUploadSerializer
+# List (GET all non-deleted)
+class SearchDataUploadListView(generics.ListAPIView):
+    queryset = SearchDataUpload.objects.all()
+    serializer_class = SearchDataUploadSerializer
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False).order_by("date_created")
 
-# # Soft Delete (custom DELETE)
-# class SearchDataUploadDeleteView(generics.DestroyAPIView):
-#     queryset = SearchDataUpload.objects.filter(is_deleted=False)
-#     serializer_class = SearchDataUploadSerializer
+# Soft Delete (custom DELETE)
+class SearchDataUploadDeleteView(generics.UpdateAPIView):
+    queryset = SearchDataUpload.objects.filter(is_deleted=False)
+    serializer_class = SearchDataUploadSerializer
+    pagination_class = None
 
-#     def delete(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         instance.is_deleted = True
-#         instance.save()
-#         return Response({"message": "Data successfully marked as deleted."}, status=status.HTTP_204_NO_CONTENT)
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_deleted = True
+        instance.save()
+        return Response({"message": "Data successfully marked as deleted."}, status=status.HTTP_204_NO_CONTENT)
     
 # Top 3 search keyword
 
