@@ -310,11 +310,13 @@ class SearchDataTopSearchesView(generics.ListAPIView):
     data in the platform
 """
 class SearchDataCountAPIView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
-        saved_data = SearchDataSaved.objects.count()
-        uploaded_data = SearchDataUpload.objects.count()
-        shared_data =  SearchDataShare.objects.count()
-        exported_data = SearchDataExport.objects.count()
+        user = request.user.account_profile
+        saved_data = SearchDataSaved.objects.filter(user=user).count()
+        uploaded_data = SearchDataUpload.objects.filter(user=user).count()
+        shared_data =  SearchDataShare.objects.filter(user=user).count()
+        exported_data = SearchDataExport.objects.filter(user=user).count()
         return Response({
             "saved_data" : saved_data,
             "uploaded_data" : uploaded_data,
@@ -332,3 +334,6 @@ class SearchDataCountAPIView(APIView):
 class SearchDataDownloadsCreateAPIView(CreateAPIView):
     queryset = SearchDataDownloads.objects.all()
     serializer_class = SearchDataDownloadsCreateSerializer
+    
+    
+    
