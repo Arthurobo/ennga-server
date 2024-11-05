@@ -28,7 +28,7 @@ from .views import (
 
 app_name = "search_data"
 urlpatterns = [
-    path("search/", SearchDocumentView.as_view({'get': 'list'})),
+    # path("search/", SearchDocumentView.as_view({'get': 'list'})),
     path("search/create/", SearchDataCreateAPIView.as_view()),
     path("search/update/<int:pk>/", SearchDataUpdateAPIView.as_view()),
     path("search/delete/<int:pk>/", SearchDataDeleteAPIView.as_view()),
