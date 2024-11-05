@@ -85,7 +85,7 @@ class SearchDataVideos(models.Model):
     
 class SearchDataDownloads(models.Model):
     user = models.ForeignKey("accounts.Profile", on_delete=models.SET_NULL, blank=True, null=True)
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -135,8 +135,8 @@ class SearchDataSaved(models.Model):
         return str(self.id)
 
 class SearchDataImport(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_import")
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, blank=True, null=True, related_name="search_data_import")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
@@ -144,8 +144,8 @@ class SearchDataImport(models.Model):
         return str(self.id)
 
 class SearchDataExport(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_export")
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, blank=True, null=True, related_name="search_data_export")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -154,8 +154,8 @@ class SearchDataExport(models.Model):
     
 
 class SearchDataBookmark(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_bookmark")
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, blank=True, null=True, related_name="search_data_bookmark")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -164,8 +164,8 @@ class SearchDataBookmark(models.Model):
     
 
 class SearchDataShare(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_share")
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, blank=True, null=True, related_name="search_data_share")
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     platform = models.CharField(max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -175,7 +175,7 @@ class SearchDataShare(models.Model):
     
 
 class SearchDataUpload(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_upload")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, blank=True, null=True, related_name="search_data_upload")
     file = models.FileField(validators=[validate_file_extension])
     is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -183,16 +183,3 @@ class SearchDataUpload(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
-
-    
-
-
-# 1. Share Data - We'll receive a post request from the frontend to tell us which platform the data was shared to by the user. This means
-    # we need a new field to handle the record for the platform the data was shared to. 
-
-# 2. Upload Data - for CRUD operations: 
-    # - DELETE: add a is_deleted boolean field to indicate deletion,
-    # - UPDATE: add a last_updated field to indicate the last time the data was updated,
-    # - CREATE: add a field named file which will have the following file formats - json, pdf, csv and ppt 
-    # - List: We need an endpoint the returns all the files uploaded by a user.
