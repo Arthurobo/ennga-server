@@ -65,7 +65,7 @@ class SearchData(models.Model):
 
 
 class SearchDataImages(models.Model):
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     main_image = models.FileField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -75,7 +75,7 @@ class SearchDataImages(models.Model):
     
 
 class SearchDataVideos(models.Model):
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     main_video = models.FileField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -89,11 +89,14 @@ class SearchDataDownloads(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.id)
+    
     
     
 
 class SearchDataMaps(models.Model):
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     map_data = models.URLField(max_length=255, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -103,7 +106,7 @@ class SearchDataMaps(models.Model):
     
 
 class SearchDataNews(models.Model):
-    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
+    search_data = models.ForeignKey("search_data.SearchData", on_delete=models.SET_NULL, blank=True, null=True)
     news_data = models.URLField(max_length=255, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
@@ -132,40 +135,55 @@ class SearchDataSaved(models.Model):
         return str(self.id)
 
 class SearchDataImport(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_import")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_import")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return str(self.id)
 
 class SearchDataExport(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_export")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_export")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.id)
+    
 
 class SearchDataBookmark(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_bookmark")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_bookmark")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
-
+    def __str__(self):
+        return str(self.id)
+    
 
 class SearchDataShare(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_share")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_share")
     search_data = models.ForeignKey("search_data.SearchData", on_delete=models.CASCADE, blank=True, null=True)
     platform = models.CharField(max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.id)
+    
+
 class SearchDataUpload(models.Model):
-    user = models.ForeignKey('accounts.Profile', on_delete=models.CASCADE, related_name="search_data_upload")
+    user = models.ForeignKey('accounts.Profile', on_delete=models.SET_NULL, related_name="search_data_upload")
     file = models.FileField(validators=[validate_file_extension])
     is_deleted = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.id)
+    
 
     
 
