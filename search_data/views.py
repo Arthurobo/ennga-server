@@ -57,7 +57,7 @@ from rest_framework import status
     This is the view that handles get request for getting search data.
     It also records searches using the (SearchDataHistory) model
 """
-"""
+
 class SearchDocumentView(DocumentViewSet):
     document = SearchDocument
     pagination_class = SearchDataPagination
@@ -91,7 +91,7 @@ class SearchDocumentView(DocumentViewSet):
 
         SearchDataHistory.objects.create(user=user, search_query=search_query)
         return super().list(request, *args, **kwargs)
-"""  
+    
 
 """
     This endpoint is responsible got creating a new search data object
