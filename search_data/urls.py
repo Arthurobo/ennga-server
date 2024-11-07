@@ -51,7 +51,7 @@ urlpatterns = [
     path("search/upload/update/<int:pk>/", SearchDataUploadUpdateView.as_view()),
     path("search/upload/list/",SearchDataUploadListView.as_view()),
     path("search/upload/delete/<int:pk>/",SearchDataUploadDeleteView.as_view()),
-    # path("search/upload/retrieve/<int:pk>/",SearchDataUploadDetailView.as_view()),
+    path("search/upload/retrieve/<int:pk>/",SearchDataUploadDetailView.as_view()),
     path("search/top/",SearchDataTopSearchesView.as_view()),
     path("search/count/", SearchDataCountAPIView.as_view()),
     path("search/downloads/", SearchDataDownloadsCreateAPIView.as_view()),
