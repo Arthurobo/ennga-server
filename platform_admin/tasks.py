@@ -1,7 +1,7 @@
 import csv
 from django.core.files.storage import default_storage as storage
 
-from celery import task
+from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from accounts.models import Profile
@@ -12,7 +12,7 @@ from .models import MarketSector, MarketSectorBulkData
 logger = get_task_logger(__name__)
 
 
-@task
+@shared_task
 def create_new_customers(newly_saved_form_id, user_profile_id):
     obj = MarketSectorBulkData.objects.get(id=newly_saved_form_id)
     user_profile = Profile.objects.get(id=user_profile_id)
