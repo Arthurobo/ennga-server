@@ -1,4 +1,4 @@
-FROM python:3.11.4-slim-bookworm as builder
+FROM python:3.13-slim-bookworm as builder
 
 # set work directory
 WORKDIR /usr/src/app
@@ -22,7 +22,7 @@ COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 # pull official base image
-FROM python:3.11.4-slim-bookworm
+FROM python:3.13-slim-bookworm
 
 # create directory for the app user
 RUN mkdir -p /home/app
