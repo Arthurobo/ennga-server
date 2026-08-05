@@ -65,3 +65,5 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 ENTRYPOINT ["/home/app/sleepo/entrypoint.sh"]
+
+CMD ["gunicorn", "ennga.wsgi:application", "--bind", "0.0.0.0:10000"]
