@@ -38,7 +38,9 @@ RUN mkdir $APP_HOME/staticfiles
 WORKDIR $APP_HOME
 
 # install dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends netcat-openbsd && \
+    rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
