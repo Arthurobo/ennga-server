@@ -47,6 +47,7 @@ elastic-transport==8.13.1
 elasticsearch==7.17.9
 elasticsearch-dsl==7.4.1
 Faker==40.36.0
+gunicorn==26.0.0
 html5lib==1.1
 idna==3.18
 inflection==0.5.1
@@ -64,7 +65,7 @@ packaging==26.0
 pathspec==1.1.1
 phonenumbers==9.0.36
 phonenumberslite==9.0.36
-Pillow==12.3.0
+pillow==12.3.0
 platformdirs==4.11.0
 prompt_toolkit==3.0.52
 psycopg2-binary==2.9.12
